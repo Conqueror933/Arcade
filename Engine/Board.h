@@ -9,7 +9,7 @@
 class Board
 {
 private:
-	class Cell//dfsdfsdf
+	class Cell
 	{
 	public:
 		Cell(Board& brd, Graphics& gfx, Vec2<int> loc, Color c, const int size = 30);
