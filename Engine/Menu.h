@@ -4,47 +4,41 @@
 #include <map>
 #include "Graphics.h"
 #include "Bitmap.h"
+#include "WorldObject.h"
 
 class Menu
 {
 private:
-	class Button
+	class Button : public WorldObject
 	{
 		//hit detection
 			//possible animation
 		//invokes smth when pressed
 	};
-	class Label
+	struct Label : public WorldObject
 	{
 		//helper thing to display text on screen
-		friend class Button;
+		Label(Text& text, std::string s, Vec2<int> position, 
+			Vec2<int> size = { 0,0 }, Color background = Colors::Magenta, Color textcolor = Colors::White);
+		//add a "Style" Object for rounded corners and all that fancy stuff
+		void Draw();
+		Text& text;
 		std::string s;
-
-		static std::map<char, std::pair<int,int>> letters; 
-		//char = letter, int = x position of letter in bitmapint = width of letter in bitmap
-
 	};
 public:
 	Menu(Graphics& gfx);
 	~Menu();
 
-	void Update() { 
-		text.Draw("LOOK MA AUTOMATISCHES SCHREIBEN", { 100,100 }, Colors::Yellow);
-		//text.Draw('H', { 100,100 }, Colors::Cyan);
-		//text.Draw('E', { 110,100 }, Colors::Cyan);
-		//text.Draw('L', { 120,100 }, Colors::Cyan);
-		//text.Draw('L', { 130,100 }, Colors::Cyan);
-		//text.Draw('O', { 140,100 }, Colors::Cyan);
-		//text.Draw('W', { 155,100 }, Colors::Cyan);
-		//text.Draw('O', { 170,100 }, Colors::Cyan);
-		//text.Draw('R', { 180,100 }, Colors::Cyan);
-		//text.Draw('L', { 190,100 }, Colors::Cyan);
-		//text.Draw('D', { 200,100 }, Colors::Cyan);
-	}
-	void Draw(){}
+	void Update();
+	void Draw();
 
 private:
 	Graphics& gfx;
 	Text text;
+	std::vector<Label> labels;
+	std::vector<Button> buttons;
+
+	static constexpr int letterspacing = 3;
+	static constexpr int border = 6;
 };
 

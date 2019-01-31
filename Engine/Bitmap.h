@@ -9,8 +9,8 @@
 #include "Graphics.h"
 #include "Colors.h"
 
-#pragma pack(push,2)
-typedef struct mBitmapFileHdr_t
+//#pragma pack(push,2)
+struct mBitmapFileHdr_t
 {
 	uint16_t bfType;//FileType
 	uint32_t bfSizeHeader;//FileSize
@@ -19,7 +19,7 @@ typedef struct mBitmapFileHdr_t
 	uint32_t bfOffsetBits;//BitmapOffset
 };
 
-typedef struct mBitmapInfoHdr_t
+struct mBitmapInfoHdr_t
 {
 	uint32_t biSizeHeader;//Size
 	uint32_t biWidth;//Width
@@ -34,12 +34,12 @@ typedef struct mBitmapInfoHdr_t
 	uint32_t biClrImportant;//ColorsImportant
 };
 
-typedef struct mBitmapHeader
+struct mBitmapHeader
 {
 	mBitmapFileHdr_t hdr;
 	mBitmapInfoHdr_t info;
 };
-#pragma pop
+//#pragma pop
 
 class Bitmap
 {
@@ -60,8 +60,27 @@ class Text : public Bitmap
 {
 public:
 	Text(Graphics& gfx, std::string filename);
-	void Draw(std::string str, Vec2<int> position, Color c);
-	void Draw(const char* str, Vec2<int> position, Color c);
+	void Draw(std::string str, Vec2<int> position, int letterspace, Color c);
+	void Draw(const char* str, Vec2<int> position, int letterspace, Color c);
+	inline void DrawRectangle(int x0, int y0, int x1, int y1, Color c)
+	{
+		gfx.DrawRectangle(x0, y0, x1, y1, c);
+	}
+	inline void DrawRectangleDim(int x0, int y0, int width, int height, Color c)
+	{
+		gfx.DrawRectangleDim(x0, y0, width, height, c);
+	}
+	int GetLetterWidth(char letter)
+	{
+		if (letter == ' ')
+			return space;
+		else
+			return letters[letter].second;
+	}
+	int GetLetterHeight()
+	{
+		return bH.info.biHeight;
+	}
 
 private:
 	void DrawLetter(const char letter, Vec2<int> position, Color c);
@@ -69,4 +88,5 @@ private:
 private:
 	//char = letter, int = x position of letter in bitmap int = width of letter in bitmap
 	std::map<char, std::pair<int, int>> letters;
+	static constexpr int space = 10;
 };
