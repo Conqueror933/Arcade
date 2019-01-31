@@ -14,11 +14,11 @@ public:	//Ctor, Dtor, Copy, Move
 		y = in_y;
 	}
 
-	/*Vec2(const Vec2& rhs);
-	Vec2& operator= (const Vec2& rhs);
-	Vec2(Vec2&& rhs);
-	Vec2& operator= (Vec2&& rhs);
-	~Vec2() = default;*/
+	//Vec2(const Vec2& rhs) : x(rhs.x), y(rhs.y){}
+	//Vec2& operator= (const Vec2& rhs) { return *this = Vec2(rhs); }
+	//Vec2(Vec2&& rhs);
+	//Vec2& operator= (Vec2&& rhs);
+	~Vec2() = default;
 
 public: //Math
 	Vec2<T> operator+(const Vec2<T>& rhs)

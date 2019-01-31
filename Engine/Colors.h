@@ -34,31 +34,6 @@ public:
 		:
 		dword( dw )
 	{}
-	//constexpr Color( unsigned int dw, bool alpha )
-	//	:
-	//	dword( 0 )
-	//{
-	//	if (alpha)
-	//	{
-	//		//unsigned int temp1 = (dw & 0x000000FF) << 24u;
-	//		//unsigned int temp2 = (dw & 0x0000FF00) << 8u;
-	//		//unsigned int temp3 = (dw & 0x00FF0000) >> 8u;
-	//		//unsigned int temp4 = (dw & 0xFF000000) >> 24u;
-	//		//dword = temp1 | temp2 | temp3 | temp4;
-	//		dword = (((dw & 0x000000FF) << 24u) | ((dw & 0x0000FF00) << 8u) | ((dw & 0x00FF0000) >> 8u) | ((dw & 0xFF000000) >> 24u));
-	//	}
-	//	else
-	//		dword = (((dw & 0x00000000) << 24u) | ((dw & 0x0000FF00) << 8u) | ((dw & 0x00FF0000) >> 8u) | ((dw & 0xFF000000) >> 24u));
-	//}
-	//constexpr Color( unsigned char b,unsigned char g,unsigned char r,unsigned char x, bool alpha )
-	//	:
-	//	dword( 0 )
-	//{
-	//	if (alpha)
-	//		dword = (x << 24u) | (r << 16u) | (g << 8u) | b;
-	//	else
-	//		dword = (r << 16u) | (g << 8u) | b;
-	//}
 	constexpr Color( unsigned char x,unsigned char r,unsigned char g,unsigned char b )
 		:
 		dword( (x << 24u) | (r << 16u) | (g << 8u) | b )
