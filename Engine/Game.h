@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Board.h"
+#include "Menu.h"
 
 class Game
 {
@@ -37,10 +38,12 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
+	void GameRunning();
 	/********************************/
 private:
 	MainWindow & wnd;
 	Graphics gfx;
+	Menu menu;
 	Board brd;
 	/********************************/
 	/*  User Variables              */
@@ -48,5 +51,6 @@ private:
 	Player Player1{ 1, Colors::Blue };
 	Player Player2{ 2, Colors::Red };
 	int timmyturner = 200;
+	bool gameStarted = false;
 	/********************************/
 };

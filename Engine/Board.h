@@ -34,7 +34,7 @@ private:
 		Board& brd;
 		Vec2<int> loc;
 		Color c;
-		const int size;
+		const int size;//make static again, only need 1 copy, not 64
 		const int borderwidth = 5;
 		int x = loc.x*size + brd.GetBoardBorder();
 		int y = loc.y*size + brd.GetBoardBorder();
@@ -47,7 +47,11 @@ private:
 	};
 
 public:
-	Board(Graphics& gfx, const int size = 8, const int cellsize = 30);
+	Board(Graphics& gfx);
+	Board(Graphics& gfx, const int size, const int cellsize = 30);
+	Board(Graphics& gfx, Player& plr, const int size = 8, const int cellsize = 30);
+	Board(const Board& brd);
+	Board& operator=(const Board& brd);
 	int Update(int x, int y, Player& plr);
 	bool GameEnded();
 	int Cellsfilled();

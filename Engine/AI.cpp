@@ -15,3 +15,8 @@ AI::AI(Board& brd, int Playernumber, Color c)
 AI::~AI()
 {
 }
+
+void AI::Update(int i)
+{
+	cellstate[i] = cellstate[i] + 1;
+}

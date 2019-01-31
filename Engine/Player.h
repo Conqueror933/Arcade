@@ -10,6 +10,7 @@ public:
 	const int GetCounter();
 	//Setter
 	void SetCounter();
+	virtual void Update(int i) {}
 private:
 	Color c;
 	int counter;

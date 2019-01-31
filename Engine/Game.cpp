@@ -27,7 +27,8 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	brd(gfx)
+	brd(gfx),
+	menu(gfx)
 {
 }
 
@@ -41,58 +42,74 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (!brd.GameEnded())
+	if (gameStarted)
 	{
-		while (!wnd.mouse.IsEmpty())
+		if (!brd.GameEnded())
 		{
-			const auto e = wnd.mouse.Read();
-			if (e.GetType() == Mouse::Event::Type::LPress)
+			GameRunning();
+		}
+		else
+		{
+			if (Player1.GetCounter() > Player2.GetCounter())
 			{
-				int x = wnd.mouse.GetPosX();
-				int y = wnd.mouse.GetPosY();
-
-
-				int old = brd.Cellsfilled();
-				if (timmyturner % 2 == 0)
-				{
-					timmyturner += brd.Update(x, y, Player1);	//successful click == +1 == next player		//confirmed
-				}												//if click missed == +0 == same player		//confirmed
-				else if (timmyturner % 2 == 1)
-				{
-					timmyturner += brd.Update(x, y, Player2);
-				}
-				else
-				{
-					//smth went wrong
-					gfx.DrawRectangle(0, 0, 700, 500, Colors::Cyan);
-				}
-				//filled out a cell, so you can go again
-				if (old + 1 <= brd.Cellsfilled())					//has filled cell == -1 == same player
-					timmyturner--;								//if click missed == didnt fill cell == false == -0
+				//Player1 wins
+				gfx.DrawRectangle(0, 0, 700, 500, Player1.GetColor());
+			}
+			else if (Player1.GetCounter() < Player2.GetCounter())
+			{
+				// Player2 wins
+				gfx.DrawRectangle(0, 0, 700, 500, Player2.GetColor());
+			}
+			else
+			{
+				//Unentschieden || smth went very wrong
+				gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
 			}
 		}
 	}
 	else
 	{
-		if (Player1.GetCounter() > Player2.GetCounter())
-		{
-			//Player1 wins
-			gfx.DrawRectangle(0, 0, 700, 500, Player1.GetColor());
-		}
-		else if (Player1.GetCounter() < Player2.GetCounter())
-		{
-			// Player2 wins
-			gfx.DrawRectangle(0, 0, 700, 500, Player2.GetColor());
-		}
-		else
-		{
-			//Unentschieden || smth went very wrong
-			gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
-		}
+		menu.Update();
 	}
+	
 }
 
 void Game::ComposeFrame()
 {
-	brd.Draw();
+	if (gameStarted)
+		brd.Draw();
+	else
+		menu.Draw();	//not implemented yet
+}
+
+void Game::GameRunning()
+{
+	while (!wnd.mouse.IsEmpty())
+	{
+		const auto e = wnd.mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LPress)
+		{
+			int x = wnd.mouse.GetPosX();
+			int y = wnd.mouse.GetPosY();
+
+
+			int old = brd.Cellsfilled();
+			if (timmyturner % 2 == 0)
+			{
+				timmyturner += brd.Update(x, y, Player1);	//successful click == +1 == next player		//confirmed
+			}												//if click missed == +0 == same player		//confirmed
+			else if (timmyturner % 2 == 1)
+			{
+				timmyturner += brd.Update(x, y, Player2);
+			}
+			else
+			{
+				//smth went wrong
+				gfx.DrawRectangle(0, 0, 700, 500, Colors::Cyan);
+			}
+			//filled out a cell, so you can go again
+			if (old + 1 <= brd.Cellsfilled())					//has filled cell == -1 == same player
+				timmyturner--;								//if click missed == didnt fill cell == false == -0
+		}
+	}
 }
