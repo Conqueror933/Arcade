@@ -25,6 +25,7 @@ class Color
 public:
 	unsigned int dword;
 public:
+	//Constructors
 	constexpr Color() : dword() {}
 	constexpr Color( const Color& col )
 		:
@@ -51,6 +52,7 @@ public:
 		dword = color.dword;
 		return *this;
 	}
+	//Getters
 	constexpr unsigned char GetX() const
 	{
 		return dword >> 24u;
@@ -71,6 +73,7 @@ public:
 	{
 		return dword & 0xFFu;
 	}
+	//Setters
 	void SetX( unsigned char x )
 	{
 		dword = (dword & 0xFFFFFFu) | (x << 24u);
@@ -91,6 +94,7 @@ public:
 	{
 		dword = (dword & 0xFFFFFF00u) | b;
 	}
+	//Compare
 	bool operator==(const Color& c)
 	{
 		return c.dword == dword;
@@ -98,6 +102,21 @@ public:
 	bool operator!=(const Color& c)
 	{
 		return c.dword != dword;
+	}
+	//Functions
+	Color& Shade(float factor)
+	{
+		SetR(unsigned char((float)GetR() * factor + 0.5f));
+		SetG(unsigned char((float)GetG() * factor + 0.5f));
+		SetB(unsigned char((float)GetB() * factor + 0.5f));
+		return *this;
+	}
+	Color& Tint(float factor)
+	{
+		SetR(unsigned char((float)GetR() + (float)(255 - GetR()) * factor));
+		SetG(unsigned char((float)GetG() + (float)(255 - GetG()) * factor));
+		SetB(unsigned char((float)GetB() + (float)(255 - GetB()) * factor));
+		return *this;
 	}
 };
 
