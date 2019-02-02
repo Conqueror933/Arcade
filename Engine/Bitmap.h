@@ -62,14 +62,14 @@ public:
 	Text(Graphics& gfx, std::string filename);
 	void Draw(std::string str, Vec2<int> position, int letterspace, Color c);
 	void Draw(const char* str, Vec2<int> position, int letterspace, Color c);
-	inline void DrawRectangle(int x0, int y0, int x1, int y1, Color c)
-	{
-		gfx.DrawRectangle(x0, y0, x1, y1, c);
-	}
-	inline void DrawRectangleDim(int x0, int y0, int width, int height, Color c)
-	{
-		gfx.DrawRectangleDim(x0, y0, width, height, c);
-	}
+	//inline void DrawRectangle(int x0, int y0, int x1, int y1, Color c)
+	//{
+	//	gfx.DrawRectangle(x0, y0, x1, y1, c);
+	//}
+	//inline void DrawRectangleDim(int x0, int y0, int width, int height, Color c)
+	//{
+	//	gfx.DrawRectangleDim(x0, y0, width, height, c);
+	//}
 	int GetLetterWidth(char letter)
 	{
 		if (letter == ' ')

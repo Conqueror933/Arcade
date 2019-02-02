@@ -144,6 +144,7 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="DXErr.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />

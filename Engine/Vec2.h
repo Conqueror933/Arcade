@@ -14,8 +14,8 @@ public:	//Ctor, Dtor, Copy, Move
 		y = in_y;
 	}
 
-	//Vec2(const Vec2& rhs) : x(rhs.x), y(rhs.y){}
-	//Vec2& operator= (const Vec2& rhs) { return *this = Vec2(rhs); }
+	Vec2(const Vec2& rhs) : x(rhs.x), y(rhs.y){}
+	Vec2& operator= (const Vec2& rhs) { return *this = Vec2(rhs); }
 	//Vec2(Vec2&& rhs);
 	//Vec2& operator= (Vec2&& rhs);
 	~Vec2() = default;
@@ -66,6 +66,22 @@ public: //Comparison
 	{
 		return x != rhs.x || y != rhs.y;
 	}
+	//bool operator<(const Vec2<T> rhs)
+	//{
+	//	return x < rhs.x && y < rhs.y;
+	//}
+	//bool operator>(const Vec2<T> rhs)
+	//{
+	//	return x > rhs.x && y > rhs.y;
+	//}
+	//bool operator<=(const Vec2<T> rhs)
+	//{
+	//	return x <= rhs.x && y <= rhs.y;
+	//}
+	//bool operator>=(const Vec2<T> rhs)
+	//{
+	//	return x >= rhs.x && y >= rhs.y;
+	//}
 
 public:
 	T x;

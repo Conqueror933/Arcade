@@ -1,5 +1,6 @@
 Stuff to add:
 bitmap:
+support different bmp formats
 scaling of Text
 kleinbuchstaben und satzzeichen
 INCLUDE SPACE!   ---  currently done in GetLetterWidth

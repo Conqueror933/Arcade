@@ -69,7 +69,7 @@ void Game::UpdateModel()
 	}
 	else
 	{
-		menu.Update();
+		menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
 	}
 	
 }
