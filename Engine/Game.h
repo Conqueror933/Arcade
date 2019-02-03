@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Board.h"
 #include "Menu.h"
+#include "Effect.h"
 
 class Game
 {
@@ -51,6 +52,6 @@ private:
 	Player Player1{ 1, Colors::Blue };
 	Player Player2{ 2, Colors::Red };
 	int timmyturner = 200;
-	bool gameStarted = false;
+	Gamestate gameStarted = GsMenu;
 	/********************************/
 };

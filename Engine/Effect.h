@@ -3,7 +3,18 @@
 #include "Graphics.h"
 #include "Colors.h"
 
-namespace ButtonEffect
+
+enum Gamestate
+{
+	GsMenu,
+	GstwoPlayer,
+	GsAILevel1,
+	GsAILevel2,
+	GsAILevel3,
+	GsOptionen
+};
+
+namespace GraphicEffect
 {
 	class Standard
 	{
@@ -39,5 +50,18 @@ namespace ButtonEffect
 		}
 	private:
 		Color chroma;
+	};
+}
+
+namespace ButtonEffect
+{
+	class Standard
+	{
+	public:
+		Standard() = default;
+		void operator()() const
+		{
+			
+		}
 	};
 }

@@ -42,7 +42,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (gameStarted)
+	if (gameStarted == GstwoPlayer)
 	{
 		if (!brd.GameEnded())
 		{
@@ -69,17 +69,17 @@ void Game::UpdateModel()
 	}
 	else
 	{
-		menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+		menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
 	}
 	
 }
 
 void Game::ComposeFrame()
 {
-	if (gameStarted)
+	if (gameStarted == GstwoPlayer)
 		brd.Draw();
 	else
-		menu.Draw();	//not implemented yet
+		menu.Draw();
 }
 
 void Game::GameRunning()

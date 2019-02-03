@@ -12,7 +12,6 @@
 class Menu
 {
 private:
-public:
 	struct Label : public WorldObject
 	{
 		Label() = default;
@@ -31,11 +30,12 @@ public:
 	class Button : public WorldObject
 	{
 	public:
-		Button(Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, 
+		Button(Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,// E effect
 			Text* text, std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White)
 			:
 			WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
 			half_bordersize(half_bordersize),
+			//effect(effect),
 			label(gfx, text, s, 
 				Vec2<int>(position.x + half_bordersize*2, position.y + half_bordersize*2),
 				Vec2<int>(size.x - half_bordersize*4, size.y - half_bordersize*4),
@@ -49,7 +49,18 @@ public:
 	public:
 		void Update() override
 		{
+			if (clicked)
+			{
+				//this is the moment for the effect to take place. ...?
 
+				//effect();
+
+				// 2 Player
+				//AI level 1
+				//AI level 2
+				//AI level 3
+				//Optionen
+			}
 		}
 		void Draw() override
 		{
@@ -57,12 +68,12 @@ public:
 			{
 				Color b = backgroundcolor; b.Shade(0.5f);
 				Color f = foregroundcolor; f.Shade(0.5f);
-				label.backgroundcolor.Shade(0.75f);
+				if(clicked) label.backgroundcolor.Shade(0.75f);
 				gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, b);
 				gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
 					size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
 				label.Draw();
-				label.backgroundcolor.Tint(0.75f);
+				if(clicked) label.backgroundcolor.Tint(0.75f);
 			}
 			else
 			{
@@ -72,18 +83,15 @@ public:
 				label.Draw();
 			}
 		}
-		void SetHighlight(bool b) 
-		{ highlighted = b; 
-		}
-	private:
-		//hit detection
-			//possible animation
-		//invokes smth when pressed
+		void SetHighlight(bool b) { highlighted = b; }
+		void SetClicked(bool b) { clicked = b; }
+
 	private:
 		Label label;
 		int half_bordersize;
 		//E effect;
 		bool highlighted = false;
+		bool clicked = false;
 	};
 public:
 	Menu(Graphics& gfx);
@@ -93,7 +101,7 @@ public:
 	//Menu& operator=(const Menu&&) = delete;
 	~Menu();
 
-	void Update(int mouse_x, int mouse_y);
+	void Update(int mouse_x, int mouse_y, bool buttondown);
 	void Draw();
 
 private:

@@ -7,20 +7,38 @@ Menu::Menu(Graphics& gfx)
 	gfx(gfx),
 	text(gfx, "Letters2.bmp")
 {
-	objects.emplace_back(std::make_unique<Label>(&gfx, &text, "Hello World", Vec2<int>{ 100, 100 }));
-	objects.emplace_back(std::make_unique<Label>(&gfx, &text, "Continue", Vec2<int>{ 100, 200 }));
-	objects.emplace_back(std::make_unique<Label>(&gfx, &text, "End", Vec2<int>{ 100, 300 }));
-	objects.emplace_back(std::make_unique<Button>(&gfx, Vec2<int>{ 100, 400 }, Vec2<int>{ 100, 50 }, 2, Colors::Gray, Colors::LightGray, &text, "Play", Colors::White, Colors::Black));
-
-	//Graphics* gfx, Vec2<int> position, Vec2<int> size, int bordersize, Color backgroundcolor, Color foregroundcolor, 
-	//Text* text, std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White
+	//Set Background
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth-1, gfx.ScreenHeight-1, Color(0u, 0u, 205u));
+	//Welcome Label
+	objects.emplace_back(std::make_unique<Label>(
+		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+	//2 Player
+	objects.emplace_back(std::make_unique<Button>(
+		&gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, 
+		&text, "Zwei Spieler", Colors::White, Colors::Black));
+	//AI Level 1
+	objects.emplace_back(std::make_unique<Button>(
+		&gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
+		&text, "KI Level Eins", Colors::White, Colors::Black));
+	//AI Level 2
+	objects.emplace_back(std::make_unique<Button>(
+		&gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
+		&text, "KI Level Zwei", Colors::White, Colors::Black));
+	//AI Level 3
+	objects.emplace_back(std::make_unique<Button>(
+		&gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
+		&text, "KI Level Drei", Colors::White, Colors::Black));
+	//Optionen
+	objects.emplace_back(std::make_unique<Button>(
+		&gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
+		&text, "Optionen", Colors::White, Colors::Black));
 }
 
 Menu::~Menu()
 {
 }
 
-void Menu::Update(int mouse_x, int mouse_y)
+void Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 {
 	for (auto i = 0u; i < objects.size(); i++)
 	{
@@ -28,7 +46,13 @@ void Menu::Update(int mouse_x, int mouse_y)
 		{
 			if (temp->position.x <= mouse_x && (temp->position.x + temp->size.x) >= mouse_x &&
 				temp->position.y <= mouse_y && (temp->position.y + temp->size.y) >= mouse_y)
+			{
 				temp->SetHighlight(true);
+				if (buttondown)
+					temp->SetClicked(true);
+				else
+					temp->SetClicked(false);
+			}
 			else
 				temp->SetHighlight(false);
 		}
