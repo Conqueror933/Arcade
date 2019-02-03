@@ -4,7 +4,6 @@
 
 Menu::Menu(Graphics& gfx)
 	: 
-	gfx(gfx),
 	text(gfx, "Letters2.bmp")
 {
 	//Set Background
@@ -14,31 +13,31 @@ Menu::Menu(Graphics& gfx)
 		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
 	objects.emplace_back(std::make_unique<Button>(
-		&gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, 
-		&text, "Zwei Spieler", Colors::White, Colors::Black));
+		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
+		"Zwei Spieler", Colors::White, Colors::Black));
 	//AI Level 1
 	objects.emplace_back(std::make_unique<Button>(
-		&gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
-		&text, "KI Level Eins", Colors::White, Colors::Black));
+		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
+		"KI Level Eins", Colors::White, Colors::Black));
 	//AI Level 2
 	objects.emplace_back(std::make_unique<Button>(
-		&gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
-		&text, "KI Level Zwei", Colors::White, Colors::Black));
+		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
+		"KI Level Zwei", Colors::White, Colors::Black));
 	//AI Level 3
 	objects.emplace_back(std::make_unique<Button>(
-		&gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
-		&text, "KI Level Drei", Colors::White, Colors::Black));
+		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
+		"KI Level Drei", Colors::White, Colors::Black));
 	//Optionen
 	objects.emplace_back(std::make_unique<Button>(
-		&gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray,
-		&text, "Optionen", Colors::White, Colors::Black));
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsOptionen,
+		"Optionen", Colors::White, Colors::Black));
 }
 
 Menu::~Menu()
 {
 }
 
-void Menu::Update(int mouse_x, int mouse_y, bool buttondown)
+Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 {
 	for (auto i = 0u; i < objects.size(); i++)
 	{
@@ -56,7 +55,9 @@ void Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 			else
 				temp->SetHighlight(false);
 		}
+		objects[i]->Update();
 	}
+	return gs;
 }
 
 void Menu::Draw()
@@ -114,5 +115,53 @@ void Menu::Label::Draw()
 		auto y = size.y - height;
 		Vec2<int> vec = { position.x + x / 2, position.y + y / 2 };
 		text->Draw(s, vec, letterspacing, foregroundcolor);
+	}
+}
+
+inline Menu::Button::Button(
+	Menu& menu, Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+	std::string s, Color background, Color textcolor)
+	:
+	WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
+	half_bordersize(half_bordersize),
+	gs(gs),
+	menu(menu),
+	label(gfx, &menu.text, s,
+		Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
+		Vec2<int>(size.x - half_bordersize * 4, size.y - half_bordersize * 4),
+		background, textcolor)
+{
+	if (size == Vec2<int>{0, 0}) throw std::exception("Button can't have 0 size.");
+	if (label.size.x < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+	if (label.size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+}
+
+inline void Menu::Button::Update()
+{
+	if (clicked)
+	{
+		menu.gs = gs;
+	}
+}
+
+inline void Menu::Button::Draw()
+{
+	if (highlighted)
+	{
+		Color b = backgroundcolor; b.Shade(0.5f);
+		Color f = foregroundcolor; f.Shade(0.5f);
+		if (clicked) label.backgroundcolor.Shade(0.75f);
+		gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, b);
+		gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+			size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
+		label.Draw();
+		if (clicked) label.backgroundcolor.Tint(0.75f);
+	}
+	else
+	{
+		gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
+		gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+			size.x - half_bordersize * 2, size.y - half_bordersize * 2, foregroundcolor);
+		label.Draw();
 	}
 }
