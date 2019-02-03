@@ -48,8 +48,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	std::vector<Player> players;
-	Player Player1{ 1, Colors::Blue };
-	Player Player2{ 2, Colors::Red };
 	int timmyturner = 200;
 	Gamestate gamestate = GsMenu;
 	/********************************/

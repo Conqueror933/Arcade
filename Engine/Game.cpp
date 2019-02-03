@@ -30,6 +30,8 @@ Game::Game(MainWindow& wnd)
 	brd(gfx),
 	menu(gfx)
 {
+	players.emplace_back(Player{ 1, Colors::Blue });
+	players.emplace_back(Player{ 2, Colors::Red });
 }
 
 void Game::Go()
@@ -50,15 +52,15 @@ void Game::UpdateModel()
 		}
 		else
 		{
-			if (Player1.GetCounter() > Player2.GetCounter())
+			if (players[0].GetCounter() > players[1].GetCounter())
 			{
-				//Player1 wins
-				gfx.DrawRectangle(0, 0, 700, 500, Player1.GetColor());
+				//players[0] wins
+				gfx.DrawRectangle(0, 0, 700, 500, players[0].GetColor());
 			}
-			else if (Player1.GetCounter() < Player2.GetCounter())
+			else if (players[0].GetCounter() < players[1].GetCounter())
 			{
-				// Player2 wins
-				gfx.DrawRectangle(0, 0, 700, 500, Player2.GetColor());
+				// players[1] wins
+				gfx.DrawRectangle(0, 0, 700, 500, players[1].GetColor());
 			}
 			else
 			{
@@ -67,7 +69,7 @@ void Game::UpdateModel()
 			}
 		}
 	}
-	else
+	else if(gamestate == GsMenu)
 	{
 		gamestate = menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
 	}
@@ -96,11 +98,11 @@ void Game::GameRunning()
 			int old = brd.Cellsfilled();
 			if (timmyturner % 2 == 0)
 			{
-				timmyturner += brd.Update(x, y, Player1);	//successful click == +1 == next player		//confirmed
+				timmyturner += brd.Update(x, y, players[0]);	//successful click == +1 == next player		//confirmed
 			}												//if click missed == +0 == same player		//confirmed
 			else if (timmyturner % 2 == 1)
 			{
-				timmyturner += brd.Update(x, y, Player2);
+				timmyturner += brd.Update(x, y, players[1]);
 			}
 			else
 			{
