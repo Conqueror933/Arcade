@@ -7,17 +7,7 @@
 #include "WorldObject.h"
 #include <memory>
 #include "MainWindow.h"
-
-enum Gamestate
-{
-	GsError = -1,
-	GsMenu,
-	GstwoPlayer,
-	GsAILevel1,
-	GsAILevel2,
-	GsAILevel3,
-	GsOptionen
-};
+#include "Enum.h"
 
 class Menu
 {

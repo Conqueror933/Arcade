@@ -43,7 +43,7 @@ Board::Board(Graphics & gfx, const int size, const int cellsize)
 /****************************************************************************************************/
 /*												Logic												*/
 /****************************************************************************************************/
-int Board::Update(int x, int y, Player& plr)
+Gamestate Board::Update(int x, int y, bool buttondown)
 {
 	int r;
 	int i = FindCell(x, y);

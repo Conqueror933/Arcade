@@ -77,7 +77,8 @@ void Game::UpdateModel()
 			else
 				curInterface = new Board(gfx, 5, 30);
 		//<code>
-		if (!static_cast<Board*>(curInterface)->GameEnded())
+		gamestate = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
+		/*if (!static_cast<Board*>(curInterface)->GameEnded())
 		{
 			GameRunning();
 		}
@@ -98,7 +99,7 @@ void Game::UpdateModel()
 				//Unentschieden || smth went very wrong
 				gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
 			}
-		}
+		}*/
 		//</code>
 		prevgamestate = GstwoPlayer;
 		break;
