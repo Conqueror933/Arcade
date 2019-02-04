@@ -18,15 +18,15 @@ Menu::Menu(Graphics& gfx)
 	//AI Level 1
 	objects.emplace_back(std::make_unique<Button>(
 		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
-		"KI Level Eins", Colors::White, Colors::Black));
+		"Einfach", Colors::White, Colors::Black));
 	//AI Level 2
 	objects.emplace_back(std::make_unique<Button>(
 		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
-		"KI Level Zwei", Colors::White, Colors::Black));
+		"Mittel", Colors::White, Colors::Black));
 	//AI Level 3
 	objects.emplace_back(std::make_unique<Button>(
 		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
-		"KI Level Drei", Colors::White, Colors::Black));
+		"Schwer", Colors::White, Colors::Black));
 	//Optionen
 	objects.emplace_back(std::make_unique<Button>(
 		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsOptionen,

@@ -44,8 +44,12 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (gamestate == GstwoPlayer)
+	switch (gamestate)
 	{
+	case GsMenu:
+		gamestate = menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
+		break;
+	case GstwoPlayer:
 		if (!brd.GameEnded())
 		{
 			GameRunning();
@@ -68,20 +72,41 @@ void Game::UpdateModel()
 				gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
 			}
 		}
+		break;
+	case GsAILevel1:
+		break;
+	case GsAILevel2:
+		break;
+	case GsAILevel3:
+		break;
+	case GsOptionen:
+		break;
+	default:
+		gamestate = GsError;
 	}
-	else if(gamestate == GsMenu)
-	{
-		gamestate = menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
-	}
-	
 }
 
 void Game::ComposeFrame()
 {
-	if (gamestate == GstwoPlayer)
-		brd.Draw();
-	else
+	switch (gamestate)
+	{
+	case GsMenu:
 		menu.Draw();
+		break;
+	case GstwoPlayer:
+		brd.Draw();
+		break;
+	case GsAILevel1:
+		break;
+	case GsAILevel2:
+		break;
+	case GsAILevel3:
+		break;
+	case GsOptionen:
+		break;
+	default:
+		throw std::exception("Bad Gamestate.");
+	}
 }
 
 void Game::GameRunning()
