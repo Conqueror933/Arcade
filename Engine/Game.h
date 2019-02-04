@@ -39,16 +39,13 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void GameRunning();
 	/********************************/
 private:
 	MainWindow & wnd;
 	Graphics gfx;
-	void* curInterface = nullptr;
 	/********************************/
 	/*  User Variables              */
-	std::vector<Player> players;
-	int timmyturner = 200;
+	void* curInterface = nullptr;
 	Gamestate gamestate = GsMenu;
 	Gamestate prevgamestate;
 	/********************************/

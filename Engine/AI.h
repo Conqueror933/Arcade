@@ -8,7 +8,7 @@ class AI : public Player
 public:
 	AI(Board& brd, int Playernumber, Color c);
 	~AI();
-	void Update(int i) override;
+	void Update(int i);
 
 private:
 	Board& brd;

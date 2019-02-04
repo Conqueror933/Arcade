@@ -4,15 +4,14 @@
 class Player
 {
 public:
-	Player(int Playernumber, Color c);
+	Player(Color c) : c(c) {}
 	//Getter
-	const Color GetColor();
-	const int GetCounter();
+	const Color GetColor() { return c; }
+	const int GetCounter() { return counter; }
 	//Setter
-	void SetCounter();
-	virtual void Update(int i) {}
+	void SetCounter(){ counter++; }
+
 private:
 	Color c;
-	int counter;
-	int playernumber;
+	int counter = 0;
 };

@@ -3,8 +3,25 @@
 #include "Graphics.h"
 #include <vector>
 #include "Vec2.h"
-#include "Enum.h"
 #include "Player.h"
+
+enum Direction
+{
+	Dirtop,
+	Dirleft
+};
+
+struct BoardColors
+{
+	Color foreground = Colors::LightGray;
+	Color background = Colors::Gray;
+
+	Color clicked = Colors::White;
+	Color lastclicked = Colors::Green;
+
+	Color player1 = Colors::Blue;
+	Color player2 = Colors::Red;
+};
 
 class Board
 {
@@ -12,10 +29,10 @@ private:
 	class Cell
 	{
 	public:
-		Cell(Board& brd, Graphics& gfx, Vec2<int> loc, Color c, const int size = 30);
+		Cell(Board& brd, Vec2<int> position, Vec2<int> size);
 		~Cell();
 		Cell(const Cell& other);
-		Cell& operator=(Cell other);
+		Cell& operator=(const Cell& other);
 		int Update(Direction e, Player& plr);
 		int UpdateBorders(Direction e);
 		const void Draw(Color c);
@@ -47,19 +64,14 @@ private:
 	};
 
 public:
-	//Board(Graphics& gfx);
-	Board(Graphics& gfx, const int size, const int cellsize = 30);
-	//Board(Graphics& gfx, Player& plr, const int size = 8, const int cellsize = 30);
+	Board(Graphics& gfx, const BoardColors brdclr, 
+		const Vec2<int> topleft, const Vec2<int> bottomright, const Vec2<int> size, 
+		const Vec2<int> cellsize = const Vec2<int>{ 30, 30 });
 	Board(const Board& brd) = delete;
 	Board& operator=(const Board& brd) = delete;
-	Gamestate Update(int x, int y, bool buttondown);
-	bool GameEnded();
-	int Cellsfilled();
-	const void Draw();
-	const int GetBoardSize();
-	const int GetCellSize();
-	const int GetCellBorderwidth();
-	const int GetBoardBorder();
+
+	bool Update(int x, int y, bool buttondown);
+	void Draw() const;
 
 private:
 	Direction DetectMouseInput(int i, Vec2<int> loc);
@@ -69,16 +81,73 @@ private:
 	const bool Collision(const int x0, const int y0, const int x1, const int y1, Vec2<int> to_check);
 
 private:
-	Graphics& gfx;
-	Vec2<int> loc;
-	const int boardborder = 50;
-	const int size;
+	const BoardColors brdclr;
+	const Vec2<int> topleft;
+	const Vec2<int> bottomright;
+	const Vec2<int> size;
 	std::vector<Cell> cells;
-	const Color boardColor = Colors::LightGray;
-	const Color borderColor = Colors::Gray;
-	const Color clickedColor = Colors::White;
 	int cellsfilled = 0;
 	int lastclickedCell = -1;
 	Direction lastclickedDirection;
+
+	std::vector<Player> players;
+	int timmyturner = 0;
 };
 
+
+
+/*if (!static_cast<Board*>(curInterface)->GameEnded())
+{
+GameRunning();
+}
+else
+{
+if (players[0].GetCounter() > players[1].GetCounter())
+{
+//players[0] wins
+gfx.DrawRectangle(0, 0, 700, 500, players[0].GetColor());
+}
+else if (players[0].GetCounter() < players[1].GetCounter())
+{
+// players[1] wins
+gfx.DrawRectangle(0, 0, 700, 500, players[1].GetColor());
+}
+else
+{
+//Unentschieden || smth went very wrong
+gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
+}
+}*/
+
+void Game::GameRunning()
+{
+	auto brd = static_cast<Board*>(curInterface);
+	while (!wnd.mouse.IsEmpty())
+	{
+		const auto e = wnd.mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LPress)
+		{
+			int x = wnd.mouse.GetPosX();
+			int y = wnd.mouse.GetPosY();
+
+
+			int old = brd->Cellsfilled();
+			if (timmyturner % 2 == 0)
+			{
+				timmyturner += brd->Update(x, y, players[0]);	//successful click == +1 == next player		//confirmed
+			}												//if click missed == +0 == same player		//confirmed
+			else if (timmyturner % 2 == 1)
+			{
+				timmyturner += brd->Update(x, y, players[1]);
+			}
+			else
+			{
+				//smth went wrong
+				gfx.DrawRectangle(0, 0, 700, 500, Colors::Cyan);
+			}
+			//filled out a cell, so you can go again
+			if (old + 1 <= brd->Cellsfilled())					//has filled cell == -1 == same player
+				timmyturner--;								//if click missed == didnt fill cell == false == -0
+		}
+	}
+}

@@ -1,26 +1,30 @@
 #include "Board.h"
-#include "Graphics.h"
-#include "Player.h"
-#include "Enum.h"
 #include <assert.h>
 
-Board::Board(Graphics & gfx, const int size, const int cellsize)
+Board::Board(Graphics& gfx, const BoardColors brdclr,
+	const Vec2<int> topleft, const Vec2<int> bottomright, const Vec2<int> size,
+	const Vec2<int> cellsize)
 	:
-	gfx(gfx),
+	brdclr(brdclr),
+	topleft(topleft),
+	bottomright(bottomright),
 	size(size)
 {
 	//Set Background
 	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 205u, 0u));
 	//reserve Cell space to avoid reallocating
-	cells.reserve(size*size);
+	cells.reserve(size.x*size.y);
 	//make Cells
-	for (int x = 0; x < size; x++)
+	for (int x = 0; x < size.x; x++)
 	{
-		for (int y = 0; y < size; y++)
+		for (int y = 0; y < size.y; y++)
 		{
-			cells.emplace_back( *this, gfx, Vec2<int>{ x,y }, boardColor, cellsize );
+			cells.emplace_back(*this, gfx, Vec2<int>{ x, y }, cellsize);
 		}
 	}
+	//make Players
+	players.emplace_back(brdclr.player1);
+	players.emplace_back(brdclr.player2);
 	//Fill Cells at border of Board
 	for (int i = 0; i < size; i++)
 	{
@@ -43,7 +47,7 @@ Board::Board(Graphics & gfx, const int size, const int cellsize)
 /****************************************************************************************************/
 /*												Logic												*/
 /****************************************************************************************************/
-Gamestate Board::Update(int x, int y, bool buttondown)
+bool Board::Update(int x, int y, bool buttondown)
 {
 	int r;
 	int i = FindCell(x, y);
