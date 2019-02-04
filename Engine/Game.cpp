@@ -54,9 +54,8 @@ void Game::UpdateModel()
 	switch (gamestate)
 	{
 	case GsMenu:
-	{
 		if (prevgamestate != GsMenu)
-			if (curInterface != nullptr) 
+			if (curInterface != nullptr)
 			{
 				delete curInterface;
 				curInterface = new Menu(gfx); 
@@ -68,16 +67,15 @@ void Game::UpdateModel()
 		//</code>
 		prevgamestate = GsMenu;
 		break;
-	}
 	case GstwoPlayer:
-		if (prevgamestate != GsMenu)
+		if (prevgamestate != GstwoPlayer)
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx);
+				curInterface = new Board(gfx, 5, 30);
 			}
 			else
-				curInterface = new Menu(gfx);
+				curInterface = new Board(gfx, 5, 30);
 		//<code>
 		if (!static_cast<Board*>(curInterface)->GameEnded())
 		{
@@ -105,56 +103,56 @@ void Game::UpdateModel()
 		prevgamestate = GstwoPlayer;
 		break;
 	case GsAILevel1:
-		if (prevgamestate != GsMenu)
+		if (prevgamestate != GsAILevel1)
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 			}
 			else
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
 		prevgamestate = GsAILevel1;
 		break;
 	case GsAILevel2:
-		if (prevgamestate != GsMenu)
+		if (prevgamestate != GsAILevel2)
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 			}
 			else
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
 		prevgamestate = GsAILevel2;
 		break;
 	case GsAILevel3:
-		if (prevgamestate != GsMenu)
+		if (prevgamestate != GsAILevel3)
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 			}
 			else
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
 		prevgamestate = GsAILevel3;
 		break;
 	case GsOptionen:
-		if (prevgamestate != GsMenu)
+		if (prevgamestate != GsOptionen)
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 			}
 			else
-				curInterface = new Menu(gfx);
+				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
@@ -167,7 +165,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	switch (gamestate)
+	switch (prevgamestate)
 	{
 	case GsMenu:
 		static_cast<Menu*>(curInterface)->Draw();
@@ -190,8 +188,7 @@ void Game::ComposeFrame()
 
 void Game::GameRunning()
 {
-	auto pbrd = static_cast<Board*>(curInterface);
-	auto brd = *pbrd; pbrd = nullptr;
+	auto brd = static_cast<Board*>(curInterface);
 	while (!wnd.mouse.IsEmpty())
 	{
 		const auto e = wnd.mouse.Read();
@@ -201,14 +198,14 @@ void Game::GameRunning()
 			int y = wnd.mouse.GetPosY();
 
 
-			int old = brd.Cellsfilled();
+			int old = brd->Cellsfilled();
 			if (timmyturner % 2 == 0)
 			{
-				timmyturner += brd.Update(x, y, players[0]);	//successful click == +1 == next player		//confirmed
+				timmyturner += brd->Update(x, y, players[0]);	//successful click == +1 == next player		//confirmed
 			}												//if click missed == +0 == same player		//confirmed
 			else if (timmyturner % 2 == 1)
 			{
-				timmyturner += brd.Update(x, y, players[1]);
+				timmyturner += brd->Update(x, y, players[1]);
 			}
 			else
 			{
@@ -216,7 +213,7 @@ void Game::GameRunning()
 				gfx.DrawRectangle(0, 0, 700, 500, Colors::Cyan);
 			}
 			//filled out a cell, so you can go again
-			if (old + 1 <= brd.Cellsfilled())					//has filled cell == -1 == same player
+			if (old + 1 <= brd->Cellsfilled())					//has filled cell == -1 == same player
 				timmyturner--;								//if click missed == didnt fill cell == false == -0
 		}
 	}

@@ -4,19 +4,16 @@
 #include "Enum.h"
 #include <assert.h>
 
-Board::Board(Graphics & gfx)
-	:
-	gfx(gfx),
-	size(0)
-{
-}
-
 Board::Board(Graphics & gfx, const int size, const int cellsize)
 	:
 	gfx(gfx),
 	size(size)
 {
+	//Set Background
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 205u, 0u));
+	//reserve Cell space to avoid reallocating
 	cells.reserve(size*size);
+	//make Cells
 	for (int x = 0; x < size; x++)
 	{
 		for (int y = 0; y < size; y++)
@@ -24,7 +21,7 @@ Board::Board(Graphics & gfx, const int size, const int cellsize)
 			cells.emplace_back( *this, gfx, Vec2<int>{ x,y }, boardColor, cellsize );
 		}
 	}
-
+	//Fill Cells at border of Board
 	for (int i = 0; i < size; i++)
 	{
 		cells[i].UpdateBorders(eleft);
@@ -41,54 +38,6 @@ Board::Board(Graphics & gfx, const int size, const int cellsize)
 	{
 		cells[i].UpdateBorders(ebottom);
 	}
-}
-
-Board::Board(Graphics & gfx, Player& plr, const int size, const int cellsize)
-	:
-	gfx(gfx),
-	size(size)
-{
-	cells.reserve(size*size);
-	for (int x = 0; x < size; x++)
-	{
-		for (int y = 0; y < size; y++)
-		{
-			cells.emplace_back(*this, gfx, Vec2<int>{ x, y }, boardColor, cellsize);
-		}
-	}
-
-	for (int i = 0; i < size; i++)
-	{
-		cells[i].UpdateBorders(eleft);
-		plr.Update(i);
-	}
-	for (int i = size * (size - 1); i < size*size; i++)
-	{
-		cells[i].UpdateBorders(eright);
-		plr.Update(i);
-	}
-	for (int i = 0; i < size*size; i += size)
-	{
-		cells[i].UpdateBorders(etop);
-		plr.Update(i);
-	}
-	for (int i = size - 1; i < size*size; i += size)
-	{
-		cells[i].UpdateBorders(ebottom);
-		plr.Update(i);
-	}
-}
-
-Board::Board(const Board & brd)
-	:
-	gfx(brd.gfx),
-	size(brd.size)
-{
-}
-
-Board & Board::operator=(const Board & brd)
-{
-	return *this;
 }
 
 /****************************************************************************************************/
@@ -436,4 +385,3 @@ const int Board::Cell::GetBorderwidth()
 {
 	return borderwidth;
 }
-

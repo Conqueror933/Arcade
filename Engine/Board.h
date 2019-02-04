@@ -47,11 +47,11 @@ private:
 	};
 
 public:
-	Board(Graphics& gfx);
+	//Board(Graphics& gfx);
 	Board(Graphics& gfx, const int size, const int cellsize = 30);
-	Board(Graphics& gfx, Player& plr, const int size = 8, const int cellsize = 30);
-	Board(const Board& brd);
-	Board& operator=(const Board& brd);
+	//Board(Graphics& gfx, Player& plr, const int size = 8, const int cellsize = 30);
+	Board(const Board& brd) = delete;
+	Board& operator=(const Board& brd) = delete;
 	int Update(int x, int y, Player& plr);
 	bool GameEnded();
 	int Cellsfilled();
