@@ -26,12 +26,19 @@
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
-	gfx(wnd),
-	brd(gfx),
-	menu(gfx)
+	gfx(wnd)
 {
 	players.emplace_back(Player{ 1, Colors::Blue });
 	players.emplace_back(Player{ 2, Colors::Red });
+}
+
+Game::~Game()
+{
+	if (curInterface != nullptr)
+	{
+		delete curInterface;
+		curInterface = nullptr;
+	}
 }
 
 void Game::Go()
@@ -47,10 +54,32 @@ void Game::UpdateModel()
 	switch (gamestate)
 	{
 	case GsMenu:
-		gamestate = menu.Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
+	{
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr) 
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx); 
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+		gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
+		//</code>
+		prevgamestate = GsMenu;
 		break;
+	}
 	case GstwoPlayer:
-		if (!brd.GameEnded())
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx);
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+		if (!static_cast<Board*>(curInterface)->GameEnded())
 		{
 			GameRunning();
 		}
@@ -72,14 +101,64 @@ void Game::UpdateModel()
 				gfx.DrawRectangle(0, 0, 700, 500, Colors::Green);
 			}
 		}
+		//</code>
+		prevgamestate = GstwoPlayer;
 		break;
 	case GsAILevel1:
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx);
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+
+		//</code>
+		prevgamestate = GsAILevel1;
 		break;
 	case GsAILevel2:
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx);
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+
+		//</code>
+		prevgamestate = GsAILevel2;
 		break;
 	case GsAILevel3:
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx);
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+
+		//</code>
+		prevgamestate = GsAILevel3;
 		break;
 	case GsOptionen:
+		if (prevgamestate != GsMenu)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Menu(gfx);
+			}
+			else
+				curInterface = new Menu(gfx);
+		//<code>
+
+		//</code>
+		prevgamestate = GsOptionen;
 		break;
 	default:
 		gamestate = GsError;
@@ -91,10 +170,10 @@ void Game::ComposeFrame()
 	switch (gamestate)
 	{
 	case GsMenu:
-		menu.Draw();
+		static_cast<Menu*>(curInterface)->Draw();
 		break;
 	case GstwoPlayer:
-		brd.Draw();
+		static_cast<Board*>(curInterface)->Draw();
 		break;
 	case GsAILevel1:
 		break;
@@ -111,6 +190,8 @@ void Game::ComposeFrame()
 
 void Game::GameRunning()
 {
+	auto pbrd = static_cast<Board*>(curInterface);
+	auto brd = *pbrd; pbrd = nullptr;
 	while (!wnd.mouse.IsEmpty())
 	{
 		const auto e = wnd.mouse.Read();

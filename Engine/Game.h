@@ -32,6 +32,7 @@ public:
 	Game(class MainWindow& wnd);
 	Game(const Game&) = delete;
 	Game& operator=(const Game&) = delete;
+	~Game();
 	void Go();
 private:
 	void ComposeFrame();
@@ -43,12 +44,12 @@ private:
 private:
 	MainWindow & wnd;
 	Graphics gfx;
-	Menu menu;
-	Board brd;
+	void* curInterface = nullptr;
 	/********************************/
 	/*  User Variables              */
 	std::vector<Player> players;
 	int timmyturner = 200;
 	Gamestate gamestate = GsMenu;
+	Gamestate prevgamestate;
 	/********************************/
 };
