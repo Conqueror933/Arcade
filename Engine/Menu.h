@@ -17,7 +17,8 @@ enum Gamestate
 	GsAILevel2,
 	GsAILevel3,
 	GsOptionen,
-	GsVictory
+	GsPlayer1Victory,
+	GsPlayer2Victory
 };
 
 class Menu

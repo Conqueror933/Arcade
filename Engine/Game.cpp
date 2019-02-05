@@ -61,22 +61,41 @@ void Game::UpdateModel()
 			else
 				curInterface = new Menu(gfx);
 		//<code>
-		gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed());
+		while (!wnd.mouse.IsEmpty())
+		{
+			const auto e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), true);
+			else
+				gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), false);
+		}
 		//</code>
 		prevgamestate = GsMenu;
 		break;
 	case GstwoPlayer:
 		if (prevgamestate != GstwoPlayer)
+		{
+			BoardColors brdclr;
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Board(gfx, 5, 30);
+				curInterface = new Board(gfx, brdclr, Vec2<int>(100, 100), Vec2<int>(500, 500), Vec2<int>(3, 3));
 			}
 			else
-				curInterface = new Board(gfx, 5, 30);
+				curInterface = new Board(gfx, brdclr, Vec2<int>(100, 100), Vec2<int>(500, 500), Vec2<int>(3, 3));
+		}
 		//<code>
-		if (!static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), wnd.mouse.LeftIsPressed()))
-			gamestate = GsMenu; //GsVictory;
+		while (!wnd.mouse.IsEmpty())
+		{
+			const auto e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LPress) {
+				auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+				if (temp == 1)
+					gamestate = GsPlayer1Victory;
+				if (temp == 2)
+					gamestate = GsPlayer2Victory;
+			}
+		}
 		//</code>
 		prevgamestate = GstwoPlayer;
 		break;
@@ -135,6 +154,24 @@ void Game::UpdateModel()
 
 		//</code>
 		prevgamestate = GsOptionen;
+		break;
+	case GsPlayer1Victory:
+		gfx.DrawRectangle(0, 0, 100, 100, Colors::Blue);
+		while (!wnd.mouse.IsEmpty())
+		{
+			const auto e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				gamestate = GsMenu;
+		}
+		break;
+	case GsPlayer2Victory:
+		gfx.DrawRectangle(0, 0, 100, 100, Colors::Red);
+		while (!wnd.mouse.IsEmpty())
+		{
+			const auto e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				gamestate = GsMenu;
+		}
 		break;
 	default:
 		gamestate = GsError;

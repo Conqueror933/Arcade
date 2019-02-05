@@ -7,7 +7,7 @@ Menu::Menu(Graphics& gfx)
 	text(gfx, "Letters2.bmp")
 {
 	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth-1, gfx.ScreenHeight-1, Color(0u, 0u, 205u));
 	//Welcome Label
 	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));

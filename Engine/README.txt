@@ -14,6 +14,9 @@ BeginFrame()
 removed clearing of sysbuffer for not having to redraw the background over and over again, if this causes problems, revert it
 might actually be fine as long as you dont have moving stuff on the screen
 
+Board.cpp:
+Constructor, cellsize, problems with floating point math on ints and pixels and stuff
+the recursion on Board::Cell::Update() might be going way deeper than it needs to
 
 AI Levels:
 1: just check for closed cell and pick random
