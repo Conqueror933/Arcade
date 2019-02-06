@@ -15,7 +15,7 @@ Board::Board(Graphics& gfx, const BoardColors brdclr,
 	cellsize(Vec2<int>(Vec2<int>::constminus(bottomright - borderwidth, topleft) / size ))
 {
 	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth - 1, gfx.ScreenHeight - 1, Color(0u, 205u, 0u));
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 205u, 0u));
 	//reserve Cell space to avoid reallocating
 	cells.reserve(size.x*size.y);
 	//make Cells
