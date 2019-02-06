@@ -81,8 +81,6 @@ void Game::UpdateModel()
 				delete curInterface;
 				curInterface = new Board(gfx, brdclr, Vec2<int>(100, 100), Vec2<int>(500, 500), Vec2<int>(3, 3));
 			}
-			else
-				curInterface = new Board(gfx, brdclr, Vec2<int>(100, 100), Vec2<int>(500, 500), Vec2<int>(3, 3));
 		}
 		//<code>
 		while (!wnd.mouse.IsEmpty())
@@ -106,8 +104,6 @@ void Game::UpdateModel()
 				delete curInterface;
 				//curInterface = new SMTH;
 			}
-			else
-				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
@@ -120,8 +116,6 @@ void Game::UpdateModel()
 				delete curInterface;
 				//curInterface = new SMTH;
 			}
-			else
-				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
@@ -134,8 +128,6 @@ void Game::UpdateModel()
 				delete curInterface;
 				//curInterface = new SMTH;
 			}
-			else
-				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
@@ -148,8 +140,6 @@ void Game::UpdateModel()
 				delete curInterface;
 				//curInterface = new SMTH;
 			}
-			else
-				//curInterface = new SMTH;
 		//<code>
 
 		//</code>
