@@ -17,6 +17,7 @@ might actually be fine as long as you dont have moving stuff on the screen
 Board.cpp:
 Constructor, cellsize, problems with floating point math on ints and pixels and stuff
 the recursion on Board::Cell::Update() might be going way deeper than it needs to
+make Board adjust itself to screen center
 
 AI Levels:
 1: just check for closed cell and pick random
