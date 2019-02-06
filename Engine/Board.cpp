@@ -164,8 +164,8 @@ int Board::Cell::Update()
 
 		//error- and checking for right and bottom
 		if (left && top) {
-			bool right; x == brd.size.x - 1 ? right = true : right = brd.cells[brd.size.x * y + x + 1].left;
-			bool bottom; y == brd.size.y - 1 ? bottom = true : bottom = brd.cells[x + brd.size.x * (y + 1)].top;
+			bool right = (x == brd.size.x - 1 ? true : brd.cells[brd.size.x * y + x + 1].left);
+			bool bottom = (y == brd.size.y - 1 ? true : brd.cells[x + brd.size.x * (y + 1)].top);
 			if (right && bottom && top && left) {
 				if (brd.turncounter % 2 == 0) {
 					brd.players[0].SetCounter();
