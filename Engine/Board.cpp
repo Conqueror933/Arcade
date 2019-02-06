@@ -13,12 +13,6 @@ Board::Board(Graphics& gfx, const BoardColors brdclr,
 	borderwidth(Vec2<int>::pickLowest(Vec2<int>::constminus(bottomright, topleft) / borderthicknessratio / (size + 1))),
 	//calculate cellsize
 	cellsize(Vec2<int>(Vec2<int>::constminus(bottomright - borderwidth, topleft) / size ))
-
-	//	//calculate cellsize
-	//cellsize(Vec2<int>(Vec2<float>{
-	//	Vec2<float>::constminus((Vec2<float>(bottomright) - (float)borderwidth), Vec2<float>(topleft)) /
-	//	Vec2<float>(size) + Vec2<float>{0.5f, 0.5f}
-	//})) //dis is not good...
 {
 	//Set Background
 	gfx.DrawRectangle(0, 0, gfx.ScreenWidth - 1, gfx.ScreenHeight - 1, Color(0u, 205u, 0u));
@@ -44,6 +38,7 @@ Board::Board(Graphics& gfx, const BoardColors brdclr,
 	{
 		cells[i].left = true;
 	}
+	//make Right and bottom look filled
 	int x = cells[size.x*size.y - 1].position.x * cellsize.x + topleft.x;
 	int y = cells[size.x*size.y - 1].position.y * cellsize.y + topleft.y;
 	gfx.DrawRectangle(x + cellsize.x, 
@@ -71,21 +66,6 @@ int Board::Update(int mouse_x, int mouse_y)
 		if(auto temp = cells[x + size.x * y].Update((mouse_x - topleft.x) % cellsize.x, (mouse_y - topleft.y) % cellsize.y))
 		{
 			cellsfilled += temp;
-			//errorchecking for right and bottom
-			//bool right; x == size.x - 1 ? right = true : right = cells[size.x * y + x + 1].left;
-			//bool bottom; y == size.y - 1 ? bottom = true : bottom = cells[x + size.x * (y + 1)].top;
-			//if (right && bottom && cells[x + size.x * y].top && cells[x + size.x * y].left)
-			//{
-				//cellsfilled++;
-				//if (turncounter % 2 == 0) {
-				//	players[0].SetCounter();
-				//	cells[x + size.x * y].playerflag = 0;
-				//}
-				//else {
-				//	players[1].SetCounter();
-				//	cells[x + size.x * y].playerflag = 1;
-				//}
-
 			//check who won
 			if (cellsfilled == size.x * size.y)
 			{
@@ -102,137 +82,7 @@ int Board::Update(int mouse_x, int mouse_y)
 			if(set)
 				turncounter++;
 	return 0;
-	//int r;
-	//int i = FindCell(x, y);
-	//Vec2<int> loc = FindClickPos(x, y);
-	//if (i >= 0 && i <= size * size)
-	//{
-	//	Direction e = DetectMouseInput(i, loc);
-	//	//clicked cell
-	//	r = cells[i].Update(e, plr); // == UpdateAdjacent(i, 0, e, plr);
-	//	plr.Update(i);
-	//	if (r == 1)//last clicked color change stuff
-	//	{
-	//		lastclickedCell = i;
-	//		lastclickedDirection = e;
-	//	}
-	//	// adjacent cells
-	//	switch (e) {
-	//	case etop:
-	//		e = ebottom;
-	//		UpdateAdjacent(i, -1, e, plr);
-	//		break;
-	//	case ebottom:
-	//		e = etop;
-	//		UpdateAdjacent(i, 1, e, plr);
-	//		break;
-	//	case eleft:
-	//		e = eright;
-	//		UpdateAdjacent(i, -size, e, plr);
-	//		break;
-	//	case eright:
-	//		e = eleft;
-	//		UpdateAdjacent(i, size, e, plr);
-	//		break;
-	//	}
-	//}
-	//else
-	//{
-	//	r = 0;
-	//}
-	//return r;
 }
-
-//bool Board::GameEnded()
-//{
-//	int filled = 0;
-//	for (int i = 0; i < size.x*size.y; i++)
-//	{
-//		filled = filled && cells[i].GetBorderfilled();
-//	}
-//	return filled;
-//}
-//
-//int Board::Cellsfilled()
-//{
-//	cellsfilled = 0;
-//	for (int i = 0; i < size*size; i++)
-//	{
-//		if (cells[i].GetBorderfilled())
-//			cellsfilled++;
-//	}
-//	return cellsfilled;
-//}
-//
-//void Board::UpdateAdjacent(int i, int offset, Direction e, Player& plr)
-//{
-//	i += offset;
-//	if (i <= size * size && i >= 0)
-//		cells[i].Update(e, plr);
-//}
-//
-//Direction Board::DetectMouseInput(int i, Vec2<int> loc)
-//{
-//	//assert(FindCell());
-//	//assert(FindClickPos());
-//	int max = GetCellSize();
-//	int min = 0;
-//	int tlcut = GetCellBorderwidth();	//topleftcut
-//	int brcut = max - tlcut;			//bottomrightcut
-//
-//	if (Collision(tlcut, min, brcut, tlcut, loc))
-//	{
-//		return etop;
-//	}
-//	if (Collision(tlcut, brcut, brcut, max, loc))
-//	{
-//		return ebottom;
-//	}
-//	if (Collision(min, tlcut, tlcut, brcut, loc))
-//	{
-//		return eleft;
-//	}
-//	if (Collision(brcut, tlcut, max, brcut, loc))
-//	{
-//		return eright;
-//	}
-//	return error;
-//}
-//
-//int Board::FindCell(int x, int y)
-//{
-//	int s = GetCellSize();
-//	if (x > 0 && x < s * size + boardborder &&
-//		y > 0 && y < s * size + boardborder)
-//	{
-//		Vec2<int> loc{ (x - boardborder) / s, (y - boardborder) / s };
-//		int i = loc.y + loc.x*size;			//i = Position of Cell in Array
-//		return i;
-//	}
-//	return -1;
-//}
-//
-//Vec2<int> Board::FindClickPos(int x, int y)
-//{
-//	int s = GetCellSize();
-//	if (x > 0 && x < s * size + boardborder &&
-//		y > 0 && y < s * size + boardborder)
-//	{
-//		Vec2<int> loc{ (x - boardborder) % s, (y - boardborder) % s };
-//		return loc;
-//	}
-//	return { -1,-1 };
-//}
-//
-//const bool Board::Collision(const int x0, const int y0, const int x1, const int y1, Vec2<int> to_check)
-//{
-//	if (to_check.x >= x0 && to_check.y >= y0 &&
-//		to_check.x <= x1 && to_check.y <= y1)
-//		return true;
-//	else
-//		return false;
-//}
-
 
 /****************************************************************************************************/
 /*												Draw												*/
@@ -243,8 +93,8 @@ void Board::Draw() const
 	{
 		cells[i].Draw();
 	}
-	/*if (lastclickedCell > -1)
-		cells[lastclickedCell].DrawEdges(Colors::Green, lastclickedDirection);*/
+	if (lastclickedCell.first > -1)
+		cells[lastclickedCell.first].Draw();
 }
 
 
@@ -289,23 +139,19 @@ int Board::Cell::Update(int mouse_x, int mouse_y)
 	{
 		if (mouse_x > brd.borderwidth && mouse_x < brd.cellsize.x &&
 			mouse_y > 0 && mouse_y < brd.borderwidth)
-			if (!top) { top = true; brd.set = true; }
+			if (!top) {
+				top = true; brd.set = true; 
+				brd.lastclickedCell = { position.x + position.y * brd.size.x, true };
+			}
 		if (mouse_x > 0 && mouse_x < brd.borderwidth &&
 			mouse_y > brd.borderwidth && mouse_y < brd.cellsize.y)
-			if (!left) { left = true; brd.set = true; }
+			if (!left) { 
+				left = true; brd.set = true; 
+				brd.lastclickedCell = { position.x + position.y * brd.size.x, false };
+			}
 		return Update();
 	}
 	return 0;
-	//int r = UpdateBorders(e);
-	//if (top && bottom && left && right)
-	//	borderfilled = true;
-	//if (borderfilled && !set)
-	//{
-	//	SetColor(plr.GetColor());
-	//	plr.SetCounter();
-	//	set = true;
-	//}
-	//return r;
 }
 
 int Board::Cell::Update()
@@ -342,46 +188,6 @@ int Board::Cell::Update()
 	return b;
 }
 
-//int Board::Cell::UpdateBorders(Direction e)
-//{
-//	switch (e)
-//	{
-//	case etop:
-//		if (!top)
-//		{
-//			top = true;
-//			return 1;
-//		}
-//		else
-//			return 0;
-//	case ebottom:
-//		if (!bottom)
-//		{
-//			bottom = true;
-//			return 1;
-//		}
-//		else
-//			return 0;
-//	case eleft:
-//		if (!left)
-//		{
-//			left = true;
-//			return 1;
-//		}
-//		else
-//			return 0;
-//	case eright:
-//		if (!right)
-//		{
-//			right = true;
-//			return 1;
-//		}
-//		else
-//			return 0;
-//	}
-//	return 0;
-//}
-
 /****************************************************************************************************/
 /*												Draw												*/
 /****************************************************************************************************/
@@ -401,45 +207,15 @@ void Board::Cell::Draw() const
 	}
 	brd.gfx.DrawRectangleDim(x + brd.borderwidth, y + brd.borderwidth,
 		brd.cellsize.x - brd.borderwidth, brd.cellsize.y - brd.borderwidth, c);
-	if (top)
-		brd.gfx.DrawRectangle(x, y, x + brd.borderwidth + brd.cellsize.x, y + brd.borderwidth, brd.brdclr.clicked);
-	if(left)
-		brd.gfx.DrawRectangle(x, y, x + brd.borderwidth, y + brd.borderwidth + brd.cellsize.y, brd.brdclr.clicked);
-
-	//gfx.DrawRectangle(x, y, x + size, y + size, brd.borderColor);
-	//gfx.DrawRectangle(x + borderwidth, y + borderwidth, x + size - borderwidth, y + size - borderwidth, c);
+	if ((position.x + position.y * brd.size.x) == brd.lastclickedCell.first)
+		if (brd.lastclickedCell.second)
+			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth + brd.cellsize.x, y + brd.borderwidth, brd.brdclr.lastclicked);
+		else
+			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth, y + brd.borderwidth + brd.cellsize.y, brd.brdclr.lastclicked);
+	else {
+		if (top)
+			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth + brd.cellsize.x, y + brd.borderwidth, brd.brdclr.clicked);
+		if (left)
+			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth, y + brd.borderwidth + brd.cellsize.y, brd.brdclr.clicked);
+	}
 }
-
-//const void Board::Cell::DrawEdges()
-//{
-//	if (top)
-//		gfx.DrawRectangle(x - borderwidth, y - borderwidth, x + size + borderwidth, y + borderwidth, brd.clickedColor);
-//	if (bottom)
-//		gfx.DrawRectangle(x - borderwidth, y + size - borderwidth, x + size + borderwidth, y + size + borderwidth, brd.clickedColor);
-//	if (left)
-//		gfx.DrawRectangle(x - borderwidth, y - borderwidth, x + borderwidth, y + size + borderwidth, brd.clickedColor);
-//	if (right)
-//		gfx.DrawRectangle(x + size - borderwidth, y - borderwidth, x + size + borderwidth, y + size + borderwidth, brd.clickedColor);
-//}
-//
-//const void Board::Cell::DrawEdges(Color c, Direction lc)
-//{
-//	switch (lc) {
-//	case etop:
-//		if (top)
-//			gfx.DrawRectangle(x - borderwidth, y - borderwidth, x + size + borderwidth, y + borderwidth, c);
-//		break;
-//	case ebottom:
-//		if (bottom)
-//			gfx.DrawRectangle(x - borderwidth, y + size - borderwidth, x + size + borderwidth, y + size + borderwidth, c);
-//		break;
-//	case eleft:
-//		if (left)
-//			gfx.DrawRectangle(x - borderwidth, y - borderwidth, x + borderwidth, y + size + borderwidth, c);
-//		break;
-//	case eright:
-//		if (right)
-//			gfx.DrawRectangle(x + size - borderwidth, y - borderwidth, x + size + borderwidth, y + size + borderwidth, c);
-//		break;
-//	}
-//}
