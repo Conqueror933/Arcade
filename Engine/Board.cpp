@@ -34,7 +34,7 @@ Board::Board(Graphics& gfx, const BoardColors brdclr,
 	{
 		cells[i].top = true;
 	}
-	for (int i = 0; i < size.y*size.y; i += size.y)
+	for (int i = 0; i < size.x*size.y; i += size.x)
 	{
 		cells[i].left = true;
 	}
