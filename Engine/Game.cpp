@@ -133,35 +133,23 @@ void Game::UpdateModel()
 		//</code>
 		prevgamestate = GsAILevel3;
 		break;
-	case GsOptionen:
-		if (prevgamestate != GsOptionen)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				//curInterface = new SMTH;
-			}
-		//<code>
-
-		//</code>
-		prevgamestate = GsOptionen;
-		break;
 	case GsPlayer1Victory:
-		gfx.DrawRectangle(0, 0, 100, 100, Colors::Blue);
 		while (!wnd.mouse.IsEmpty())
 		{
 			const auto e = wnd.mouse.Read();
 			if (e.GetType() == Mouse::Event::Type::LPress)
 				gamestate = GsMenu;
 		}
+		prevgamestate = GsPlayer1Victory;
 		break;
 	case GsPlayer2Victory:
-		gfx.DrawRectangle(0, 0, 100, 100, Colors::Red);
 		while (!wnd.mouse.IsEmpty())
 		{
 			const auto e = wnd.mouse.Read();
 			if (e.GetType() == Mouse::Event::Type::LPress)
 				gamestate = GsMenu;
 		}
+		prevgamestate = GsPlayer2Victory;
 		break;
 	default:
 		gamestate = GsError;
@@ -184,7 +172,11 @@ void Game::ComposeFrame()
 		break;
 	case GsAILevel3:
 		break;
-	case GsOptionen:
+	case GsPlayer1Victory:
+		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Blue);
+		break;
+	case GsPlayer2Victory:
+		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Red);
 		break;
 	default:
 		throw std::exception("Bad Gamestate.");

@@ -33,15 +33,19 @@ private:
 			//add a "Style" Object for rounded corners and all that fancy stuff
 		Label(const Label& other);
 		Label& operator=(const Label& other) { return *this = Label(other); }
-		virtual void Update() {}
-		virtual void Draw();
+		void Update() override {}
+		void Draw() override;
+	private:
 		Text* text;
 		std::string s;
 	};
 	class Button : public WorldObject
 	{
 	public:
-		Button(Menu& menu, Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+		Button(Menu& menu, Graphics* gfx, 
+			//Button
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+			//Label
 			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
 
 	public:
@@ -70,10 +74,16 @@ public:
 	void Draw();
 
 private:
+	void CreateBaseMenu();
+	void CreateOptionsMenu();
+
+private:
+	Graphics& gfx;
 	Text text;
 	std::vector<std::unique_ptr<WorldObject>> objects;
 
 	Gamestate gs = GsMenu;
+	Gamestate prevgs = GsMenu;
 	static constexpr int letterspacing = 3;
 	static constexpr int border = 6;
 };

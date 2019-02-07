@@ -4,7 +4,17 @@
 
 Menu::Menu(Graphics& gfx)
 	: 
+	gfx(gfx),
 	text(gfx, "Letters2.bmp")
+{
+	CreateBaseMenu();
+}
+
+Menu::~Menu()
+{
+}
+
+void Menu::CreateBaseMenu()
 {
 	//Set Background
 	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
@@ -33,8 +43,33 @@ Menu::Menu(Graphics& gfx)
 		"Optionen", Colors::White, Colors::Black));
 }
 
-Menu::~Menu()
+void Menu::CreateOptionsMenu()
 {
+	//Set Background
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
+	//Optionen
+	objects.emplace_back(std::make_unique<Label>(
+		&gfx, &text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+	//Boardwidth
+	objects.emplace_back(std::make_unique<Button>(
+		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
+		"Boardwidth", Colors::White, Colors::Black));
+	//Boardheight
+	objects.emplace_back(std::make_unique<Button>(
+		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
+		"Boardheight", Colors::White, Colors::Black));
+	//Cellwidth
+	objects.emplace_back(std::make_unique<Button>(
+		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
+		"Cellwidth", Colors::White, Colors::Black));
+	//Cellheight
+	objects.emplace_back(std::make_unique<Button>(
+		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
+		"Cellheight", Colors::White, Colors::Black));
+	//Back
+	objects.emplace_back(std::make_unique<Button>(
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsMenu,
+		"Back", Colors::White, Colors::Black));
 }
 
 Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
@@ -51,13 +86,32 @@ Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 					temp->SetClicked(true);
 				else
 					temp->SetClicked(false);
+				prevgs = gs;
 			}
 			else
 				temp->SetHighlight(false);
 		}
 		objects[i]->Update();
 	}
-	return gs;
+	if (prevgs != gs)
+	{
+		if (gs == GsOptionen)
+		{
+			objects.clear();
+			CreateOptionsMenu();
+			prevgs = GsOptionen;
+		}
+		else if (gs == GsMenu)
+		{
+			objects.clear();
+			CreateBaseMenu();
+			prevgs = GsMenu;
+		}
+		else
+			return gs;
+	}
+	else
+		return GsMenu;
 }
 
 void Menu::Draw()
