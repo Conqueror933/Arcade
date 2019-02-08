@@ -43,7 +43,7 @@ private:
 
 public:
 	Board(Graphics& gfx, const BoardColors brdclr, 
-		const Vec2<int> topleft, const Vec2<int> bottomright, const Vec2<int> size, const unsigned int borderthicknessratio = 4);
+		const Vec2<int> topleft, const Vec2<int> bottomright, const Vec2<int> size, const unsigned int borderthicknessratio);
 	Board(const Board& brd) = delete;
 	Board& operator=(const Board& brd) = delete;
 

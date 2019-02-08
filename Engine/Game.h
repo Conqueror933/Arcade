@@ -26,6 +26,7 @@
 #include "Board.h"
 #include "Menu.h"
 
+
 class Game
 {
 public:
@@ -34,11 +35,13 @@ public:
 	Game& operator=(const Game&) = delete;
 	~Game();
 	void Go();
+
 private:
 	void ComposeFrame();
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
+	void GetBoardInit();
 	/********************************/
 private:
 	MainWindow & wnd;
@@ -48,5 +51,8 @@ private:
 	void* curInterface = nullptr;
 	Gamestate gamestate = GsMenu;
 	Gamestate prevgamestate;
+
+	//Board init state
+	BoardInit brdinit;
 	/********************************/
 };

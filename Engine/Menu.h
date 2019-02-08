@@ -6,7 +6,7 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
-#include "MainWindow.h"
+#include "Board.h"
 
 enum Gamestate
 {
@@ -16,51 +16,98 @@ enum Gamestate
 	GsAILevel1,
 	GsAILevel2,
 	GsAILevel3,
-	GsOptionen,
 	GsPlayer1Victory,
 	GsPlayer2Victory
+};
+
+struct BoardInit
+{
+	BoardColors brdclr;
+	Vec2<int> boardtopleft = Vec2<int>(100, 100);
+	Vec2<int> boardbottomright = Vec2<int>(500, 500);
+	Vec2<int> boardcellcounts = Vec2<int>(10, 10);
+	unsigned int boardborderthickness = 4u; //not used yet
 };
 
 class Menu
 {
 private:
-	struct Label : public WorldObject
+	enum Menustate
 	{
-		Label() = default;
+		MsMain,
+		MsOptionen,
+		MsSmall,
+		MsMedium,
+		MsDefault,
+		MsBig,
+		MsSquare,
+		MsFree,
+		MsThickBorder,
+		MsSlimBorder
+	};
+	class Label : public WorldObject
+	{
+	public:
 		//helper thing to display text on screen
 		Label(Graphics* gfx, Text* text, std::string s, Vec2<int> position,
 			Vec2<int> size = { 0,0 }, Color background = Colors::Magenta, Color textcolor = Colors::White);
 			//add a "Style" Object for rounded corners and all that fancy stuff
 		Label(const Label& other);
 		Label& operator=(const Label& other) { return *this = Label(other); }
-		void Update() override {}
+		void Update() override { /*if (!permanent) timercountdown;*/ }
 		void Draw() override;
 	private:
 		Text* text;
-		std::string s;
+		const std::string s;
+		/*bool permanent;*/
 	};
 	class Button : public WorldObject
 	{
 	public:
 		Button(Menu& menu, Graphics* gfx, 
 			//Button
-			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
 			//Label
 			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
 
 	public:
-		void Update() override;
-		void Draw() override;
+		virtual void Update() = 0;
+		virtual void Draw();
 		void SetHighlight(bool b) { highlighted = b; }
 		void SetClicked(bool b) { clicked = b; }
 
-	private:
+	protected:
 		Menu & menu;
 		Label label;
-		int half_bordersize;
-		Gamestate gs = GsError;
+		const int half_bordersize;
 		bool highlighted = false;
 		bool clicked = false;
+	};
+	class GameButton : public Button
+	{
+	public:
+		GameButton(Menu& menu, Graphics* gfx,
+			//Button
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+			//Label
+			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
+		void Update() override;
+
+	private:
+		Gamestate gs = GsError;
+	};
+	class MenuButton : public Button
+	{
+	public:
+		MenuButton(Menu& menu, Graphics* gfx,
+			//Button
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms,
+			//Label
+			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
+		void Update() override;
+
+	private:
+		Menustate ms;
 	};
 public:
 	Menu(Graphics& gfx);
@@ -72,18 +119,20 @@ public:
 
 	Gamestate Update(int mouse_x, int mouse_y, bool buttondown);
 	void Draw();
+	BoardInit GetBoardInit() { return brdinit; }
 
 private:
-	void CreateBaseMenu();
+	void CreateMainMenu();
 	void CreateOptionsMenu();
 
 private:
 	Graphics& gfx;
 	Text text;
 	std::vector<std::unique_ptr<WorldObject>> objects;
-
+	BoardInit brdinit;
 	Gamestate gs = GsMenu;
-	Gamestate prevgs = GsMenu;
+	Menustate ms;
+	Menustate prevms;
 	static constexpr int letterspacing = 3;
 	static constexpr int border = 6;
 };

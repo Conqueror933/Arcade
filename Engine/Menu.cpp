@@ -1,20 +1,20 @@
 #include "Menu.h"
 
-
+/****************  Menu  *******************/
 
 Menu::Menu(Graphics& gfx)
 	: 
 	gfx(gfx),
 	text(gfx, "Letters2.bmp")
 {
-	CreateBaseMenu();
+	CreateMainMenu();
 }
 
 Menu::~Menu()
 {
 }
 
-void Menu::CreateBaseMenu()
+void Menu::CreateMainMenu()
 {
 	//Set Background
 	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
@@ -22,24 +22,24 @@ void Menu::CreateBaseMenu()
 	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
-	objects.emplace_back(std::make_unique<Button>(
+	objects.emplace_back(std::make_unique<GameButton>(
 		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
 		"Zwei Spieler", Colors::White, Colors::Black));
 	//AI Level 1
-	objects.emplace_back(std::make_unique<Button>(
+	objects.emplace_back(std::make_unique<GameButton>(
 		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
 		"Einfach", Colors::White, Colors::Black));
 	//AI Level 2
-	objects.emplace_back(std::make_unique<Button>(
+	objects.emplace_back(std::make_unique<GameButton>(
 		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
 		"Mittel", Colors::White, Colors::Black));
 	//AI Level 3
-	objects.emplace_back(std::make_unique<Button>(
+	objects.emplace_back(std::make_unique<GameButton>(
 		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
 		"Schwer", Colors::White, Colors::Black));
 	//Optionen
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsOptionen,
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsOptionen,
 		"Optionen", Colors::White, Colors::Black));
 }
 
@@ -50,25 +50,41 @@ void Menu::CreateOptionsMenu()
 	//Optionen
 	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
-	//Boardwidth
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
-		"Boardwidth", Colors::White, Colors::Black));
-	//Boardheight
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
-		"Boardheight", Colors::White, Colors::Black));
-	//Cellwidth
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
-		"Cellwidth", Colors::White, Colors::Black));
-	//Cellheight
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
-		"Cellheight", Colors::White, Colors::Black));
+	//Small size is 4x4  -  would be nice if this was a slider
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSmall,
+		"Small", Colors::White, Colors::Black));
+	//Medium size is 8x8
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsMedium,
+		"Medium", Colors::White, Colors::Black));
+	//Default size is 10x10
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsDefault,
+		"Default", Colors::White, Colors::Black));
+	//Big size is 12x12
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsBig,
+		"Big", Colors::White, Colors::Black));
+	//Square ensures Square Cells (and Board)  -  would be nice if this was a checkbox
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSquare,
+		"Square", Colors::White, Colors::Black));
+	//makes Board fill the entire screen
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsFree,
+		"Full Screen", Colors::White, Colors::Black));
+	//Extra thick borders
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsThickBorder,
+		"Thick borders", Colors::White, Colors::Black));
+	//Reset Thick borders
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSlimBorder,
+		"Slim borders", Colors::White, Colors::Black));
 	//Back
-	objects.emplace_back(std::make_unique<Button>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsMenu,
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsMain,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -86,32 +102,24 @@ Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 					temp->SetClicked(true);
 				else
 					temp->SetClicked(false);
-				prevgs = gs;
+				prevms = ms;
 			}
 			else
 				temp->SetHighlight(false);
 		}
 		objects[i]->Update();
 	}
-	if (prevgs != gs)
+	if (ms != prevms && ms == MsOptionen)
 	{
-		if (gs == GsOptionen)
-		{
-			objects.clear();
-			CreateOptionsMenu();
-			prevgs = GsOptionen;
-		}
-		else if (gs == GsMenu)
-		{
-			objects.clear();
-			CreateBaseMenu();
-			prevgs = GsMenu;
-		}
-		else
-			return gs;
+		objects.clear();
+		CreateOptionsMenu();
 	}
-	else
-		return GsMenu;
+	if (ms != prevms && ms == MsMain)
+	{
+		objects.clear();
+		CreateMainMenu();
+	}
+	return gs;
 }
 
 void Menu::Draw()
@@ -121,6 +129,8 @@ void Menu::Draw()
 		objects[i]->Draw();
 	}
 }
+
+/****************  Label  *******************/
 
 Menu::Label::Label(Graphics* gfx, Text* text, std::string s, Vec2<int> position, Vec2<int> size, Color background, Color textcolor)
 	:
@@ -169,53 +179,5 @@ void Menu::Label::Draw()
 		auto y = size.y - height;
 		Vec2<int> vec = { position.x + x / 2, position.y + y / 2 };
 		text->Draw(s, vec, letterspacing, foregroundcolor);
-	}
-}
-
-inline Menu::Button::Button(
-	Menu& menu, Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
-	std::string s, Color background, Color textcolor)
-	:
-	WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
-	half_bordersize(half_bordersize),
-	gs(gs),
-	menu(menu),
-	label(gfx, &menu.text, s,
-		Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
-		Vec2<int>(size.x - half_bordersize * 4, size.y - half_bordersize * 4),
-		background, textcolor)
-{
-	if (size == Vec2<int>{0, 0}) throw std::exception("Button can't have 0 size.");
-	if (label.size.x < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
-	if (label.size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
-}
-
-inline void Menu::Button::Update()
-{
-	if (clicked)
-	{
-		menu.gs = gs;
-	}
-}
-
-inline void Menu::Button::Draw()
-{
-	if (highlighted)
-	{
-		Color b = backgroundcolor; b.Shade(0.5f);
-		Color f = foregroundcolor; f.Shade(0.5f);
-		if (clicked) label.backgroundcolor.Shade(0.75f);
-		gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, b);
-		gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
-			size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
-		label.Draw();
-		if (clicked) label.backgroundcolor.Tint(0.75f);
-	}
-	else
-	{
-		gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
-		gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
-			size.x - half_bordersize * 2, size.y - half_bordersize * 2, foregroundcolor);
-		label.Draw();
 	}
 }

@@ -52,6 +52,7 @@ void Game::UpdateModel()
 	switch (gamestate)
 	{
 	case GsMenu:
+		//<init>
 		if (prevgamestate != GsMenu)
 			if (curInterface != nullptr)
 			{
@@ -60,6 +61,7 @@ void Game::UpdateModel()
 			}
 			else
 				curInterface = new Menu(gfx);
+		//</init>
 		//<code>
 		while (!wnd.mouse.IsEmpty())
 		{
@@ -73,15 +75,17 @@ void Game::UpdateModel()
 		prevgamestate = GsMenu;
 		break;
 	case GstwoPlayer:
+		//<init>
 		if (prevgamestate != GstwoPlayer)
 		{
-			BoardColors brdclr;
 			if (curInterface != nullptr)
 			{
+				GetBoardInit();
 				delete curInterface;
-				curInterface = new Board(gfx, brdclr, Vec2<int>(100, 100), Vec2<int>(500, 500), Vec2<int>(3, 3));
+				curInterface = new Board(gfx, brdinit.brdclr, brdinit.boardtopleft, brdinit.boardbottomright, brdinit.boardcellcounts, brdinit.boardborderthickness);
 			}
 		}
+		//</init>
 		//<code>
 		while (!wnd.mouse.IsEmpty())
 		{
@@ -97,42 +101,42 @@ void Game::UpdateModel()
 		//</code>
 		prevgamestate = GstwoPlayer;
 		break;
-	case GsAILevel1:
-		if (prevgamestate != GsAILevel1)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				//curInterface = new SMTH;
-			}
-		//<code>
-
-		//</code>
-		prevgamestate = GsAILevel1;
-		break;
-	case GsAILevel2:
-		if (prevgamestate != GsAILevel2)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				//curInterface = new SMTH;
-			}
-		//<code>
-
-		//</code>
-		prevgamestate = GsAILevel2;
-		break;
-	case GsAILevel3:
-		if (prevgamestate != GsAILevel3)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				//curInterface = new SMTH;
-			}
-		//<code>
-
-		//</code>
-		prevgamestate = GsAILevel3;
-		break;
+	//case GsAILevel1:
+	//	if (prevgamestate != GsAILevel1)
+	//		if (curInterface != nullptr)
+	//		{
+	//			delete curInterface;
+	//			//curInterface = new SMTH;
+	//		}
+	//	//<code>
+	//
+	//	//</code>
+	//	prevgamestate = GsAILevel1;
+	//	break;
+	//case GsAILevel2:
+	//	if (prevgamestate != GsAILevel2)
+	//		if (curInterface != nullptr)
+	//		{
+	//			delete curInterface;
+	//			//curInterface = new SMTH;
+	//		}
+	//	//<code>
+	//
+	//	//</code>
+	//	prevgamestate = GsAILevel2;
+	//	break;
+	//case GsAILevel3:
+	//	if (prevgamestate != GsAILevel3)
+	//		if (curInterface != nullptr)
+	//		{
+	//			delete curInterface;
+	//			//curInterface = new SMTH;
+	//		}
+	//	//<code>
+	//
+	//	//</code>
+	//	prevgamestate = GsAILevel3;
+	//	break;
 	case GsPlayer1Victory:
 		while (!wnd.mouse.IsEmpty())
 		{
@@ -154,6 +158,12 @@ void Game::UpdateModel()
 	default:
 		gamestate = GsError;
 	}
+}
+
+void Game::GetBoardInit()
+{
+	if (static_cast<Menu*>(curInterface))
+		brdinit = static_cast<Menu*>(curInterface)->GetBoardInit();
 }
 
 void Game::ComposeFrame()
