@@ -28,7 +28,7 @@ Board::Board(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount
 const Vec2<int> Board::CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth)
 {
 	assert(Graphics::ScreenWidth > cellcount.x * cellsize.x + cellborderwidth);
-	assert(Graphics::ScreenHeight < cellcount.y * cellsize.y + cellborderwidth);
+	assert(Graphics::ScreenHeight > cellcount.y * cellsize.y + cellborderwidth);
 	return cellsize;
 }
 
@@ -57,7 +57,8 @@ int Board::CalculateCellBorderWidth1(const Vec2<int> cellcount, const double bor
 
 int Board::CalculateCellBorderWidth2(const Vec2<int> cellsize, const double borderthicknessratio)
 {
-
+	assert(borderthicknessratio > 0.0);
+	assert(borderthicknessratio < 1.0);
 	if (cellsize.x > cellsize.y)
 		return static_cast<int>((double)cellsize.y * borderthicknessratio);
 	else
@@ -123,7 +124,7 @@ Board::Cell::~Cell()
 }
 
 int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
-{
+{//all of this works, some things for fucked up reasons, dont try to change without fully understanding
 	if (playerflag == None)
 	{
 		int r = 0;
@@ -141,7 +142,8 @@ int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
 					}
 				}
 				if (brd.cells[index - brd.cellcount.x].top && brd.cells[index - brd.cellcount.x].left)
-					if (brd.cells[index - brd.cellcount.x + 1].left) {
+					if (brd.cells[index - brd.cellcount.x + 1].left) { 
+						//doesnt need an extra check cause it wraps around and left is always set
 						brd.cells[index - brd.cellcount.x].playerflag = plr; r++;
 					}
 			}
@@ -159,7 +161,8 @@ int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
 					}
 				}
 				if (brd.cells[index - 1].top && brd.cells[index - 1].left)
-					if (brd.cells[index - 1 + brd.cellcount.x].top) {
+					if (index > brd.cellcount.x * brd.cellcount.y - brd.cellcount.x ? true : brd.cells[index - 1 + brd.cellcount.x].top) {
+						//needs an extra check because bottom isnt safe
 						brd.cells[index - 1].playerflag = plr; r++;
 					}
 			}

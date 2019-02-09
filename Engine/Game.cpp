@@ -82,7 +82,10 @@ void Game::UpdateModel()
 			{
 				GetBoardInit();
 				delete curInterface;
-				curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
+				if (brdinit.boardcellsize == Vec2<int>{0, 0})
+					curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
+				else
+					curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
 			}
 		}
 		//</init>

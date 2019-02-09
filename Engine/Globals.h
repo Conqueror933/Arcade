@@ -28,6 +28,6 @@ struct BoardInit
 {
 	BoardColors brdclr;
 	Vec2<int> boardcellcounts = Vec2<int>(10, 10);
-	Vec2<int> boardcellsize = Vec2<int>(30, 30);
+	Vec2<int> boardcellsize = Vec2<int>(0, 0);
 	double boardborderthickness = 0.25;
 };
