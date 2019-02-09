@@ -91,7 +91,7 @@ inline void Menu::MenuButton::Update()
 			menu.brdinit.boardcellcounts = Vec2<int>{ 12,12 };
 			break;
 		case MsSquare:
-			menu.brdinit.boardcellsize = Vec2<int>{ 30,30 };
+			menu.brdinit.boardcellsize = Vec2<int>{ 40,40 };
 			break;
 		case MsFree:
 			menu.brdinit.boardcellsize = Vec2<int>{ 0,0 };
