@@ -28,7 +28,7 @@ private:
 
 	public:
 		Vec2<int> pos; //screenposition
-		unsigned int index;
+		int index;
 		bool top = false;
 		bool left = false;
 		Playerflag playerflag = None;
@@ -68,6 +68,9 @@ protected:
 	int cellsfilled = 0;
 	std::pair<int, bool> lastclickedCell = { -1, false }; //int = index, bool: true = top, false = left
 	bool set;
+
+	int player1counter = 0;
+	int player2counter = 0;
 };
 
 /*

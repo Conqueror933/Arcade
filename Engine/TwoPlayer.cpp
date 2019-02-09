@@ -13,9 +13,6 @@ TwoPlayer::TwoPlayer(Graphics & gfx, const BoardColors brdclr, const Vec2<int> c
 {
 }
 
-/****************************************************************************************************/
-/*												Logic												*/
-/****************************************************************************************************/
 int TwoPlayer::Update(int mouse_x, int mouse_y)
 {
 	set = false;
@@ -66,58 +63,3 @@ int TwoPlayer::Update(int mouse_x, int mouse_y)
 		}
 	return 0;
 }
-
-//int TwoPlayer::Cell::Update(int mouse_x, int mouse_y)
-//{
-//	if (playerflag == -1)
-//	{
-//		if (mouse_x > TPbrd.cellborderwidth && mouse_x < TPbrd.cellsize.x &&
-//			mouse_y > 0 && mouse_y < TPbrd.cellborderwidth)
-//			if (!top) {
-//				top = true; TPbrd.set = true;
-//				TPbrd.lastclickedCell = { pos.x + pos.y * TPbrd.cellcount.x, true };
-//			}
-//		if (mouse_x > 0 && mouse_x < TPbrd.cellborderwidth &&
-//			mouse_y > TPbrd.cellborderwidth && mouse_y < TPbrd.cellsize.y)
-//			if (!left) {
-//				left = true; TPbrd.set = true;
-//				TPbrd.lastclickedCell = { pos.x + pos.y * TPbrd.cellcount.x, false };
-//			}
-//		return 5;// Update();
-//	}
-//	return 0;
-//}
-//
-//int TwoPlayer::Cell::Update()
-//{
-//	int b = 0;
-//	if (playerflag == -1)
-//	{
-//		int x = pos.x;
-//		int y = pos.y;
-//
-//		//error- and checking for right and bottom
-//		if (left && top) {
-//			bool right = (x == brd.size.x - 1 ? true : brd.cells[brd.size.x * y + x + 1].left);
-//			bool bottom = (y == brd.size.y - 1 ? true : brd.cells[x + brd.size.x * (y + 1)].top);
-//			if (right && bottom && top && left) {
-//				if (brd.turncounter % 2 == 0) {
-//					brd.players[0].SetCounter();
-//					playerflag = 0;
-//				}
-//				else {
-//					brd.players[1].SetCounter();
-//					playerflag = 1;
-//				}
-//				b++;
-//			}
-//		}
-//		if (top && y > 0)
-//			if (brd.cells[x + brd.size.x * (y - 1)].left && brd.cells[x + brd.size.x * (y - 1)].top)
-//				b += brd.cells[x + brd.size.x * (y - 1)].Update();
-//		if (left && x > 0)
-//			if (brd.cells[brd.size.x * y + x - 1].left && brd.cells[brd.size.x * y + x - 1].top)
-//				b += brd.cells[brd.size.x * y + x - 1].Update();
-//	}
-//	return b;
-//}

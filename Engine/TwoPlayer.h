@@ -16,7 +16,5 @@ public:
 	int Update(int mouse_x, int mouse_y) override;
 
 private:
-	int player1counter = 0;
-	int player2counter = 0;
 	int turncounter = 0;
 };

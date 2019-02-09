@@ -42,6 +42,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	void GetBoardInit();
+	void DoBoardUpdate();
 	/********************************/
 private:
 	MainWindow & wnd;

@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include "TwoPlayer.h"
+#include "AI.h"
 #include <assert.h>
 
 Game::Game(MainWindow& wnd)
@@ -57,10 +58,10 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx); 
+				curInterface = new Menu(gfx, brdinit); 
 			}
 			else
-				curInterface = new Menu(gfx);
+				curInterface = new Menu(gfx); //first call
 		//</init>
 		//<code>
 		while (!wnd.mouse.IsEmpty())
@@ -90,32 +91,26 @@ void Game::UpdateModel()
 		}
 		//</init>
 		//<code>
-		while (!wnd.mouse.IsEmpty())
-		{
-			const auto e = wnd.mouse.Read();
-			if (e.GetType() == Mouse::Event::Type::LPress) {
-				auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
-				if (temp == 1)
-					gamestate = GsPlayer1Victory;
-				if (temp == 2)
-					gamestate = GsPlayer2Victory;
-			}
-		}
+		DoBoardUpdate();
 		//</code>
 		prevgamestate = GstwoPlayer;
 		break;
-	//case GsAILevel1:
-	//	if (prevgamestate != GsAILevel1)
-	//		if (curInterface != nullptr)
-	//		{
-	//			delete curInterface;
-	//			//curInterface = new SMTH;
-	//		}
-	//	//<code>
-	//
-	//	//</code>
-	//	prevgamestate = GsAILevel1;
-	//	break;
+	case GsAILevel1:
+		if (prevgamestate != GsAILevel1)
+			if (curInterface != nullptr)
+			{
+				GetBoardInit();
+				delete curInterface;
+				if (brdinit.boardcellsize == Vec2<int>{0, 0})
+					curInterface = new EasyAI(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
+				else
+					curInterface = new EasyAI(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
+			}
+		//<code>
+		DoBoardUpdate();
+		//</code>
+		prevgamestate = GsAILevel1;
+		break;
 	//case GsAILevel2:
 	//	if (prevgamestate != GsAILevel2)
 	//		if (curInterface != nullptr)
@@ -169,6 +164,21 @@ void Game::GetBoardInit()
 		brdinit = static_cast<Menu*>(curInterface)->GetBoardInit();
 }
 
+void Game::DoBoardUpdate()
+{
+	while (!wnd.mouse.IsEmpty())
+	{
+		const auto e = wnd.mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LPress) {
+			auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+			if (temp == 1)
+				gamestate = GsPlayer1Victory;
+			if (temp == 2)
+				gamestate = GsPlayer2Victory;
+		}
+	}
+}
+
 void Game::ComposeFrame()
 {
 	switch (prevgamestate)
@@ -177,13 +187,10 @@ void Game::ComposeFrame()
 		static_cast<Menu*>(curInterface)->Draw();
 		break;
 	case GstwoPlayer:
-		static_cast<Board*>(curInterface)->Draw();
-		break;
 	case GsAILevel1:
-		break;
 	case GsAILevel2:
-		break;
 	case GsAILevel3:
+		static_cast<Board*>(curInterface)->Draw();
 		break;
 	case GsPlayer1Victory:
 		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Blue);

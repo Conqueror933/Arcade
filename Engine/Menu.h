@@ -90,6 +90,7 @@ private:
 	};
 public:
 	Menu(Graphics& gfx);
+	Menu(Graphics& gfx, BoardInit brdinit);
 	Menu(const Menu&) = delete;
 	Menu& operator=(const Menu&) = delete;
 	//Menu(const Menu&&) = delete;

@@ -125,45 +125,53 @@ Board::Cell::~Cell()
 
 int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
 {//all of this works, some things for fucked up reasons, dont try to change without fully understanding
-	if (playerflag == None)
+	if (playerflag == None) //if the cell isnt owned by a player already
 	{
-		int r = 0;
-		if (mouse_x > brd.cellborderwidth && mouse_x < brd.cellsize.x &&
+		int r = 0; //counts the amount of cells filled (there could be 2 filled)
+		if (mouse_x > brd.cellborderwidth && mouse_x < brd.cellsize.x && //defines top hitbox of the cell
 			mouse_y > 0 && mouse_y < brd.cellborderwidth)
-			if (!top) {
-				top = true; brd.set = true;
-				brd.lastclickedCell = { index, true };
-				if (left)
+			if (!top) { //if the top hasn't been set already, prevents missclicks
+				top = true; brd.set = true; //update my top and signal board that a border was set
+				brd.lastclickedCell = { index, true }; //update lastclickedCell for Drawing reasons
+				if (left) //if my left is set aswell i check for my right and bottom
 				{
-					bool right  = (index / brd.cellcount.y == brd.cellcount.x - 1 ? true : brd.cells[index + 1].left);
+					//100 cells, index = 59 -> 59+1=60, 60 % 10 = 0 -> right side
+					bool right  = ((index + 1) % brd.cellcount.y == 0 ? true : brd.cells[index + 1].left);
+					//100 cells, index = 90 -> 90/10=9, 9 == 10-1 -> bottom
 					bool bottom = (index / brd.cellcount.x == brd.cellcount.y - 1 ? true : brd.cells[index + brd.cellcount.x].top);
-					if (right && bottom) {
-						playerflag = plr; r++;
+					if (right && bottom) { //if all 4 sides are set
+						playerflag = plr; r++; //i mark myself as the player whos turn it is, amount of cells filled + 1
 					}
 				}
+				//Update the cell above me because it could be filled through my change
 				if (brd.cells[index - brd.cellcount.x].top && brd.cells[index - brd.cellcount.x].left)
-					if (brd.cells[index - brd.cellcount.x + 1].left) { 
+					if (brd.cells[index - brd.cellcount.x + 1].left) { //if aboves top&&left are filled, check its right (im the bottom)
 						//doesnt need an extra check cause it wraps around and left is always set
-						brd.cells[index - brd.cellcount.x].playerflag = plr; r++;
+						brd.cells[index - brd.cellcount.x].playerflag = plr; r++; //if all 4 sides are set, set its player and amount of cells filled + 1
 					}
 			}
-		if (mouse_x > 0 && mouse_x < brd.cellborderwidth &&
+		if (mouse_x > 0 && mouse_x < brd.cellborderwidth && //defines left hitbox of the cell
 			mouse_y > brd.cellborderwidth && mouse_y < brd.cellsize.y)
-			if (!left) {
-				left = true; brd.set = true;
-				brd.lastclickedCell = { index, false };
-				if (top)
+			if (!left) { //if the left hasn't been set already, prevents missclicks
+				left = true; brd.set = true; //update my left and signal board that a border was set
+				brd.lastclickedCell = { index, false }; //update lastclickedCell for Drawing reasons
+				if (top) //if my top is set aswell i check for my right and bottom
 				{
-					bool right = (index / brd.cellcount.y == brd.cellcount.x - 1 ? true : brd.cells[index + 1].left);
+					//100 cells, index = 59 -> 59+1=60, 60 % 10 = 0 -> right side
+					bool right = ((index + 1) % brd.cellcount.y == 0 ? true : brd.cells[index + 1].left);
+					//100 cells, index = 90 -> 90/10=9, 9 == 10-1 -> bottom
 					bool bottom = (index / brd.cellcount.x == brd.cellcount.y - 1 ? true : brd.cells[index + brd.cellcount.x].top);
-					if (right && bottom) {
-						playerflag = plr; r++;
+					if (right && bottom) { //if all 4 sides are set
+						playerflag = plr; r++; //i mark myself as the player whos turn it is, amount of cells filled + 1
 					}
 				}
+				//Update the cell to my left because it could be filled through my change
 				if (brd.cells[index - 1].top && brd.cells[index - 1].left)
+					//if lefts top&&left are filled, check its bottom (im the right)
+					//inner if: if im at the bottom row, bottom will always be true, indexing would cause a crash
 					if (index > brd.cellcount.x * brd.cellcount.y - brd.cellcount.x ? true : brd.cells[index - 1 + brd.cellcount.x].top) {
 						//needs an extra check because bottom isnt safe
-						brd.cells[index - 1].playerflag = plr; r++;
+						brd.cells[index - 1].playerflag = plr; r++; //if all 4 sides are set, set its player and amount of cells filled + 1
 					}
 			}
 		return r;

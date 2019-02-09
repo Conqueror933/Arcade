@@ -10,6 +10,15 @@ Menu::Menu(Graphics& gfx)
 	CreateMainMenu();
 }
 
+Menu::Menu(Graphics & gfx, BoardInit brdinit)
+	:
+	gfx(gfx),
+	text(gfx, "Letters2.bmp"),
+	brdinit(brdinit)
+{
+	CreateMainMenu();
+}
+
 Menu::~Menu()
 {
 }
