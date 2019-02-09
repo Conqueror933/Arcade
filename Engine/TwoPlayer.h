@@ -13,7 +13,7 @@ public:
 	~TwoPlayer() = default;
 
 public:
-	int Update(int x, int y) override;
+	int Update(int mouse_x, int mouse_y) override;
 
 private:
 	int player1counter = 0;

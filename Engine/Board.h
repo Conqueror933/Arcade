@@ -52,7 +52,7 @@ private: //statics
 	static void Init(Board& brd);
 
 public:
-	virtual int Update(int x, int y) = 0;
+	virtual int Update(int mouse_x, int mouse_y) = 0;
 	void Draw() const;
 
 protected:
