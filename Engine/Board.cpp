@@ -1,221 +1,202 @@
 #include "Board.h"
 #include <assert.h>
 
-Board::Board(Graphics& gfx, const BoardColors brdclr,
-	const Vec2<int> topleft, const Vec2<int> bottomright, const Vec2<int> size, const unsigned int borderthicknessratio)
+Board::Board(Graphics& gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
 	:
 	gfx(gfx),
 	brdclr(brdclr),
-	topleft(topleft),
-	bottomright(bottomright),
-	size(size),
-	//calculate borderwidth
-	borderwidth(Vec2<int>::pickLowest(Vec2<int>::constminus(bottomright, topleft) / borderthicknessratio / (size + 1))),
-	//calculate cellsize
-	cellsize(Vec2<int>(Vec2<int>::constminus(bottomright - borderwidth, topleft) / size ))
+	cellcount(cellcount),
+	cellsize(CalculateCellSize(cellcount, cellborderwidth)),
+	topleft(CalculateTopLeft(cellcount, cellsize)),
+	cellborderwidth(CalculateCellBorderWidth1(cellcount, borderthicknessratio))
 {
-	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 205u, 0u));
+	Init(*this);
+}
+
+Board::Board(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
+	:
+	gfx(gfx),
+	brdclr(brdclr),
+	cellcount(cellcount),
+	cellsize(CheckCellSize(cellcount, cellsize, cellborderwidth)),
+	topleft(CalculateTopLeft(cellcount, cellsize)),
+	cellborderwidth(CalculateCellBorderWidth2(cellsize, borderthicknessratio))
+{
+	Init(*this);
+}
+
+const Vec2<int> Board::CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth)
+{
+	assert(Graphics::ScreenWidth > cellcount.x * cellsize.x + cellborderwidth);
+	assert(Graphics::ScreenHeight < cellcount.y * cellsize.y + cellborderwidth);
+	return cellsize;
+}
+
+Vec2<int> Board::CalculateCellSize(const Vec2<int> cellcount, int cellborderwidth)
+{
+	return Vec2<int>((Graphics::ScreenWidth - cellcount.x * cellborderwidth) / cellcount.x, 
+		(Graphics::ScreenHeight - cellcount.y * cellborderwidth) / cellcount.y);
+}
+
+Vec2<int> Board::CalculateTopLeft(const Vec2<int> cellcount, const Vec2<int> cellsize)
+{
+	return Vec2<int>((Graphics::ScreenWidth - cellcount.x * cellsize.x) / 2, (Graphics::ScreenHeight - cellcount.y * cellsize.y) / 2);
+}
+
+int Board::CalculateCellBorderWidth1(const Vec2<int> cellcount, const double borderthicknessratio)
+{
+	assert(borderthicknessratio > 0.0);
+	assert(borderthicknessratio < 1.0);
+	auto x = Graphics::ScreenWidth * borderthicknessratio / (cellcount.x + 1);
+	auto y = Graphics::ScreenHeight * borderthicknessratio / (cellcount.y + 1);
+	if (x > y)
+		return static_cast<int>(y);
+	else
+		return static_cast<int>(x);
+}
+
+int Board::CalculateCellBorderWidth2(const Vec2<int> cellsize, const double borderthicknessratio)
+{
+
+	if (cellsize.x > cellsize.y)
+		return static_cast<int>((double)cellsize.y * borderthicknessratio);
+	else
+		return static_cast<int>((double)cellsize.x * borderthicknessratio);
+}
+
+void Board::Init(Board& brd)
+{
 	//reserve Cell space to avoid reallocating
-	cells.reserve(size.x*size.y);
+	brd.cells.reserve(brd.cellcount.x*brd.cellcount.y);
 	//make Cells
-	for (int y = 0; y < size.y; y++)
+	for (int y = 0; y < brd.cellcount.y; y++)
 	{
-		for (int x = 0; x < size.x; x++)
+		for (int x = 0; x < brd.cellcount.x; x++)
 		{
-			cells.emplace_back(*this, Vec2<int>{ x, y});
+			brd.cells.emplace_back(brd, Vec2<int>{ brd.topleft.x + x * brd.cellsize.x, brd.topleft.y + y * brd.cellsize.y}, x + y * brd.cellcount.x);
 		}
 	}
-	//make Players
-	players.emplace_back(brdclr.player1);
-	players.emplace_back(brdclr.player2);
 	//Fill Cells at border of Board
-	for (int i = 0; i < size.x; i++)
+	for (int i = 0; i < brd.cellcount.x; i++)
 	{
-		cells[i].top = true;
+		brd.cells[i].top = true;
 	}
-	for (int i = 0; i < size.x*size.y; i += size.x)
+	for (int i = 0; i < brd.cellcount.x*brd.cellcount.y; i += brd.cellcount.x)
 	{
-		cells[i].left = true;
+		brd.cells[i].left = true;
 	}
-	//make Right and bottom look filled
-	int x = cells[size.x*size.y - 1].position.x * cellsize.x + topleft.x;
-	int y = cells[size.x*size.y - 1].position.y * cellsize.y + topleft.y;
-	gfx.DrawRectangle(x + cellsize.x, 
-		topleft.y,
-		x + cellsize.x + borderwidth, 
-		y + cellsize.y + borderwidth, 
-		brdclr.clicked);
-	gfx.DrawRectangle(topleft.x,
-		y + cellsize.y,
-		x + cellsize.x + borderwidth,
-		y + cellsize.y + borderwidth,
-		brdclr.clicked);
 }
 
-/****************************************************************************************************/
-/*												Logic												*/
-/****************************************************************************************************/
-int Board::Update(int mouse_x, int mouse_y)
-{
-	set = false;
-	int x = (mouse_x - topleft.x) / cellsize.x;
-	int y = (mouse_y - topleft.y) / cellsize.y;
-	if (x >= 0 && x < size.x && y >= 0 && y < size.y)
-		//if(cells[x + size.x * y].Update(mouse_x, mouse_y))
-		if(auto temp = cells[x + size.x * y].Update((mouse_x - topleft.x) % cellsize.x, (mouse_y - topleft.y) % cellsize.y))
-		{
-			cellsfilled += temp;
-			//check who won
-			if (cellsfilled == size.x * size.y)
-			{
-				if (players[0].GetCounter() > players[1].GetCounter())
-					return 1;
-				else if (players[0].GetCounter() < players[1].GetCounter())
-					return 2;
-				else
-					return -1;
-			}
-			//}
-		}
-		else
-			if(set)
-				turncounter++;
-	return 0;
-}
-
-/****************************************************************************************************/
-/*												Draw												*/
-/****************************************************************************************************/
 void Board::Draw() const
 {
+	//Draw Cell Background
+	gfx.DrawRectangle(topleft.x, topleft.y, 
+		cells[cellcount.x * cellcount.y - 1].pos.x + cellsize.x, cells[cellcount.x * cellcount.y - 1].pos.y + cellsize.y, 
+		brdclr.background);	
+	//make Right and bottom look filled
+	int x = cells[cellcount.x*cellcount.y - 1].pos.x;
+	int y = cells[cellcount.x*cellcount.y - 1].pos.y;
+	gfx.DrawRectangle(x + cellsize.x, topleft.y, x + cellsize.x + cellborderwidth, y + cellsize.y + cellborderwidth, brdclr.clicked);
+	gfx.DrawRectangle(topleft.x, y + cellsize.y, x + cellsize.x + cellborderwidth, y + cellsize.y + cellborderwidth, brdclr.clicked);
+	//Draw Cells on Top
 	for (auto i = 0u; i < cells.size(); i++)
 	{
 		cells[i].Draw();
 	}
+	//Draw lastClicked on Top
 	if (lastclickedCell.first > -1)
-		cells[lastclickedCell.first].Draw();
+		cells[lastclickedCell.first].Draw(lastclickedCell.second);
 }
 
+/*****************   Cell   ********************/
 
-/****************************************************************************************************/
-/****************************************************************************************************/
-/*											Cell Subclass											*/
-/****************************************************************************************************/
-/****************************************************************************************************/
-
-Board::Cell::Cell(Board& brd, Vec2<int> position)
+Board::Cell::Cell(Board& brd, Vec2<int> screenposition, unsigned int index)
 	:
 	brd(brd),
-	position(position)
+	pos(screenposition),
+	index(index)
 {
-	brd.gfx.DrawRectangleDim(position.x * brd.cellsize.x + brd.topleft.x, position.y * brd.cellsize.y + brd.topleft.y,
-		brd.cellsize.x, brd.cellsize.y, brd.brdclr.background);
 }
 
 Board::Cell::~Cell()
 {
 }
 
-Board::Cell::Cell(const Cell & other)
-	:
-	brd(other.brd),
-	position(other.position)
+int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
 {
-}
-
-Board::Cell& Board::Cell::operator=(const Cell& other)
-{
-	return *this;
-}
-
-/****************************************************************************************************/
-/*												Logic												*/
-/****************************************************************************************************/
-
-int Board::Cell::Update(int mouse_x, int mouse_y)
-{
-	if (playerflag == -1)
+	if (playerflag == None)
 	{
-		if (mouse_x > brd.borderwidth && mouse_x < brd.cellsize.x &&
-			mouse_y > 0 && mouse_y < brd.borderwidth)
+		int r = 0;
+		if (mouse_x > brd.cellborderwidth && mouse_x < brd.cellsize.x &&
+			mouse_y > 0 && mouse_y < brd.cellborderwidth)
 			if (!top) {
-				top = true; brd.set = true; 
-				brd.lastclickedCell = { position.x + position.y * brd.size.x, true };
+				top = true; brd.set = true;
+				brd.lastclickedCell = { index, true };
+				if (left)
+				{
+					bool right  = (index / brd.cellcount.y == brd.cellcount.x - 1 ? true : brd.cells[index + 1].left);
+					bool bottom = (index / brd.cellcount.x == brd.cellcount.y - 1 ? true : brd.cells[index + brd.cellcount.x].top);
+					if (right && bottom) {
+						playerflag = plr; r++;
+					}
+				}
+				if (brd.cells[index - brd.cellcount.x].top && brd.cells[index - brd.cellcount.x].left)
+					if (brd.cells[index - brd.cellcount.x + 1].left) {
+						brd.cells[index - brd.cellcount.x].playerflag = plr; r++;
+					}
 			}
-		if (mouse_x > 0 && mouse_x < brd.borderwidth &&
-			mouse_y > brd.borderwidth && mouse_y < brd.cellsize.y)
-			if (!left) { 
-				left = true; brd.set = true; 
-				brd.lastclickedCell = { position.x + position.y * brd.size.x, false };
+		if (mouse_x > 0 && mouse_x < brd.cellborderwidth &&
+			mouse_y > brd.cellborderwidth && mouse_y < brd.cellsize.y)
+			if (!left) {
+				left = true; brd.set = true;
+				brd.lastclickedCell = { index, false };
+				if (top)
+				{
+					bool right = (index / brd.cellcount.y == brd.cellcount.x - 1 ? true : brd.cells[index + 1].left);
+					bool bottom = (index / brd.cellcount.x == brd.cellcount.y - 1 ? true : brd.cells[index + brd.cellcount.x].top);
+					if (right && bottom) {
+						playerflag = plr; r++;
+					}
+				}
+				if (brd.cells[index - 1].top && brd.cells[index - 1].left)
+					if (brd.cells[index - 1 + brd.cellcount.x].top) {
+						brd.cells[index - 1].playerflag = plr; r++;
+					}
 			}
-		return Update();
+		return r;
 	}
 	return 0;
 }
 
-int Board::Cell::Update()
-{
-	int b = 0;
-	if (playerflag == -1)
-	{
-		int x = position.x;
-		int y = position.y;
-
-		//error- and checking for right and bottom
-		if (left && top) {
-			bool right = (x == brd.size.x - 1 ? true : brd.cells[brd.size.x * y + x + 1].left);
-			bool bottom = (y == brd.size.y - 1 ? true : brd.cells[x + brd.size.x * (y + 1)].top);
-			if (right && bottom && top && left) {
-				if (brd.turncounter % 2 == 0) {
-					brd.players[0].SetCounter();
-					playerflag = 0;
-				}
-				else {
-					brd.players[1].SetCounter();
-					playerflag = 1;
-				}
-				b++;
-			}
-		}
-		if (top && y > 0)
-			if (brd.cells[x + brd.size.x * (y - 1)].left && brd.cells[x + brd.size.x * (y - 1)].top)
-				b += brd.cells[x + brd.size.x * (y - 1)].Update();
-		if (left && x > 0)
-			if (brd.cells[brd.size.x * y + x - 1].left && brd.cells[brd.size.x * y + x - 1].top)
-				b += brd.cells[brd.size.x * y + x - 1].Update();
-	}
-	return b;
-}
-
-/****************************************************************************************************/
-/*												Draw												*/
-/****************************************************************************************************/
 void Board::Cell::Draw() const
 {
+	//decide on Color
 	Color c;
-	int x = position.x * brd.cellsize.x + brd.topleft.x;
-	int y = position.y * brd.cellsize.y + brd.topleft.y;
 	switch (playerflag)
 	{
-	case -1:
+	case None:
 		c = brd.brdclr.foreground; break;
-	case 0:
+	case Player1:
 		c = brd.brdclr.player1; break;
-	case 1:
+	case Player2:
 		c = brd.brdclr.player2; break;
 	}
-	brd.gfx.DrawRectangleDim(x + brd.borderwidth, y + brd.borderwidth,
-		brd.cellsize.x - brd.borderwidth, brd.cellsize.y - brd.borderwidth, c);
-	if ((position.x + position.y * brd.size.x) == brd.lastclickedCell.first)
-		if (brd.lastclickedCell.second)
-			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth + brd.cellsize.x, y + brd.borderwidth, brd.brdclr.lastclicked);
-		else
-			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth, y + brd.borderwidth + brd.cellsize.y, brd.brdclr.lastclicked);
-	else {
-		if (top)
-			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth + brd.cellsize.x, y + brd.borderwidth, brd.brdclr.clicked);
-		if (left)
-			brd.gfx.DrawRectangle(x, y, x + brd.borderwidth, y + brd.borderwidth + brd.cellsize.y, brd.brdclr.clicked);
-	}
+	//Draw inner Cell
+	brd.gfx.DrawRectangleDim(pos.x + brd.cellborderwidth, pos.y + brd.cellborderwidth,
+		brd.cellsize.x - brd.cellborderwidth, brd.cellsize.y - brd.cellborderwidth, c);
+	//Draw Edges
+	if (top)
+		brd.gfx.DrawRectangle(pos.x, pos.y, pos.x + brd.cellborderwidth + brd.cellsize.x, pos.y + brd.cellborderwidth, brd.brdclr.clicked);
+	if (left)
+		brd.gfx.DrawRectangle(pos.x, pos.y, pos.x + brd.cellborderwidth, pos.y + brd.cellborderwidth + brd.cellsize.y, brd.brdclr.clicked);
+}
+
+void Board::Cell::Draw(bool b) const
+{
+	if(b)
+		//top
+		brd.gfx.DrawRectangle(pos.x, pos.y, pos.x + brd.cellborderwidth + brd.cellsize.x, pos.y + brd.cellborderwidth, brd.brdclr.lastclicked);
+	else
+		//left
+		brd.gfx.DrawRectangle(pos.x, pos.y, pos.x + brd.cellborderwidth, pos.y + brd.cellborderwidth + brd.cellsize.y, brd.brdclr.lastclicked);
 }

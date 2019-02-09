@@ -16,8 +16,6 @@ Menu::~Menu()
 
 void Menu::CreateMainMenu()
 {
-	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
 	//Welcome Label
 	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
@@ -45,8 +43,6 @@ void Menu::CreateMainMenu()
 
 void Menu::CreateOptionsMenu()
 {
-	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
 	//Optionen
 	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
@@ -124,6 +120,8 @@ Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 
 void Menu::Draw()
 {
+	//Set Background
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
 	for (auto i = 0u; i < objects.size(); i++)
 	{
 		objects[i]->Draw();

@@ -6,28 +6,7 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
-#include "Board.h"
-
-enum Gamestate
-{
-	GsError = -1,
-	GsMenu,
-	GstwoPlayer,
-	GsAILevel1,
-	GsAILevel2,
-	GsAILevel3,
-	GsPlayer1Victory,
-	GsPlayer2Victory
-};
-
-struct BoardInit
-{
-	BoardColors brdclr;
-	Vec2<int> boardtopleft = Vec2<int>(100, 100);
-	Vec2<int> boardbottomright = Vec2<int>(500, 500);
-	Vec2<int> boardcellcounts = Vec2<int>(10, 10);
-	unsigned int boardborderthickness = 4u; //not used yet
-};
+#include "Globals.h"
 
 class Menu
 {

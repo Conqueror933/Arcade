@@ -90,13 +90,13 @@ inline void Menu::MenuButton::Update()
 		case MsBig:
 			menu.brdinit.boardcellcounts = Vec2<int>{ 12,12 };
 			break;
-		case MsSquare:
-			menu.brdinit.boardtopleft = Vec2<int>(100, 100);
-			menu.brdinit.boardbottomright = Vec2<int>(500, 500);
-			break;
-		case MsFree:
-			menu.brdinit.boardtopleft = Vec2<int>{ 0,0 };
-			menu.brdinit.boardbottomright = Vec2<int>{ Graphics::ScreenWidth, Graphics::ScreenHeight };
+		//case MsSquare:
+		//	menu.brdinit.boardtopleft = Vec2<int>(100, 100);
+		//	menu.brdinit.boardbottomright = Vec2<int>(500, 500);
+		//	break;
+		//case MsFree:
+		//	menu.brdinit.boardtopleft = Vec2<int>{ 0,0 };
+		//	menu.brdinit.boardbottomright = Vec2<int>{ Graphics::ScreenWidth, Graphics::ScreenHeight };
 			break;
 		case MsThickBorder:
 			menu.brdinit.boardborderthickness = 2u;

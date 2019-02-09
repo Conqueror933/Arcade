@@ -20,7 +20,7 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "Board.h"
+#include "TwoPlayer.h"
 #include <assert.h>
 
 Game::Game(MainWindow& wnd)
@@ -82,7 +82,7 @@ void Game::UpdateModel()
 			{
 				GetBoardInit();
 				delete curInterface;
-				curInterface = new Board(gfx, brdinit.brdclr, brdinit.boardtopleft, brdinit.boardbottomright, brdinit.boardcellcounts, brdinit.boardborderthickness);
+				curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
 			}
 		}
 		//</init>
