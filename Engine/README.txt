@@ -20,6 +20,8 @@ it however is the cheap way out:
 - but its not actually about the game but to show my ability to program
 	- could argue that that is a skill aswell, then again...
 
+Board:
+Square doesnt actually behave like it should, it should still adjust to screensize, just with keeping the cells...well square
 
 AI Levels:
 1: just check for closed cell and pick random
