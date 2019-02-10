@@ -326,7 +326,72 @@ HardAI::HardAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcou
 {
 }
 
-void HardAI::AIstuff()
+void HardAI::AIstuff() //MediumAI in disguise for now :)
 {
-	
+	std::mt19937 rng(rd());
+	std::uniform_int_distribution<int> dice(0, cellcount.x*cellcount.y - 1);
+	std::uniform_int_distribution<int> coin(0, 1);
+	AIset = false;
+	while (!AIset && (cellsfilled != cellcount.x * cellcount.y)) //if ai fills a cell, go again
+	{
+		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
+						//if there is a cell with 3 sides closed, capture it
+		int temp = FindCellWith3();
+		if (temp > 0)
+			cftemp += temp;
+		//else click on a random cell with less than 3 set
+		else
+		{
+			int calc = dice(rng);
+			//find all possible valid to set cells
+			std::vector<std::pair<int, int>> allcells1; // all cells with 1 or 0 set
+			for (int i = 0; i < (int)cellstate.size(); i++) //find all 1 set cells
+			{//check all 4 sides and put only in when actually valid
+				std::pair<bool, int> valid = IsValid(i);
+				if (valid.first)
+					allcells1.emplace_back(std::pair<int, int>{ i, valid.second }); //bool: valid at all //int: top 1, left 2, both 3
+			}
+			if (allcells1.empty()) { //empty == there are no good cells to pick
+									 //check top and left, maybe toss a coin
+				set = false;
+				while (!set) {
+					if (cells[calc].top)
+						if (cells[calc].left)
+							calc = dice(rng);
+						else
+							cftemp += LeftClick(calc);
+					else
+						if (cells[calc].left)
+							cftemp += TopClick(calc);
+						else
+							if (coin(rng) == 0)
+								cftemp += LeftClick(calc);
+							else
+								cftemp += TopClick(calc);
+				}
+			}
+			else //there are still good cells to pick from
+			{
+				std::uniform_int_distribution<int> dice1(0, allcells1.size() - 1);
+				calc = dice1(rng);
+				//at this point it is guaranteed that either top or left are settable
+				if (allcells1[calc].second == 3)
+					if (coin(rng) == 0)
+						cftemp += LeftClick(allcells1[calc].first);
+					else
+						cftemp += TopClick(allcells1[calc].first);
+				else if (allcells1[calc].second == 2)
+					cftemp += LeftClick(allcells1[calc].first);
+				else if (allcells1[calc].second == 1)
+					cftemp += TopClick(allcells1[calc].first);
+			}
+		}
+		if (cftemp > 0)
+			AIset = false;
+		else
+			AIset = true;
+		cellsfilled += cftemp;
+		player2counter += cftemp;
+		ManageCellState(); //AIclick
+	}
 }
