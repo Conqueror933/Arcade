@@ -25,8 +25,8 @@ protected:
 	bool CheckRight(int index);
 	bool CheckBottom(int index);
 	void ManageCellState();
-	int TopClick(int index);
-	int LeftClick(int index);
+	inline int TopClick(int index);
+	inline int LeftClick(int index);
 	std::pair<bool, int> IsValid(int index); //bool: valid at all //int: top 1, left 2, both 3
 	virtual void AIstuff() = 0;
 
