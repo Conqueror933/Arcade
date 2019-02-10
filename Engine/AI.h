@@ -15,7 +15,7 @@ public:
 	virtual ~AI() = default;
 
 public:
-	virtual int Update(int mouse_x, int mouse_y) = 0;
+	int Update(int mouse_x, int mouse_y);
 
 private:
 	static void Init(AI& ai);
@@ -25,12 +25,17 @@ protected:
 	bool CheckRight(int index);
 	bool CheckBottom(int index);
 	void ManageCellState();
+	int TopClick(int index);
+	int LeftClick(int index);
+	std::pair<bool, int> IsValid(int index); //bool: valid at all //int: top 1, left 2, both 3
+	virtual void AIstuff() = 0;
 
 protected: //AI specific
 	const Vec2<int> topclick  = {cellsize.x / 2, cellborderwidth / 2};
 	const Vec2<int> leftclick = {cellborderwidth / 2, cellsize.y / 2};
 	std::vector<int8_t> cellstate;
 	bool AIset = false;
+	std::random_device rd;
 };
 
 class EasyAI : public AI
@@ -44,14 +49,8 @@ public:
 	EasyAI& operator=(const EasyAI& brd) = delete;
 	~EasyAI() = default;
 
-public:
-	int Update(int mouse_x, int mouse_y);
-
 private:
-	void AIstuff();
-
-private:
-	std::random_device rd;
+	void AIstuff() override;
 };
 
 class MediumAI : public AI
@@ -65,8 +64,8 @@ public:
 	MediumAI& operator=(const MediumAI& brd) = delete;
 	~MediumAI() = default;
 
-public:
-	int Update(int mouse_x, int mouse_y);
+private:
+	void AIstuff() override;
 };
 
 class HardAI : public AI
@@ -80,6 +79,6 @@ public:
 	HardAI& operator=(const HardAI& brd) = delete;
 	~HardAI() = default;
 
-public:
-	int Update(int mouse_x, int mouse_y);
+private:
+	void AIstuff() override;
 };

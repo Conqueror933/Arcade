@@ -43,6 +43,7 @@ private:
 	/*  User Functions              */
 	void GetBoardInit();
 	void DoBoardUpdate();
+	template<class T> void InitBoard();
 	/********************************/
 private:
 	MainWindow & wnd;
@@ -57,3 +58,17 @@ private:
 	BoardInit brdinit;
 	/********************************/
 };
+
+template<class T>
+inline void Game::InitBoard()
+{
+	if (curInterface != nullptr)
+	{
+		GetBoardInit();
+		delete curInterface;
+		if (brdinit.boardcellsize == Vec2<int>{0, 0})
+			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
+		else
+			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
+	}
+}

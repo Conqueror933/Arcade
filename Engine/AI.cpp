@@ -42,15 +42,33 @@ void AI::Init(AI & ai)
 
 int AI::FindCellWith3()
 {
-	for (auto i = 0u; i < cellstate.size(); i++)
-		if (cellstate[i] == 3)
-			return i;
+	int index = 0;
+	for (;index < cellstate.size(); index++)
+		if (cellstate[index] == 3)
+			break;
+	if (index != cellstate.size())
+	{
+		int temp = 0;
+		if (cells[index].top) {
+			if (cells[index].left) {
+				if (CheckRight(index)) //NOT LeftClick, its + not -
+					temp = cells[index + 1].Update(leftclick.x, leftclick.y, Player2);
+				if (CheckBottom(index)) //NOT TopClick, its + not -
+					temp = cells[index + cellcount.x].Update(topclick.x, topclick.y, Player2);
+			}
+			else
+				temp = LeftClick(index);
+		}
+		else if (cells[index].left) temp = TopClick(index);
+		cellstate[index] += 1;
+		return temp;
+	}
 	return -1;
 }
 
 bool AI::CheckRight(int index)
 {
-	if ((index + 1) % cellcount.y != 0) //not on the right side
+	if ((index + 1) % cellcount.x != 0) //not on the right side
 		if (!cells[index + 1].left) { //check rights left
 			cellstate[index + 1] += 1;
 			return true;
@@ -61,7 +79,7 @@ bool AI::CheckRight(int index)
 bool AI::CheckBottom(int index)
 {
 	if (index / cellcount.x != cellcount.y - 1) //not at the bottom
-		if (!cells[index + cellcount.x].top) {//check bottoms top
+		if (!cells[index + cellcount.x].top) { //check bottoms top
 			cellstate[index + cellcount.x] += 1;
 			return true;
 		}
@@ -80,29 +98,76 @@ void AI::ManageCellState()
 			cellstate[lastclickedCell.first - 1] += 1;
 }
 
-EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
-	:
-	AI(gfx,brdclr, cellcount, borderthicknessratio)
+int AI::TopClick(int index)
 {
+	cellstate[index - cellcount.x] += 1;
+	return cells[index].Update(topclick.x, topclick.y, Player2);
 }
 
-EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
-	:
-	AI(gfx,brdclr,cellcount,cellsize,borderthicknessratio)
+int AI::LeftClick(int index)
 {
+	cellstate[index - 1] += 1;
+	return cells[index].Update(leftclick.x, leftclick.y, Player2);
 }
 
-int EasyAI::Update(int mouse_x, int mouse_y)
+std::pair<bool, int> AI::IsValid(int i) //bool: valid at all //int: top 1, left 2, both 3
+{
+	if (cellstate[i] > 1) //check self
+		return {false, 0};
+	else
+	{
+		//index = 10 % 10 = 0 -> left -> left cant be set
+		bool left = (i % cellcount.x == 0 ? false : cellstate[i - 1] < 2);
+		//index = 10 < 10 -> top -> top cant be set
+		bool top = (i < cellcount.x ? false : cellstate[i - cellcount.x] < 2);
+		if (cells[i].top) //if my top is set, check validity of my left side
+			if (left) //check left validity 
+				return { true, 2 };
+			else
+				return { false, 0 };
+		else if (cells[i].left) //if my left is set, check validity of above
+			if (top) //check top
+				return { true, 1 };
+			else
+				return { false, 0 };
+		else //so my top and my left AREN'T set
+			if (left && top)
+				return { true, 3 };
+			else if (left)
+				return { true, 2 };
+			else if (top)
+				return { true, 1 };
+			else
+				return { false, 0 };
+	}
+}
+
+int AI::Update(int mouse_x, int mouse_y)
 {
 	set = false;
 	int x = (mouse_x - topleft.x) / cellsize.x;
 	int y = (mouse_y - topleft.y) / cellsize.y;
 	if (x >= 0 && x < cellcount.x && y >= 0 && y < cellcount.y)
-			if (auto temp = cells[x + cellcount.x * y].Update((mouse_x - topleft.x) % cellsize.x, (mouse_y - topleft.y) % cellsize.y, Player1))
+		if (auto temp = cells[x + cellcount.x * y].Update((mouse_x - topleft.x) % cellsize.x, (mouse_y - topleft.y) % cellsize.y, Player1))
+		{
+			cellsfilled += temp;
+			player1counter += temp;
+			//check who won
+			if (cellsfilled == cellcount.x * cellcount.y)
 			{
-				cellsfilled += temp;
-				player1counter += temp;
-				//check who won
+				if (player1counter > player2counter)
+					return 1;
+				else if (player1counter < player2counter)
+					return 2;
+				else
+					return -1;
+			}
+			ManageCellState();
+		}
+		else
+			if (set) {
+				ManageCellState();
+				AIstuff();
 				if (cellsfilled == cellcount.x * cellcount.y)
 				{
 					if (player1counter > player2counter)
@@ -112,23 +177,20 @@ int EasyAI::Update(int mouse_x, int mouse_y)
 					else
 						return -1;
 				}
-				ManageCellState();
 			}
-			else
-				if (set) {
-					ManageCellState();
-					AIstuff();
-					if (cellsfilled == cellcount.x * cellcount.y)
-					{
-						if (player1counter > player2counter)
-							return 1;
-						else if (player1counter < player2counter)
-							return 2;
-						else
-							return -1;
-					}
-				}
 	return 0;
+}
+
+EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
+	:
+	AI(gfx,brdclr, cellcount, borderthicknessratio)
+{
+}
+
+EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
+	:
+	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
+{
 }
 
 void EasyAI::AIstuff()
@@ -139,30 +201,11 @@ void EasyAI::AIstuff()
 	AIset = false;
 	while (!AIset && (cellsfilled != cellcount.x * cellcount.y)) //if ai fills a cell, go again
 	{
-		int temp = 0;
-		//if there is a cell with 3 sides closed, capture it
-		int index = FindCellWith3();
-		if (index != -1)
-		{
-			if (cells[index].top) {
-				if (cells[index].left) {
-					if (CheckRight(index))
-						temp = cells[index + 1].Update(leftclick.x, leftclick.y, Player2);
-					if (CheckBottom(index))
-						temp = cells[index + cellcount.x].Update(topclick.x, topclick.y, Player2);
-				}
-				else {
-					temp = cells[index].Update(leftclick.x, leftclick.y, Player2);
-					cellstate[index - 1] += 1;
-				}
-			}
-			else if (cells[index].left) {
-				temp = cells[index].Update(topclick.x, topclick.y, Player2);
-				cellstate[index - cellcount.x] += 1;
-			}
-			cellstate[index] += 1;
-		}
-		//else click on a random cell
+		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
+						//if there is a cell with 3 sides closed, capture it
+		int temp = FindCellWith3();
+		if (temp != -1)
+			cftemp += temp;
 		else
 		{
 			int calc = dice(rng);
@@ -175,34 +218,186 @@ void EasyAI::AIstuff()
 					y++;
 			}
 			if (x == cellcount.x*cellcount.y) //all top are filled -> click on a left
-			{
-				//leftclick
-				while (cells[calc].left) calc = dice(rng); //find a cell whose left isnt set
-				temp = cells[calc].Update(leftclick.x, leftclick.y, Player2);
-				cellstate[calc - 1] += 1;
-			}
+				cftemp += LeftClick(calc);
 			else if (y == cellcount.x*cellcount.y) //all left are filled -> click on a top
-			{
-				//topclick
-				while (cells[calc].top) calc = dice(rng); //find a cell whose top isnt set
-				temp = cells[calc].Update(topclick.x, topclick.y, Player2);
-				cellstate[calc - cellcount.x] += 1;
-			}
+				cftemp += TopClick(calc);
 			else //all left nor all top are filled -> throw a coin
 			{
 				if (coin(rng) == 0)
-				{
-					//topclick
-					while (cells[calc].top) calc = dice(rng); //find a cell whose top isnt set
-					temp = cells[calc].Update(topclick.x, topclick.y, Player2);
-					cellstate[calc - cellcount.x] += 1;
-				}
+					cftemp += TopClick(calc);
 				else
+					cftemp += LeftClick(calc);
+			}
+			cellstate[calc] += 1;
+		}
+		if (cftemp > 0)
+			AIset = false;
+		else
+			AIset = true;
+		cellsfilled += cftemp;
+		player2counter += cftemp;
+	}
+}
+
+MediumAI::MediumAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
+	:
+	AI(gfx, brdclr, cellcount, borderthicknessratio)
+{
+}
+
+MediumAI::MediumAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
+	:
+	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
+{
+}
+
+void MediumAI::AIstuff()
+{
+	std::mt19937 rng(rd());
+	std::uniform_int_distribution<int> dice(0, cellcount.x*cellcount.y - 1);
+	std::uniform_int_distribution<int> coin(0, 1);
+	AIset = false;
+	while (!AIset && (cellsfilled != cellcount.x * cellcount.y)) //if ai fills a cell, go again
+	{
+		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
+		//if there is a cell with 3 sides closed, capture it
+		int temp = FindCellWith3();
+		if (temp != -1) 
+			cftemp += temp;
+		//else click on a random cell with less than 3 set
+		else
+		{
+			int calc = dice(rng);
+			int cellswith2 = 0;
+			for (auto i = 0; i < cellstate.size(); i++) {
+				if (cellstate[i] >= 2)
+					cellswith2++;
+			}
+			//if ALL cells have 2 or more set
+			if (cellswith2 == cellcount.x*cellcount.y)
+			{
+				while (cellstate[calc] > 2) //all cells with 3 set are done by the loop above
+					calc = dice(rng); //find a random one that has 2 set
+				if (cells[calc].top)
+					cftemp += LeftClick(calc);
+				else
+					cftemp += TopClick(calc);
+			}
+			else
+			{
+				//find all possible valid to set cells
+				std::vector<std::pair<int, int>> allcells1; // all cells with 1 or 0 set
+				for (int i = 0; i < (int)cellstate.size(); i++) //find all 1 set cells
+				{//check all 4 sides and put only in when actually valid
+					std::pair<bool, int> valid = IsValid(i);
+					if (valid.first) //check top
+						allcells1.emplace_back(std::pair<int, int>{ i, valid.second });
+				}
+				if (allcells1.empty()) { //empty == there are no good cells to pick
+					while (cellstate[calc] > 2) calc = dice(rng); //find a random cell not filled already
+					//check top and left, maybe toss a coin
+					if (cells[calc].top)
+						if (cells[calc].left)
+							throw std::exception("its impossible for top and left to be true at this point");
+						else 
+							cftemp += LeftClick(calc);
+					else
+						if (cells[calc].left)
+							cftemp += TopClick(calc);
+						else
+							if (coin(rng) == 0)
+								cftemp += LeftClick(calc);
+							else
+								cftemp += TopClick(calc);
+				}
+				else //there are still good cells to pick from
 				{
-					//leftclick
-					while (cells[calc].left) calc = dice(rng); //find a cell whose left isnt set
-					temp = cells[calc].Update(leftclick.x, leftclick.y, Player2);
-					cellstate[calc - 1] += 1;
+					std::uniform_int_distribution<int> dice1(0, allcells1.size()-1);
+					calc = dice1(rng);
+					//at this point it is guaranteed that either top or left are settable
+					if (allcells1[calc].second == 3)
+						if (coin(rng) == 0)
+							cftemp += LeftClick(allcells1[calc].first);
+						else
+							cftemp += TopClick(allcells1[calc].first);
+					else if (allcells1[calc].second == 2)
+						cftemp += LeftClick(allcells1[calc].first);
+					else if (allcells1[calc].second == 1)
+						cftemp += TopClick(allcells1[calc].first);
+				}
+			}
+			cellstate[calc] += 1;
+		}
+		if (cftemp > 0)
+			AIset = false;
+		else
+			AIset = true;
+		cellsfilled += cftemp;
+		player2counter += cftemp;
+	}
+}
+
+HardAI::HardAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
+	:
+	AI(gfx, brdclr, cellcount, borderthicknessratio)
+{
+}
+
+HardAI::HardAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
+	:
+	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
+{
+}
+
+void HardAI::AIstuff()
+{
+	std::mt19937 rng(rd());
+	std::uniform_int_distribution<int> dice(0, cellcount.x*cellcount.y - 1);
+	std::uniform_int_distribution<int> coin(0, 1);
+	AIset = false;
+	while (!AIset && (cellsfilled != cellcount.x * cellcount.y)) //if ai fills a cell, go again
+	{
+		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
+						//if there is a cell with 3 sides closed, capture it
+		int temp = FindCellWith3();
+		if (temp != -1)
+			cftemp += temp;
+		else
+		{
+			int calc = dice(rng);
+			int cellswith2 = 0;
+			for (auto i = 0; i < cellstate.size(); i++) {
+				if (cellstate[i] >= 2)
+					cellswith2++;
+			}
+			//if ALL cells have 2 or more set
+			if (cellswith2 == cellcount.x*cellcount.y)
+			{
+				//calulate the cells that give the least points to your opponent
+			}
+			else
+			{
+				//find all possible valid to set cells
+				std::vector<int> allcells1; // all cells with 1 or 0 set
+				for (int i = 0; i < (int)cellstate.size(); i++) //find all 1 set cells
+				{//check all 4 sides and put only in when actually valid
+					if (cellstate[i] < 2 && (//check self
+						(i - 1) % cellcount.x == 0 ? true : cellstate[i - 1] < 2 || //check left
+						i < cellcount.x ? true : cellstate[i - cellcount.x] < 2)) //check top
+						allcells1.emplace_back(i);
+				}
+				if (allcells1.empty()) { //empty == there are no good cells to pick
+					//calulate the cells that give the least points to your opponent
+				}
+				else //there are still good cells to pick from
+				{
+					//maybe dont just pick at random at this point, but instead create small blocks to give away later
+					std::uniform_int_distribution<int> dice1(0, allcells1.size() - 1);
+					calc = allcells1[dice1(rng)];
+					if (cells[calc].top) //at this point it is guaranteed that either top or left are settable
+						cftemp += LeftClick(calc);
+					else
+						cftemp += TopClick(calc);
 				}
 			}
 			cellstate[calc] += 1;

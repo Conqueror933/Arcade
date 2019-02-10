@@ -76,65 +76,31 @@ void Game::UpdateModel()
 		prevgamestate = GsMenu;
 		break;
 	case GstwoPlayer:
-		//<init>
 		if (prevgamestate != GstwoPlayer)
-		{
-			if (curInterface != nullptr)
-			{
-				GetBoardInit();
-				delete curInterface;
-				if (brdinit.boardcellsize == Vec2<int>{0, 0})
-					curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
-				else
-					curInterface = new TwoPlayer(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
-			}
-		}
-		//</init>
-		//<code>
+			InitBoard<TwoPlayer>();
 		DoBoardUpdate();
-		//</code>
 		prevgamestate = GstwoPlayer;
 		break;
 	case GsAILevel1:
 		if (prevgamestate != GsAILevel1)
-			if (curInterface != nullptr)
-			{
-				GetBoardInit();
-				delete curInterface;
-				if (brdinit.boardcellsize == Vec2<int>{0, 0})
-					curInterface = new EasyAI(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
-				else
-					curInterface = new EasyAI(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
-			}
-		//<code>
+			InitBoard<EasyAI>();
 		DoBoardUpdate();
-		//</code>
 		prevgamestate = GsAILevel1;
 		break;
-	//case GsAILevel2:
-	//	if (prevgamestate != GsAILevel2)
-	//		if (curInterface != nullptr)
-	//		{
-	//			delete curInterface;
-	//			//curInterface = new SMTH;
-	//		}
-	//	//<code>
-	//
-	//	//</code>
-	//	prevgamestate = GsAILevel2;
-	//	break;
-	//case GsAILevel3:
-	//	if (prevgamestate != GsAILevel3)
-	//		if (curInterface != nullptr)
-	//		{
-	//			delete curInterface;
-	//			//curInterface = new SMTH;
-	//		}
-	//	//<code>
-	//
-	//	//</code>
-	//	prevgamestate = GsAILevel3;
-	//	break;
+	case GsAILevel2:
+		if (prevgamestate != GsAILevel2)
+			if (curInterface != nullptr)
+				InitBoard<MediumAI>();
+		DoBoardUpdate();
+		prevgamestate = GsAILevel2;
+		break;
+	case GsAILevel3:
+		if (prevgamestate != GsAILevel3)
+			if (curInterface != nullptr)
+				InitBoard<HardAI>();
+		DoBoardUpdate();
+		prevgamestate = GsAILevel3;
+		break;
 	case GsPlayer1Victory:
 		while (!wnd.mouse.IsEmpty())
 		{
