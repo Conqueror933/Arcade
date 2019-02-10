@@ -169,7 +169,7 @@ int Board::Cell::Update(int mouse_x, int mouse_y, Playerflag plr)
 				if (brd.cells[index - 1].top && brd.cells[index - 1].left)
 					//if lefts top&&left are filled, check its bottom (im the right)
 					//inner if: if im at the bottom row, bottom will always be true, indexing would cause a crash
-					if (index > brd.cellcount.x * brd.cellcount.y - brd.cellcount.x ? true : brd.cells[index - 1 + brd.cellcount.x].top) {
+					if (index / brd.cellcount.x == brd.cellcount.y - 1 ? true : brd.cells[index - 1 + brd.cellcount.x].top) {
 						//needs an extra check because bottom isnt safe
 						brd.cells[index - 1].playerflag = plr; r++; //if all 4 sides are set, set its player and amount of cells filled + 1
 					}

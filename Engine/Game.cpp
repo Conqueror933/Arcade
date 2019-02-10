@@ -119,6 +119,15 @@ void Game::UpdateModel()
 		}
 		prevgamestate = GsPlayer2Victory;
 		break;
+	case GsUndecided:
+		while (!wnd.mouse.IsEmpty())
+		{
+			const auto e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				gamestate = GsMenu;
+		}
+		prevgamestate = GsUndecided;
+		break;
 	default:
 		gamestate = GsError;
 	}
@@ -139,8 +148,10 @@ void Game::DoBoardUpdate()
 			auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
 			if (temp == 1)
 				gamestate = GsPlayer1Victory;
-			if (temp == 2)
+			else if (temp == 2)
 				gamestate = GsPlayer2Victory;
+			else if (temp == 3)
+				gamestate = GsUndecided;
 		}
 	}
 }
@@ -160,9 +171,15 @@ void Game::ComposeFrame()
 		break;
 	case GsPlayer1Victory:
 		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Blue);
+		static_cast<Board*>(curInterface)->Draw();
 		break;
 	case GsPlayer2Victory:
 		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Red);
+		static_cast<Board*>(curInterface)->Draw();
+		break;
+	case GsUndecided:
+		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Cyan);
+		static_cast<Board*>(curInterface)->Draw();
 		break;
 	default:
 		throw std::exception("Bad Gamestate.");

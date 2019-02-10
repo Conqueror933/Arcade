@@ -43,24 +43,22 @@ void AI::Init(AI & ai)
 int AI::FindCellWith3()
 {
 	int index = 0;
-	for (;index < cellstate.size(); index++)
+	for (; index < cellstate.size(); index++)
 		if (cellstate[index] == 3)
 			break;
 	if (index != cellstate.size())
 	{
 		int temp = 0;
-		if (cells[index].top) {
-			if (cells[index].left) {
+		if (cells[index].top)
+			if (cells[index].left)
 				if (CheckRight(index)) //NOT LeftClick, its + not -
-					temp = cells[index + 1].Update(leftclick.x, leftclick.y, Player2);
-				if (CheckBottom(index)) //NOT TopClick, its + not -
-					temp = cells[index + cellcount.x].Update(topclick.x, topclick.y, Player2);
-			}
+					temp += cells[index + 1].Update(leftclick.x, leftclick.y, Player2); //set right
+				else
+					temp += cells[index + cellcount.x].Update(topclick.x, topclick.y, Player2); //set bottom
 			else
-				temp = LeftClick(index);
-		}
-		else if (cells[index].left) temp = TopClick(index);
-		cellstate[index] += 1;
+				temp += LeftClick(index); //set left
+		else
+			temp += TopClick(index); //set top
 		return temp;
 	}
 	return -1;
@@ -83,7 +81,7 @@ bool AI::CheckBottom(int index)
 }
 
 void AI::ManageCellState()
-{
+{//int = index, bool: true = top, false = left
 	cellstate[lastclickedCell.first] += 1;
 	if (lastclickedCell.second) {
 		if (lastclickedCell.first >= cellcount.x)
@@ -154,15 +152,14 @@ int AI::Update(int mouse_x, int mouse_y)
 				else if (player1counter < player2counter)
 					return 2;
 				else
-					return -1;
+					return 3;
 			}
-			ManageCellState();
+			ManageCellState(); //playerclick
 		}
 		else
 			if (set) {
-				ManageCellState();
+				ManageCellState(); //playerclick
 				AIstuff();
-				ManageCellState();
 				if (cellsfilled == cellcount.x * cellcount.y)
 				{
 					if (player1counter > player2counter)
@@ -170,7 +167,7 @@ int AI::Update(int mouse_x, int mouse_y)
 					else if (player1counter < player2counter)
 						return 2;
 					else
-						return -1;
+						return 3;
 				}
 			}
 	return 0;
@@ -196,11 +193,13 @@ void EasyAI::AIstuff()
 	AIset = false;
 	while (!AIset && (cellsfilled != cellcount.x * cellcount.y)) //if ai fills a cell, go again
 	{
+		ManageCellState();
 		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
 						//if there is a cell with 3 sides closed, capture it
 		int temp = FindCellWith3();
-		if (temp != -1)
+		if (temp > 0)
 			cftemp += temp;
+		//else click on a random cell with less than 3 set
 		else
 		{
 			int calc = dice(rng);
@@ -256,44 +255,28 @@ void MediumAI::AIstuff()
 		int cftemp = 0; //cellsfilledtemp ... cause cellsfilled already exists
 		//if there is a cell with 3 sides closed, capture it
 		int temp = FindCellWith3();
-		if (temp != -1) 
+		if (temp > 0)
 			cftemp += temp;
 		//else click on a random cell with less than 3 set
 		else
 		{
 			int calc = dice(rng);
-			int cellswith2 = 0;
-			for (auto i = 0; i < cellstate.size(); i++) {
-				if (cellstate[i] >= 2)
-					cellswith2++;
+			//find all possible valid to set cells
+			std::vector<std::pair<int, int>> allcells1; // all cells with 1 or 0 set
+			for (int i = 0; i < (int)cellstate.size(); i++) //find all 1 set cells
+			{//check all 4 sides and put only in when actually valid
+				std::pair<bool, int> valid = IsValid(i);
+				if (valid.first)
+					allcells1.emplace_back(std::pair<int, int>{ i, valid.second }); //bool: valid at all //int: top 1, left 2, both 3
 			}
-			//if ALL cells have 2 or more set
-			if (cellswith2 == cellcount.x*cellcount.y)
-			{
-				while (cellstate[calc] > 2) //all cells with 3 set are done by the loop above
-					calc = dice(rng); //find a random one that has 2 set
-				if (cells[calc].top)
-					cftemp += LeftClick(calc);
-				else
-					cftemp += TopClick(calc);
-			}
-			else
-			{
-				//find all possible valid to set cells
-				std::vector<std::pair<int, int>> allcells1; // all cells with 1 or 0 set
-				for (int i = 0; i < (int)cellstate.size(); i++) //find all 1 set cells
-				{//check all 4 sides and put only in when actually valid
-					std::pair<bool, int> valid = IsValid(i);
-					if (valid.first) //check top
-						allcells1.emplace_back(std::pair<int, int>{ i, valid.second });
-				}
-				if (allcells1.empty()) { //empty == there are no good cells to pick
-					while (cellstate[calc] > 2) calc = dice(rng); //find a random cell not filled already
-					//check top and left, maybe toss a coin
+			if (allcells1.empty()) { //empty == there are no good cells to pick
+				//check top and left, maybe toss a coin
+				set = false;
+				while (!set) {
 					if (cells[calc].top)
 						if (cells[calc].left)
-							throw std::exception("its impossible for top and left to be true at this point");
-						else 
+							calc = dice(rng);
+						else
 							cftemp += LeftClick(calc);
 					else
 						if (cells[calc].left)
@@ -304,21 +287,21 @@ void MediumAI::AIstuff()
 							else
 								cftemp += TopClick(calc);
 				}
-				else //there are still good cells to pick from
-				{
-					std::uniform_int_distribution<int> dice1(0, allcells1.size()-1);
-					calc = dice1(rng);
-					//at this point it is guaranteed that either top or left are settable
-					if (allcells1[calc].second == 3)
-						if (coin(rng) == 0)
-							cftemp += LeftClick(allcells1[calc].first);
-						else
-							cftemp += TopClick(allcells1[calc].first);
-					else if (allcells1[calc].second == 2)
+			}
+			else //there are still good cells to pick from
+			{
+				std::uniform_int_distribution<int> dice1(0, allcells1.size()-1);
+				calc = dice1(rng);
+				//at this point it is guaranteed that either top or left are settable
+				if (allcells1[calc].second == 3)
+					if (coin(rng) == 0)
 						cftemp += LeftClick(allcells1[calc].first);
-					else if (allcells1[calc].second == 1)
+					else
 						cftemp += TopClick(allcells1[calc].first);
-				}
+				else if (allcells1[calc].second == 2)
+					cftemp += LeftClick(allcells1[calc].first);
+				else if (allcells1[calc].second == 1)
+					cftemp += TopClick(allcells1[calc].first);
 			}
 		}
 		if (cftemp > 0)
@@ -327,6 +310,7 @@ void MediumAI::AIstuff()
 			AIset = true;
 		cellsfilled += cftemp;
 		player2counter += cftemp;
+		ManageCellState(); //AIclick
 	}
 }
 

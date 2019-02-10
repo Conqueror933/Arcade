@@ -9,7 +9,8 @@ enum Gamestate
 	GsAILevel2,
 	GsAILevel3,
 	GsPlayer1Victory,
-	GsPlayer2Victory
+	GsPlayer2Victory,
+	GsUndecided
 };
 
 struct BoardColors
