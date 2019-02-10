@@ -44,11 +44,11 @@ public:
 	virtual ~Board() = default;
 
 private: //statics
-	static const Vec2<int> CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth);
-	static Vec2<int> CalculateCellSize(const Vec2<int> cellcount, int borderwidth);
-	static Vec2<int> CalculateTopLeft(const Vec2<int> cellcount, const Vec2<int> cellsize);
 	static int CalculateCellBorderWidth1(const Vec2<int> cellcount, const double borderthicknessratio);
 	static int CalculateCellBorderWidth2(const Vec2<int> cellsize, const double borderthicknessratio);
+	static Vec2<int> CalculateCellSize(const Vec2<int> cellcount, int borderwidth);
+	static const Vec2<int> CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth);
+	static Vec2<int> CalculateTopLeft(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth);
 	static void Init(Board& brd);
 
 public:

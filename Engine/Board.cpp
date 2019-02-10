@@ -6,9 +6,9 @@ Board::Board(Graphics& gfx, const BoardColors brdclr, const Vec2<int> cellcount,
 	gfx(gfx),
 	brdclr(brdclr),
 	cellcount(cellcount),
+	cellborderwidth(CalculateCellBorderWidth1(cellcount, borderthicknessratio)),
 	cellsize(CalculateCellSize(cellcount, cellborderwidth)),
-	topleft(CalculateTopLeft(cellcount, cellsize)),
-	cellborderwidth(CalculateCellBorderWidth1(cellcount, borderthicknessratio))
+	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth))
 {
 	Init(*this);
 }
@@ -18,29 +18,11 @@ Board::Board(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount
 	gfx(gfx),
 	brdclr(brdclr),
 	cellcount(cellcount),
+	cellborderwidth(CalculateCellBorderWidth2(cellsize, borderthicknessratio)),
 	cellsize(CheckCellSize(cellcount, cellsize, cellborderwidth)),
-	topleft(CalculateTopLeft(cellcount, cellsize)),
-	cellborderwidth(CalculateCellBorderWidth2(cellsize, borderthicknessratio))
+	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth))
 {
 	Init(*this);
-}
-
-const Vec2<int> Board::CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth)
-{
-	assert(Graphics::ScreenWidth > cellcount.x * cellsize.x + cellborderwidth);
-	assert(Graphics::ScreenHeight > cellcount.y * cellsize.y + cellborderwidth);
-	return cellsize;
-}
-
-Vec2<int> Board::CalculateCellSize(const Vec2<int> cellcount, int cellborderwidth)
-{
-	return Vec2<int>((Graphics::ScreenWidth - cellcount.x * cellborderwidth) / cellcount.x, 
-		(Graphics::ScreenHeight - cellcount.y * cellborderwidth) / cellcount.y);
-}
-
-Vec2<int> Board::CalculateTopLeft(const Vec2<int> cellcount, const Vec2<int> cellsize)
-{
-	return Vec2<int>((Graphics::ScreenWidth - cellcount.x * cellsize.x) / 2, (Graphics::ScreenHeight - cellcount.y * cellsize.y) / 2);
 }
 
 int Board::CalculateCellBorderWidth1(const Vec2<int> cellcount, const double borderthicknessratio)
@@ -63,6 +45,25 @@ int Board::CalculateCellBorderWidth2(const Vec2<int> cellsize, const double bord
 		return static_cast<int>((double)cellsize.y * borderthicknessratio);
 	else
 		return static_cast<int>((double)cellsize.x * borderthicknessratio);
+}
+
+Vec2<int> Board::CalculateCellSize(const Vec2<int> cellcount, int cellborderwidth)
+{
+	return Vec2<int>((Graphics::ScreenWidth - cellcount.x * cellborderwidth) / cellcount.x,
+		(Graphics::ScreenHeight - cellcount.y * cellborderwidth) / cellcount.y);
+}
+
+const Vec2<int> Board::CheckCellSize(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth)
+{
+	assert(Graphics::ScreenWidth > cellcount.x * cellsize.x + cellborderwidth);
+	assert(Graphics::ScreenHeight > cellcount.y * cellsize.y + cellborderwidth);
+	return cellsize;
+}
+
+Vec2<int> Board::CalculateTopLeft(const Vec2<int> cellcount, const Vec2<int> cellsize, int cellborderwidth)
+{
+	return Vec2<int>((Graphics::ScreenWidth - cellborderwidth - cellcount.x * cellsize.x) / 2, 
+		(Graphics::ScreenHeight - cellborderwidth - cellcount.y * cellsize.y) / 2);
 }
 
 void Board::Init(Board& brd)
