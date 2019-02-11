@@ -242,6 +242,7 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icon1.ico" />
     <Image Include="Letters2.bmp" />
     <Image Include="Letters.bmp" />
     <Image Include="Chili.ico" />
