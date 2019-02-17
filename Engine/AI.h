@@ -81,4 +81,14 @@ public:
 
 private:
 	void AIstuff() override;
+	void FindAllCellsWith1();
+	void FindAllCellsWith3();
+
+private:
+	enum Direction
+	{
+		dtop, dleft, dright, dbottom
+	};
+	std::vector<std::pair<int, int>> allcells1; // all cells with 1 or 0 set
+	std::vector<std::pair<int, Direction>> allcells3; // all cells with 3
 };
