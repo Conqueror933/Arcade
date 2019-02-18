@@ -50,9 +50,13 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	void* curInterface = nullptr;
 	Gamestate gamestate = GsMenu;
 	Gamestate prevgamestate;
+
+	//Should be totally legimit RAII, right? no memory learking happening
+	void* curInterface = nullptr;
+	void* data = ::operator new (64u); //basically malloc, but not quite
+
 
 	//Board init state
 	BoardInit brdinit;

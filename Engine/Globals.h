@@ -4,6 +4,7 @@ enum Gamestate
 {
 	GsError = -1,
 	GsMenu,
+	GsSnake,
 	GstwoPlayer,
 	GsAILevel1,
 	GsAILevel2,
@@ -31,4 +32,18 @@ struct BoardInit
 	Vec2<int> boardcellcounts = Vec2<int>(10, 10);
 	Vec2<int> boardcellsize = Vec2<int>(0, 0);
 	double boardborderthickness = 0.25;
+};
+
+struct MemBlock
+{
+	explicit MemBlock(size_t size = 64)
+	{
+		data = operator new (size);
+	}
+	~MemBlock()
+	{
+		operator delete(data);
+		data = nullptr;
+	}
+	void* data = nullptr;
 };

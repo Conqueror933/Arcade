@@ -38,6 +38,11 @@ Game::~Game()
 		delete curInterface;
 		curInterface = nullptr;
 	}
+	if (data != nullptr)
+	{
+		::operator delete(data);
+		data = nullptr;
+	}
 }
 
 void Game::Go()
