@@ -27,6 +27,35 @@ void Menu::CreateMainMenu()
 {
 	//Welcome Label
 	objects.emplace_back(std::make_unique<Label>(
+		&gfx, &text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
+		"Kaesekaestchen", Colors::White, Colors::Black));
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnake,
+		"Snake", Colors::White, Colors::Black));
+}
+
+void Menu::CreateSnakeMenu()
+{
+	//Back
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
+		"Back", Colors::White, Colors::Black));
+}
+
+void Menu::CreateSnakeOptionsMenu()
+{
+	//Back
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
+		"Back", Colors::White, Colors::Black));
+}
+
+void Menu::CreateKaeseMenu()
+{
+	//Welcome Label
+	objects.emplace_back(std::make_unique<Label>(
 		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
 	objects.emplace_back(std::make_unique<GameButton>(
@@ -46,11 +75,15 @@ void Menu::CreateMainMenu()
 		"Schwer", Colors::White, Colors::Black));
 	//Optionen
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsOptionen,
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseOptionen,
 		"Optionen", Colors::White, Colors::Black));
+	//Back
+	objects.emplace_back(std::make_unique<MenuButton>(
+		*this, &gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
+		"Back", Colors::White, Colors::Black));
 }
 
-void Menu::CreateOptionsMenu()
+void Menu::CreateKaeseOptionsMenu()
 {
 	//Optionen
 	objects.emplace_back(std::make_unique<Label>(
@@ -89,7 +122,7 @@ void Menu::CreateOptionsMenu()
 		"Slim borders", Colors::White, Colors::Black));
 	//Back
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsMain,
+		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -114,15 +147,30 @@ Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 		}
 		objects[i]->Update();
 	}
-	if (ms != prevms && ms == MsOptionen)
+	if (ms == prevms)	//turned the ms != prevms around for ease of reading
+		return gs;
+	switch (ms)
 	{
+	case MsKaese:
 		objects.clear();
-		CreateOptionsMenu();
-	}
-	if (ms != prevms && ms == MsMain)
-	{
+		CreateKaeseMenu();
+		break;
+	case MsKaeseOptionen:
+		objects.clear();
+		CreateKaeseOptionsMenu();
+		break;
+	case MsSnake:
+		objects.clear();
+		CreateSnakeMenu();
+		break;
+	case MsSnakeOptionen:
+		objects.clear();
+		CreateSnakeOptionsMenu();
+		break;
+	case MsMain:
 		objects.clear();
 		CreateMainMenu();
+		break;
 	}
 	return gs;
 }

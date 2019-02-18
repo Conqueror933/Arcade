@@ -75,7 +75,10 @@ inline void Menu::MenuButton::Update()
 		switch (ms)
 		{
 		case MsMain:
-		case MsOptionen:
+		case MsKaese:
+		case MsKaeseOptionen:
+		case MsSnake:
+		case MsSnakeOptionen:
 			menu.ms = ms;
 			return;
 		case MsSmall:
@@ -102,6 +105,6 @@ inline void Menu::MenuButton::Update()
 		case MsSlimBorder:
 			menu.brdinit.boardborderthickness = 0.25;
 		}
-		menu.ms = MsOptionen;
+		menu.ms = MsKaeseOptionen;
 	}
 }

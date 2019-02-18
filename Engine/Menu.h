@@ -14,7 +14,12 @@ private:
 	enum Menustate
 	{
 		MsMain,
-		MsOptionen,
+
+		MsSnake,
+		MsSnakeOptionen,
+
+		MsKaese,
+		MsKaeseOptionen,
 		MsSmall,
 		MsMedium,
 		MsDefault,
@@ -103,7 +108,12 @@ public:
 
 private:
 	void CreateMainMenu();
-	void CreateOptionsMenu();
+
+	void CreateSnakeMenu();
+	void CreateSnakeOptionsMenu();
+
+	void CreateKaeseMenu();
+	void CreateKaeseOptionsMenu();
 
 private:
 	Graphics& gfx;
