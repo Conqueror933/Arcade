@@ -1,20 +1,12 @@
 #include "Menu.h"
+#include "Game.h"
 
 /****************  Menu  *******************/
 
-Menu::Menu(Graphics& gfx)
+Menu::Menu(Game* game)
 	: 
-	gfx(gfx),
-	text(gfx, "Letters2.bmp")
-{
-	CreateMainMenu();
-}
-
-Menu::Menu(Graphics & gfx, BoardInit brdinit)
-	:
-	gfx(gfx),
-	text(gfx, "Letters2.bmp"),
-	brdinit(brdinit)
+	game(game),
+	text(game->gfx, "Letters2.bmp")
 {
 	CreateMainMenu();
 }
@@ -27,12 +19,12 @@ void Menu::CreateMainMenu()
 {
 	//Welcome Label
 	objects.emplace_back(std::make_unique<Label>(
-		&gfx, &text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+		&game->gfx, &text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
+		*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseInit,
 		"Kaesekaestchen", Colors::White, Colors::Black));
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnake,
+		*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnakeInit,
 		"Snake", Colors::White, Colors::Black));
 }
 
@@ -40,7 +32,7 @@ void Menu::CreateSnakeMenu()
 {
 	//Back
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
+		*this, &game->gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -48,7 +40,7 @@ void Menu::CreateSnakeOptionsMenu()
 {
 	//Back
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
+		*this, &game->gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -56,30 +48,30 @@ void Menu::CreateKaeseMenu()
 {
 	//Welcome Label
 	objects.emplace_back(std::make_unique<Label>(
-		&gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+		&game->gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
+		*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
 		"Zwei Spieler", Colors::White, Colors::Black));
 	//AI Level 1
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
+		*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
 		"Einfach", Colors::White, Colors::Black));
 	//AI Level 2
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
+		*this, &game->gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
 		"Mittel", Colors::White, Colors::Black));
 	//AI Level 3
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
+		*this, &game->gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
 		"Schwer", Colors::White, Colors::Black));
 	//Optionen
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseOptionen,
+		*this, &game->gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseOptionen,
 		"Optionen", Colors::White, Colors::Black));
 	//Back
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
+		*this, &game->gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, 2, Colors::Gray, Colors::LightGray, MsMain,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -87,42 +79,42 @@ void Menu::CreateKaeseOptionsMenu()
 {
 	//Optionen
 	objects.emplace_back(std::make_unique<Label>(
-		&gfx, &text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+		&game->gfx, &text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//Small size is 4x4  -  would be nice if this was a slider
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSmall,
+		*this, &game->gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSmall,
 		"Small", Colors::White, Colors::Black));
 	//Medium size is 8x8
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsMedium,
+		*this, &game->gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsMedium,
 		"Medium", Colors::White, Colors::Black));
 	//Default size is 10x10
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsDefault,
+		*this, &game->gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsDefault,
 		"Default", Colors::White, Colors::Black));
 	//Big size is 12x12
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsBig,
+		*this, &game->gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsBig,
 		"Big", Colors::White, Colors::Black));
 	//Square ensures Square Cells (and Board)  -  would be nice if this was a checkbox
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSquare,
+		*this, &game->gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSquare,
 		"Square", Colors::White, Colors::Black));
 	//makes Board fill the entire screen
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsFree,
+		*this, &game->gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsFree,
 		"Full Screen", Colors::White, Colors::Black));
 	//Extra thick borders
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsThickBorder,
+		*this, &game->gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsThickBorder,
 		"Thick borders", Colors::White, Colors::Black));
 	//Reset Thick borders
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSlimBorder,
+		*this, &game->gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSlimBorder,
 		"Slim borders", Colors::White, Colors::Black));
 	//Back
 	objects.emplace_back(std::make_unique<MenuButton>(
-		*this, &gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
+		*this, &game->gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaese,
 		"Back", Colors::White, Colors::Black));
 }
 
@@ -178,7 +170,7 @@ Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 void Menu::Draw()
 {
 	//Set Background
-	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
+	game->gfx.DrawRectangle(0, 0, game->gfx.ScreenWidth, game->gfx.ScreenHeight, Color(0u, 0u, 205u));
 	for (auto i = 0u; i < objects.size(); i++)
 	{
 		objects[i]->Draw();

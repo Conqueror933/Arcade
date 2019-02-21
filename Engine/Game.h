@@ -23,12 +23,13 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
-#include "Board.h"
 #include "Menu.h"
-
+#include "Kaesekaestchen.h"
+#include "Board.h"
 
 class Game
 {
+	friend class Menu;
 public:
 	Game(class MainWindow& wnd);
 	Game(const Game&) = delete;
@@ -41,9 +42,10 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void GetBoardInit();
+	inline /* __declspec(noinline)*/ BoardInit GetBoardInit();
 	void DoBoardUpdate();
 	template<class T> void InitBoard();
+	void ClearData();
 	/********************************/
 private:
 	MainWindow & wnd;
@@ -55,11 +57,20 @@ private:
 
 	//Should be totally legimit RAII, right? no memory learking happening
 	void* curInterface = nullptr;
-	void* data = ::operator new (64u); //basically malloc, but not quite
 
-
-	//Board init state
-	BoardInit brdinit;
+	union Data
+	{
+		char ca[sizeof(double)];
+		char c;
+		int i;
+		unsigned int ui;
+		long long ll;
+		float f;
+		double d;
+	};
+	//void* data = ::operator new (64u); //basically malloc, but not quite
+	static constexpr unsigned int databufferarraysize = 16u;
+	std::array<Data, databufferarraysize> data{};
 	/********************************/
 };
 
@@ -68,8 +79,8 @@ inline void Game::InitBoard()
 {
 	if (curInterface != nullptr)
 	{
-		GetBoardInit();
 		delete curInterface;
+		BoardInit brdinit = GetBoardInit();
 		if (brdinit.boardcellsize == Vec2<int>{0, 0})
 			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
 		else

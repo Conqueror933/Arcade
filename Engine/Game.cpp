@@ -29,6 +29,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd)
 {
+	ClearData();
 }
 
 Game::~Game()
@@ -38,10 +39,18 @@ Game::~Game()
 		delete curInterface;
 		curInterface = nullptr;
 	}
-	if (data != nullptr)
+	/*if (data != nullptr)
 	{
 		::operator delete(data);
 		data = nullptr;
+	}*/
+}
+
+void Game::ClearData()
+{
+	for (auto i = 0u; i < databufferarraysize; i++)
+	{
+		data[i].ll = 0;
 	}
 }
 
@@ -63,10 +72,10 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(gfx, brdinit); 
+				curInterface = new Menu(this); 
 			}
 			else
-				curInterface = new Menu(gfx); //first call
+				curInterface = new Menu(this); //first call
 		//</init>
 		//<code>
 		while (!wnd.mouse.IsEmpty())
@@ -79,6 +88,21 @@ void Game::UpdateModel()
 		}
 		//</code>
 		prevgamestate = GsMenu;
+		break;
+	case GsKaese:
+		//<init>
+		if (prevgamestate != GsKaese)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Kaesekaestchen(3);
+			}
+		//</init>
+		//<code>
+		if (static_cast<Kaesekaestchen*>(curInterface)->Update()) //if running return 0 else return 1
+			gamestate = GsMenu;
+		//</code>
+		prevgamestate = GsKaese;
 		break;
 	case GstwoPlayer:
 		if (prevgamestate != GstwoPlayer)
@@ -138,10 +162,13 @@ void Game::UpdateModel()
 	}
 }
 
-void Game::GetBoardInit()
+inline  /*__declspec(noinline)*/ BoardInit Game::GetBoardInit()
 {
-	if (static_cast<Menu*>(curInterface))
-		brdinit = static_cast<Menu*>(curInterface)->GetBoardInit();
+	BoardInit bi;
+	bi.boardcellcounts = Vec2<int>(data[6].i, data[7].i);
+	bi.boardcellsize = Vec2<int>(data[8].i, data[9].i);
+	bi.boardborderthickness = data[10].d;
+	return bi;
 }
 
 void Game::DoBoardUpdate()
@@ -167,6 +194,9 @@ void Game::ComposeFrame()
 	{
 	case GsMenu:
 		static_cast<Menu*>(curInterface)->Draw();
+		break;
+	case GsKaese:
+		static_cast<Kaesekaestchen*>(curInterface)->Draw();
 		break;
 	case GstwoPlayer:
 	case GsAILevel1:

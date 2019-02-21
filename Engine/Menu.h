@@ -6,8 +6,24 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
-#include "Globals.h"
 
+enum Gamestate
+{
+	GsError = -1,
+	GsMenu,
+	GsKaese,
+	GsSnake,
+
+	GstwoPlayer,
+	GsAILevel1,
+	GsAILevel2,
+	GsAILevel3,
+	GsPlayer1Victory,
+	GsPlayer2Victory,
+	GsUndecided
+};
+
+class Game;
 class Menu
 {
 private:
@@ -15,19 +31,9 @@ private:
 	{
 		MsMain,
 
-		MsSnake,
-		MsSnakeOptionen,
+		MsSnakeInit, MsSnake, MsSnakeOptionen,
 
-		MsKaese,
-		MsKaeseOptionen,
-		MsSmall,
-		MsMedium,
-		MsDefault,
-		MsBig,
-		MsSquare,
-		MsFree,
-		MsThickBorder,
-		MsSlimBorder
+		MsKaeseInit, MsKaese, MsKaeseOptionen, MsSmall, MsMedium, MsDefault, MsBig, MsSquare, MsFree, MsThickBorder, MsSlimBorder
 	};
 	class Label : public WorldObject
 	{
@@ -94,8 +100,7 @@ private:
 		Menustate ms;
 	};
 public:
-	Menu(Graphics& gfx);
-	Menu(Graphics& gfx, BoardInit brdinit);
+	Menu(Game* game);
 	Menu(const Menu&) = delete;
 	Menu& operator=(const Menu&) = delete;
 	//Menu(const Menu&&) = delete;
@@ -104,7 +109,6 @@ public:
 
 	Gamestate Update(int mouse_x, int mouse_y, bool buttondown);
 	void Draw();
-	BoardInit GetBoardInit() { return brdinit; }
 
 private:
 	void CreateMainMenu();
@@ -116,10 +120,9 @@ private:
 	void CreateKaeseOptionsMenu();
 
 private:
-	Graphics& gfx;
+	Game* game;
 	Text text;
 	std::vector<std::unique_ptr<WorldObject>> objects;
-	BoardInit brdinit;
 	Gamestate gs = GsMenu;
 	Menustate ms;
 	Menustate prevms;

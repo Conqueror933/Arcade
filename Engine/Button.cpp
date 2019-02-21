@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "Game.h"
 
 /****************  BaseButton  *******************/
 inline Menu::Button::Button(
@@ -75,36 +76,83 @@ inline void Menu::MenuButton::Update()
 		switch (ms)
 		{
 		case MsMain:
+			menu.game->ClearData();
 		case MsKaese:
 		case MsKaeseOptionen:
 		case MsSnake:
 		case MsSnakeOptionen:
 			menu.ms = ms;
 			return;
+		case MsKaeseInit:
+			menu.game->data[6].i = 10;
+			menu.game->data[7].i = 10;
+			menu.game->data[8].i = 0;
+			menu.game->data[9].i = 0;
+			menu.game->data[10].d = 0.25;
+			menu.ms = MsKaese;
+			break;
+		case MsSnakeInit:
+			menu.ms = MsSnake;
+			break;
 		case MsSmall:
-			menu.brdinit.boardcellcounts = Vec2<int>{ 4,4 };
+			menu.game->data[6].i = 4;
+			menu.game->data[7].i = 4;
 			break;
 		case MsMedium:
-			menu.brdinit.boardcellcounts = Vec2<int>{ 8,8 };
+			menu.game->data[6].i = 8;
+			menu.game->data[7].i = 8;
 			break;
 		case MsDefault:
-			menu.brdinit.boardcellcounts = Vec2<int>{ 10,10 };
+			menu.game->data[6].i = 10;
+			menu.game->data[7].i = 10;
 			break;
 		case MsBig:
-			menu.brdinit.boardcellcounts = Vec2<int>{ 12,12 };
+			menu.game->data[6].i = 12;
+			menu.game->data[7].i = 12;
 			break;
 		case MsSquare:
-			menu.brdinit.boardcellsize = Vec2<int>{ 40,40 };
+			menu.game->data[8].i = 40;
+			menu.game->data[9].i = 40;
 			break;
 		case MsFree:
-			menu.brdinit.boardcellsize = Vec2<int>{ 0,0 };
+			menu.game->data[8].i = 0;
+			menu.game->data[9].i = 0;
 			break;
 		case MsThickBorder:
-			menu.brdinit.boardborderthickness = 0.45;
+			menu.game->data[10].d = 0.35;
 			break;
 		case MsSlimBorder:
-			menu.brdinit.boardborderthickness = 0.25;
+			menu.game->data[10].d = 0.25;
+			break;
 		}
-		menu.ms = MsKaeseOptionen;
 	}
 }
+/*
+BoardInit
+00:	int		:	Color
+01: int		:	Color
+02: int		:	Color
+03: int		:	Color
+04: int		:	Color
+05: int		:	Color
+06: short	:	boardcellcounts.x
+07: short	:	boardcellcounts.y
+08: short	:	boardcellsize.x
+09: short	:	boardcellsize.y
+10: double	:	boardborderthickness
+*/
+/*
+BoardInit
+00:	int		:	Color
+04: int		:	Color
+08: int		:	Color
+12: int		:	Color
+16: int		:	Color
+20: int		:	Color
+24: short	:	boardcellcounts.x
+26: short	:	boardcellcounts.y
+28: short	:	boardcellsize.x
+30: short	:	boardcellsize.y
+32: double	:	boardborderthickness
+40: end
+*/
