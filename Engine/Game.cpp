@@ -64,7 +64,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	switch (gamestate)
+	switch (gamestate.first)
 	{
 	case GsMenu:
 		//<init>
@@ -95,16 +95,18 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Kaesekaestchen(3);
+				BoardInit brdinit = GetBoardInit();
+				curInterface = new Kaesekaestchen(brdinit, gfx, wnd.mouse, gamestate.second);
 			}
 		//</init>
 		//<code>
+		wnd.mouse;
 		if (static_cast<Kaesekaestchen*>(curInterface)->Update()) //if running return 0 else return 1
-			gamestate = GsMenu;
+			gamestate = std::make_pair(GsMenu, -1);
 		//</code>
 		prevgamestate = GsKaese;
 		break;
-	case GstwoPlayer:
+	/*case GstwoPlayer:
 		if (prevgamestate != GstwoPlayer)
 			InitBoard<TwoPlayer>();
 		DoBoardUpdate();
@@ -156,9 +158,9 @@ void Game::UpdateModel()
 				gamestate = GsMenu;
 		}
 		prevgamestate = GsUndecided;
-		break;
+		break;*/
 	default:
-		gamestate = GsError;
+		gamestate = std::make_pair(GsError, -1);
 	}
 }
 
@@ -171,22 +173,22 @@ inline  /*__declspec(noinline)*/ BoardInit Game::GetBoardInit()
 	return bi;
 }
 
-void Game::DoBoardUpdate()
-{
-	while (!wnd.mouse.IsEmpty())
-	{
-		const auto e = wnd.mouse.Read();
-		if (e.GetType() == Mouse::Event::Type::LPress) {
-			auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
-			if (temp == 1)
-				gamestate = GsPlayer1Victory;
-			else if (temp == 2)
-				gamestate = GsPlayer2Victory;
-			else if (temp == 3)
-				gamestate = GsUndecided;
-		}
-	}
-}
+//void Game::DoBoardUpdate()
+//{
+//	while (!wnd.mouse.IsEmpty())
+//	{
+//		const auto e = wnd.mouse.Read();
+//		if (e.GetType() == Mouse::Event::Type::LPress) {
+//			auto temp = static_cast<Board*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+//			if (temp == 1)
+//				gamestate = GsPlayer1Victory;
+//			else if (temp == 2)
+//				gamestate = GsPlayer2Victory;
+//			else if (temp == 3)
+//				gamestate = GsUndecided;
+//		}
+//	}
+//}
 
 void Game::ComposeFrame()
 {
@@ -197,7 +199,7 @@ void Game::ComposeFrame()
 		break;
 	case GsKaese:
 		static_cast<Kaesekaestchen*>(curInterface)->Draw();
-		break;
+		break;/*
 	case GstwoPlayer:
 	case GsAILevel1:
 	case GsAILevel2:
@@ -215,7 +217,7 @@ void Game::ComposeFrame()
 	case GsUndecided:
 		gfx.DrawRectangle(0, 0, Graphics::ScreenWidth, Graphics::ScreenHeight, Colors::Cyan);
 		static_cast<Board*>(curInterface)->Draw();
-		break;
+		break;*/
 	default:
 		throw std::exception("Bad Gamestate.");
 	}

@@ -25,7 +25,6 @@
 #include "Graphics.h"
 #include "Menu.h"
 #include "Kaesekaestchen.h"
-#include "Board.h"
 
 class Game
 {
@@ -43,8 +42,8 @@ private:
 	/********************************/
 	/*  User Functions              */
 	inline /* __declspec(noinline)*/ BoardInit GetBoardInit();
-	void DoBoardUpdate();
-	template<class T> void InitBoard();
+	//void DoBoardUpdate();
+	//template<class T> void InitBoard();
 	void ClearData();
 	/********************************/
 private:
@@ -52,11 +51,12 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	Gamestate gamestate = GsMenu;
+	std::pair<Gamestate, int> gamestate = std::make_pair(GsMenu, -1);
 	Gamestate prevgamestate;
 
 	//Should be totally legimit RAII, right? no memory learking happening
 	void* curInterface = nullptr;
+
 
 	union Data
 	{
@@ -74,16 +74,16 @@ private:
 	/********************************/
 };
 
-template<class T>
-inline void Game::InitBoard()
-{
-	if (curInterface != nullptr)
-	{
-		delete curInterface;
-		BoardInit brdinit = GetBoardInit();
-		if (brdinit.boardcellsize == Vec2<int>{0, 0})
-			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
-		else
-			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
-	}
-}
+//template<class T>
+//inline void Game::InitBoard()
+//{
+//	if (curInterface != nullptr)
+//	{
+//		delete curInterface;
+//		BoardInit brdinit = GetBoardInit();
+//		if (brdinit.boardcellsize == Vec2<int>{0, 0})
+//			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
+//		else
+//			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
+//	}
+//}

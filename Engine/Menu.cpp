@@ -51,19 +51,19 @@ void Menu::CreateKaeseMenu()
 		&game->gfx, &text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GstwoPlayer,
+		*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 0),
 		"Zwei Spieler", Colors::White, Colors::Black));
 	//AI Level 1
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel1,
+		*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 1),
 		"Einfach", Colors::White, Colors::Black));
 	//AI Level 2
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &game->gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel2,
+		*this, &game->gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 2),
 		"Mittel", Colors::White, Colors::Black));
 	//AI Level 3
 	objects.emplace_back(std::make_unique<GameButton>(
-		*this, &game->gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, GsAILevel3,
+		*this, &game->gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 3),
 		"Schwer", Colors::White, Colors::Black));
 	//Optionen
 	objects.emplace_back(std::make_unique<MenuButton>(
@@ -118,7 +118,7 @@ void Menu::CreateKaeseOptionsMenu()
 		"Back", Colors::White, Colors::Black));
 }
 
-Gamestate Menu::Update(int mouse_x, int mouse_y, bool buttondown)
+std::pair<Gamestate, int> Menu::Update(int mouse_x, int mouse_y, bool buttondown)
 {
 	for (auto i = 0u; i < objects.size(); i++)
 	{

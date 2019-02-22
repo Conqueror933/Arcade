@@ -6,6 +6,8 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
+#include "GlobalEnum.h"
+#include "ButtonBehaviour.h"
 
 enum Gamestate
 {
@@ -13,14 +15,6 @@ enum Gamestate
 	GsMenu,
 	GsKaese,
 	GsSnake,
-
-	GstwoPlayer,
-	GsAILevel1,
-	GsAILevel2,
-	GsAILevel3,
-	GsPlayer1Victory,
-	GsPlayer2Victory,
-	GsUndecided
 };
 
 class Game;
@@ -78,13 +72,13 @@ private:
 	public:
 		GameButton(Menu& menu, Graphics* gfx,
 			//Button
-			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs,
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, std::pair<Gamestate, int> gs,
 			//Label
 			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
 		void Update() override;
 
 	private:
-		Gamestate gs = GsError;
+		std::pair<Gamestate, int> gs;
 	};
 	class MenuButton : public Button
 	{
@@ -107,7 +101,7 @@ public:
 	//Menu& operator=(const Menu&&) = delete;
 	~Menu();
 
-	Gamestate Update(int mouse_x, int mouse_y, bool buttondown);
+	std::pair<Gamestate, int> Update(int mouse_x, int mouse_y, bool buttondown);
 	void Draw();
 
 private:
@@ -123,7 +117,7 @@ private:
 	Game* game;
 	Text text;
 	std::vector<std::unique_ptr<WorldObject>> objects;
-	Gamestate gs = GsMenu;
+	std::pair<Gamestate, int> gs = std::make_pair(GsMenu, -1);
 	Menustate ms;
 	Menustate prevms;
 	static constexpr int letterspacing = 3;

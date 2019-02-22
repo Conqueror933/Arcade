@@ -43,7 +43,7 @@ inline void Menu::Button::Draw()
 
 /****************  GameButton  *******************/
 Menu::GameButton::GameButton(Menu & menu, Graphics * gfx, 
-	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Gamestate gs, 
+	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, std::pair<Gamestate, int> gs,
 	std::string s, Color background, Color textcolor)
 	:
 	Button(menu, gfx, position, size, half_bordersize, backgroundcolor, foregroundcolor, s, background, textcolor),
