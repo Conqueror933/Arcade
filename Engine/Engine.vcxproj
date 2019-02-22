@@ -140,7 +140,6 @@
     <ClInclude Include="AI.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Board.h" />
-    <ClInclude Include="ButtonBehaviour.h" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />

@@ -39,6 +39,11 @@ Kaesekaestchen::Kaesekaestchen(BoardInit brdinit, Graphics& gfx, Mouse& mouse, i
 
 Kaesekaestchen::~Kaesekaestchen()
 {
+	if (brd != nullptr)
+	{
+		delete brd;
+		brd = nullptr;
+	}
 }
 
 int Kaesekaestchen::Update()

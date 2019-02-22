@@ -41,9 +41,7 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	inline /* __declspec(noinline)*/ BoardInit GetBoardInit();
-	//void DoBoardUpdate();
-	//template<class T> void InitBoard();
+	inline BoardInit GetBoardInit();
 	void ClearData();
 	/********************************/
 private:
@@ -68,22 +66,7 @@ private:
 		float f;
 		double d;
 	};
-	//void* data = ::operator new (64u); //basically malloc, but not quite
 	static constexpr unsigned int databufferarraysize = 16u;
 	std::array<Data, databufferarraysize> data{};
 	/********************************/
 };
-
-//template<class T>
-//inline void Game::InitBoard()
-//{
-//	if (curInterface != nullptr)
-//	{
-//		delete curInterface;
-//		BoardInit brdinit = GetBoardInit();
-//		if (brdinit.boardcellsize == Vec2<int>{0, 0})
-//			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardborderthickness);
-//		else
-//			curInterface = new T(gfx, brdinit.brdclr, brdinit.boardcellcounts, brdinit.boardcellsize, brdinit.boardborderthickness);
-//	}
-//}

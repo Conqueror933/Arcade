@@ -7,7 +7,6 @@
 #include "WorldObject.h"
 #include <memory>
 #include "GlobalEnum.h"
-#include "ButtonBehaviour.h"
 
 enum Gamestate
 {
