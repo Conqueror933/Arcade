@@ -110,12 +110,12 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Snake();
+				curInterface = new SnakeGame();
 			}
 		//</init>
 		//<code>
 		wnd.mouse;
-		if (static_cast<Snake*>(curInterface)->Update()) //if running return 0 else return 1
+		if (static_cast<SnakeGame*>(curInterface)->Update()) //if running return 0 else return 1
 			gamestate = std::make_pair(GsMenu, -1);
 		//</code>
 		prevgamestate = GsSnake;
@@ -136,7 +136,7 @@ void Game::ComposeFrame()
 		static_cast<Kaesekaestchen*>(curInterface)->Draw();
 		break;
 	case GsSnake:
-		static_cast<Snake*>(curInterface)->Draw();
+		static_cast<SnakeGame*>(curInterface)->Draw();
 		break;
 	default:
 		throw std::exception("Bad Gamestate.");
