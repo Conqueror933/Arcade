@@ -6,7 +6,6 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
-#include "GlobalEnum.h"
 
 enum Gamestate
 {

@@ -6,7 +6,7 @@ Kaesekaestchen::Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag
 	gfx(gfx),
 	mouse(mouse)
 {
-	BoardInit brdinit; 
+	Board::BoardInit brdinit; 
 	short* ptr = static_cast<short*>(data);
 	brdinit.boardcellcounts = Vec2<int>(int(ptr[12]), int(ptr[13]));
 	brdinit.boardcellsize = Vec2<int>(int(ptr[14]), int(ptr[15])); 

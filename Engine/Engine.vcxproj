@@ -146,7 +146,6 @@
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GlobalEnum.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Kaesekaestchen.h" />
     <ClInclude Include="Keyboard.h" />

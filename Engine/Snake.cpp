@@ -2,7 +2,10 @@
 
 
 
-Snake::Snake()
+Snake::Snake(Graphics& gfx, Keyboard& keyboard, void* data, int flag)
+	:
+	gfx(gfx),
+	keyboard(keyboard)
 {
 }
 
@@ -13,9 +16,28 @@ Snake::~Snake()
 
 int Snake::Update()
 {
-	return 0;
+	switch (sm)
+	{
+	case running:
+		//code
+		return 0;
+	case Victory:
+		//code
+		return 1;
+	default:
+		return -1;
+	}
 }
 
 void Snake::Draw()
 {
+	switch (sm)
+	{
+	case running:
+		//draw
+		break;
+	case Victory:
+		//draw
+		break;
+	}
 }
