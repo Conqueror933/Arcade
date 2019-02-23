@@ -158,17 +158,22 @@ inline void Menu::MenuButton::Update()
 	}
 }
 /*
-BoardInit
-00:	int		:	Color
-04: int		:	Color
-08: int		:	Color
-12: int		:	Color
-16: int		:	Color
-20: int		:	Color
-24: short	:	boardcellcounts.x
-26: short	:	boardcellcounts.y
-28: short	:	boardcellsize.x
-30: short	:	boardcellsize.y
-32: double	:	boardborderthickness
-40: end
+Init
+00: int		:	Color
+04:	int		:	Color
+08:	int		:	Color
+12:	int		:	Color
+16:	int		:	Color
+20:	int		:	Color
+24:	int		:	Color
+28:	int		:	Color
+32:	int		:	Color
+36:	int		:	Color
+40:	int		:	Color
+44:	int		:	Color
+48:	int		:	Color
+52:	int		:	Color
+56:	int		:	Color
+60:	int		:	Color
+64: end
 */
