@@ -3,18 +3,17 @@
 #include "AI.h"
 #include "Mouse.h"
 
-enum Kaesekaestchenmode
-{
-	running,
-	Player1Victory,
-	Player2Victory,
-	Undecided
-};
-
 class Kaesekaestchen
 {
+private:
+	enum Kaesekaestchenmode
+	{
+		running,
+		Player1Victory,
+		Player2Victory,
+		Undecided
+	};
 public:
-	Kaesekaestchen(BoardInit brdinit, Graphics& gfx, Mouse& mouse, int flag);
 	Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag);
 	~Kaesekaestchen();
 	int Update();

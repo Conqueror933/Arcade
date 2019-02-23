@@ -42,7 +42,6 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	inline BoardInit GetBoardInit();
 	void ClearData();
 	/********************************/
 private:
@@ -56,17 +55,7 @@ private:
 	//Should be totally legimit RAII, right? no memory learking happening
 	void* curInterface = nullptr;
 
-	union Data
-	{
-		char ca[sizeof(double)];
-		char c;
-		int i;
-		unsigned int ui;
-		long long ll;
-		float f;
-		double d;
-	};
-	static constexpr unsigned int databufferarraysize = 16u;
-	std::array<Data, databufferarraysize> data{};
+	static constexpr unsigned int databuffermemblocksize = 64u;
+	void* data = ::operator new (databuffermemblocksize); //basically malloc, but not quite
 	/********************************/
 };

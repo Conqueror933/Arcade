@@ -1,11 +1,16 @@
 #include "Kaesekaestchen.h"
 #include "Game.h"
 
-Kaesekaestchen::Kaesekaestchen(BoardInit brdinit, Graphics& gfx, Mouse& mouse, int flag)
+Kaesekaestchen::Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag)
 	:
 	gfx(gfx),
 	mouse(mouse)
 {
+	BoardInit brdinit; 
+	short* ptr = static_cast<short*>(data);
+	brdinit.boardcellcounts = Vec2<int>(int(ptr[12]), int(ptr[13]));
+	brdinit.boardcellsize = Vec2<int>(int(ptr[14]), int(ptr[15])); 
+	brdinit.boardborderthickness = static_cast<double*>(data)[4];
 	switch (flag)
 	{
 	case 0://twoPlayer;

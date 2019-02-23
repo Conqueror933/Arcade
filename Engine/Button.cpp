@@ -84,45 +84,75 @@ inline void Menu::MenuButton::Update()
 			menu.ms = ms;
 			return;
 		case MsKaeseInit:
-			menu.game->data[6].i = 10;
-			menu.game->data[7].i = 10;
-			menu.game->data[8].i = 0;
-			menu.game->data[9].i = 0;
-			menu.game->data[10].d = 0.25;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[12] = 10;
+			ptr[13] = 10;
+			ptr[14] = 0;
+			ptr[15] = 0;
+		}
+		{
+			double* ptr = static_cast<double*>(menu.game->data);
+			ptr[4] = 0.25;
+		}
 			menu.ms = MsKaese;
 			break;
 		case MsSnakeInit:
 			menu.ms = MsSnake;
 			break;
 		case MsSmall:
-			menu.game->data[6].i = 4;
-			menu.game->data[7].i = 4;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[12] = 4;
+			ptr[13] = 4;
+		}
 			break;
 		case MsMedium:
-			menu.game->data[6].i = 8;
-			menu.game->data[7].i = 8;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[12] = 8;
+			ptr[13] = 8;
+		}
 			break;
 		case MsDefault:
-			menu.game->data[6].i = 10;
-			menu.game->data[7].i = 10;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[12] = 10;
+			ptr[13] = 10;
+		}
 			break;
 		case MsBig:
-			menu.game->data[6].i = 12;
-			menu.game->data[7].i = 12;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[12] = 12;
+			ptr[13] = 12;
+		}
 			break;
 		case MsSquare:
-			menu.game->data[8].i = 40;
-			menu.game->data[9].i = 40;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[14] = 40;
+			ptr[15] = 40;
+		}
 			break;
 		case MsFree:
-			menu.game->data[8].i = 0;
-			menu.game->data[9].i = 0;
+		{
+			short* ptr = static_cast<short*>(menu.game->data);
+			ptr[14] = 0;
+			ptr[15] = 0;
+		}
 			break;
 		case MsThickBorder:
-			menu.game->data[10].d = 0.35;
+		{
+			double* ptr = static_cast<double*>(menu.game->data);
+			ptr[4] = 0.35;
+		}
 			break;
 		case MsSlimBorder:
-			menu.game->data[10].d = 0.25;
+		{
+			double* ptr = static_cast<double*>(menu.game->data);
+			ptr[4] = 0.25;
+		}
 			break;
 		}
 	}
@@ -130,14 +160,15 @@ inline void Menu::MenuButton::Update()
 /*
 BoardInit
 00:	int		:	Color
-01: int		:	Color
-02: int		:	Color
-03: int		:	Color
 04: int		:	Color
-05: int		:	Color
-06: short	:	boardcellcounts.x
-07: short	:	boardcellcounts.y
-08: short	:	boardcellsize.x
-09: short	:	boardcellsize.y
-10: double	:	boardborderthickness
+08: int		:	Color
+12: int		:	Color
+16: int		:	Color
+20: int		:	Color
+24: short	:	boardcellcounts.x
+26: short	:	boardcellcounts.y
+28: short	:	boardcellsize.x
+30: short	:	boardcellsize.y
+32: double	:	boardborderthickness
+40: end
 */

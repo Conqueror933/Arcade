@@ -37,13 +37,19 @@ Game::~Game()
 		delete curInterface;
 		curInterface = nullptr;
 	}
+	if (data != nullptr)
+	{
+		delete data;
+		data = nullptr;
+	}
 }
 
 void Game::ClearData()
 {
-	for (auto i = 0u; i < databufferarraysize; i++)
+	int* ptr = static_cast<int*>(data);
+	for (auto i = 0u; i < databuffermemblocksize / 4; i++)
 	{
-		data[i].ll = 0;
+		ptr[i] = 0;
 	}
 }
 
@@ -88,8 +94,7 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				BoardInit brdinit = GetBoardInit();
-				curInterface = new Kaesekaestchen(brdinit, gfx, wnd.mouse, gamestate.second);
+				curInterface = new Kaesekaestchen(gfx, wnd.mouse, data, gamestate.second);
 			}
 		//</init>
 		//<code>
@@ -118,15 +123,6 @@ void Game::UpdateModel()
 	default:
 		gamestate = std::make_pair(GsError, -1);
 	}
-}
-
-inline BoardInit Game::GetBoardInit()
-{
-	BoardInit bi;
-	bi.boardcellcounts = Vec2<int>(data[6].i, data[7].i);
-	bi.boardcellsize = Vec2<int>(data[8].i, data[9].i);
-	bi.boardborderthickness = data[10].d;
-	return bi;
 }
 
 void Game::ComposeFrame()
