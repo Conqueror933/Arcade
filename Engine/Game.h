@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Menu.h"
 #include "Kaesekaestchen.h"
+#include "Snake.h"
 
 class Game
 {
@@ -54,7 +55,6 @@ private:
 
 	//Should be totally legimit RAII, right? no memory learking happening
 	void* curInterface = nullptr;
-
 
 	union Data
 	{

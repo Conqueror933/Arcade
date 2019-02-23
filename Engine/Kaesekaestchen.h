@@ -15,6 +15,7 @@ class Kaesekaestchen
 {
 public:
 	Kaesekaestchen(BoardInit brdinit, Graphics& gfx, Mouse& mouse, int flag);
+	Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag);
 	~Kaesekaestchen();
 	int Update();
 	void Draw();

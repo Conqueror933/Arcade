@@ -5,4 +5,6 @@ private:
 public:
 	Snake();
 	~Snake();
+	int Update();
+	void Draw();
 };

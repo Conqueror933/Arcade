@@ -20,8 +20,6 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "TwoPlayer.h"
-#include "AI.h"
 #include <assert.h>
 
 Game::Game(MainWindow& wnd)
@@ -101,6 +99,22 @@ void Game::UpdateModel()
 		//</code>
 		prevgamestate = GsKaese;
 		break;
+	case GsSnake:
+		//<init>
+		if (prevgamestate != GsSnake)
+			if (curInterface != nullptr)
+			{
+				delete curInterface;
+				curInterface = new Snake();
+			}
+		//</init>
+		//<code>
+		wnd.mouse;
+		if (static_cast<Snake*>(curInterface)->Update()) //if running return 0 else return 1
+			gamestate = std::make_pair(GsMenu, -1);
+		//</code>
+		prevgamestate = GsSnake;
+		break;
 	default:
 		gamestate = std::make_pair(GsError, -1);
 	}
@@ -124,6 +138,9 @@ void Game::ComposeFrame()
 		break;
 	case GsKaese:
 		static_cast<Kaesekaestchen*>(curInterface)->Draw();
+		break;
+	case GsSnake:
+		static_cast<Snake*>(curInterface)->Draw();
 		break;
 	default:
 		throw std::exception("Bad Gamestate.");
