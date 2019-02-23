@@ -33,7 +33,7 @@ private:
 	{
 	public:
 		Cell(Board& brd, Vec2<int> screenposition, unsigned int index);
-		virtual ~Cell();
+		~Cell();
 		//Cell(const Cell& other);
 		//Cell& operator=(const Cell& other);
 
@@ -91,6 +91,21 @@ protected:
 	int player1counter = 0;
 	int player2counter = 0;
 };
+/*
+BoardInit
+00:	int		:	Color
+04: int		:	Color
+08: int		:	Color
+12: int		:	Color
+16: int		:	Color
+20: int		:	Color
+24: short	:	boardcellcounts.x
+26: short	:	boardcellcounts.y
+28: short	:	boardcellsize.x
+30: short	:	boardcellsize.y
+32: double	:	boardborderthickness
+40: end
+*/
 
 /*
 #define SquareBoard			0x0001i16 //0000 0000 0000 0001
