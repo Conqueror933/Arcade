@@ -110,7 +110,7 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new SnakeGame();
+				curInterface = new SnakeGame(gfx, wnd.kbd, data);
 			}
 		//</init>
 		//<code>

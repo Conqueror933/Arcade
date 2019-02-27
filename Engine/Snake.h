@@ -3,7 +3,11 @@
 #include "Graphics.h"
 #include "Keyboard.h"
 #include "Vec2.h"
+#include "Frametimer.h"
 #include <vector>
+#include <queue>
+#include <array>
+#include <random>
 
 class SnakeGame
 {
@@ -25,33 +29,34 @@ private:
 			Apple
 		};
 	public:
-		Cell(Vec2<int> screenposition);
-		~Cell();
+		Cell(SnakeGame& sg, Vec2<int> screenposition);
+		~Cell() = default;
 
 	public:
-		int Update();
 		void Draw() const;
 
 	public:
 		Vec2<int> pos; //screenposition
 		CellContents cc = Empty;
+
+	private:
+		SnakeGame& sg;
 	};
 
-	class Snake 
+	struct Snake
 	{
-		int Update();
-		void Draw() = delete;
-		class Head
-		{};
-		class Body
-		{
-			//Vec2<int> pos;
-			//Vec2<int> prevpos; || Body/Head* next;
-		};
-		Head head;
-		std::vector<Body> body;
-		//needs a head -> controlled by player
-		//needs body parts, in some sort of vector, part 0 follows head, part 1 follows 0, 2 -> 1, ...
+		Snake(SnakeGame& sg, int bodyparts) : sg(sg), length(bodyparts + 1)
+		{ //limited by the size of the field, if bodyparts > cellcounts.x = insta lose
+			for(int i = 0; i < bodyparts; i++)
+				Update(true);
+		}
+		enum Direction { up, left, right, down } dir = right;
+		void Update(bool apple);
+		Vec2<int> head = { 0, 0 };
+		std::queue<Vec2<int>> body;
+		int length;
+	private:
+		SnakeGame& sg;
 	};
 	/*
 	Game calls SnakeGame::Update
@@ -72,35 +77,51 @@ public:
 
 private:
 	static Vec2<int> GetCellCount(void* data);
+	static int CalculateCellBorderWidth(const int cellsize, const double borderthicknessratio);
 	static int CalculateCellSize(const Vec2<int> cellcount, void* data);
 	static Vec2<int> CalculateTopLeft(const Vec2<int> cellcount, const int cellsize);
+	static Vec2<int> MakeSnakeHead(SnakeGame& sg);
+
+private:
+	inline void Run();
+	void PlaceApple();
 
 private:
 	Graphics& gfx;
 	Keyboard& keyboard;
 	Snakemode sm;
+	std::random_device rd;
+	FrameTimer ft;
 
 	const Vec2<int> cellcount;
 	const int cellsize;
+	const int cellborderwidth; //for drawing purposes
 	const Vec2<int> topleft;
+	const std::array<char, 4> keys;
+	const float gamespeed;
+	const std::array<Color, 5> colors; //Border, Cell, Apple, Snake, Snakehead
 
 	std::vector<Cell> cells;
+	Snake snake;
+	float time_passed;
 };
 /*
 SnakeInit
 00:	short	:	Cellcount.x
 02:	short	:	Cellcount.y
 04:	short	:	Cellsize
-06:	short	:	
-08:	int		:	Color
-12:	int		:	Color
-16:	int		:	Color
-20:	int		:	Color
-24:	int		:	Color
-28:	int		:	Color
-32:	int		:	Color
-36:	int		:	Color
-40:	int		:	Color
+06:	short	:	Snakebodyparts
+08:	double	:	cellborderthicknessratio
+16:	char	:	up		- Key
+17:	char	:	left	- Key
+18:	char	:	right	- Key
+19:	char	:	down	- Key
+20:	float	:	gamespeed
+24:	int		:	Color - Border
+28:	int		:	Color - Cell
+32:	int		:	Color - Apple
+36:	int		:	Color - Snake
+40:	int		:	Color - Snakehead
 44:	int		:	Color
 48:	int		:	Color
 52:	int		:	Color
