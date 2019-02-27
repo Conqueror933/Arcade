@@ -11,6 +11,7 @@ Menu:
 	add a "Style" Object for rounded corners and all that fancy stuff
 make a checkbox-type button
 make a slider-type button
+Snake Button doesn't work after first time playing snake
 
 General:
 maybe even just predefine some options in the optionsmenu
@@ -22,6 +23,9 @@ it however is the cheap way out:
 
 Board:
 Square doesnt actually behave like it should, it should still adjust to screensize, just with keeping the cells...well square
+
+Snake:
+controls are weirdly delayed, super annoying
 
 AI Levels:
 1: just check for closed cell and pick random

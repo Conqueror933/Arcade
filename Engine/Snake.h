@@ -45,16 +45,18 @@ private:
 
 	struct Snake
 	{
-		Snake(SnakeGame& sg, int bodyparts) : sg(sg), length(bodyparts + 1)
-		{ //limited by the size of the field, if bodyparts > cellcounts.x = insta lose
-			for(int i = 0; i < bodyparts; i++)
-				Update(true);
+		Snake(SnakeGame& sg, int bodyparts) : sg(sg), length(bodyparts + 1) {}
+		void Init()
+		{//limited by the size of the field, if bodyparts > cellcounts.x = insta lose
+			/*for (int i = 0; i < length; i++)
+				body.push(Vec2<int>{ 0, 0});*/
 		}
 		enum Direction { up, left, right, down } dir = right;
-		void Update(bool apple);
+		void Update();
 		Vec2<int> head = { 0, 0 };
 		std::queue<Vec2<int>> body;
 		int length;
+
 	private:
 		SnakeGame& sg;
 	};
@@ -89,7 +91,7 @@ private:
 private:
 	Graphics& gfx;
 	Keyboard& keyboard;
-	Snakemode sm;
+	Snakemode sm = running;
 	std::random_device rd;
 	FrameTimer ft;
 
@@ -103,7 +105,7 @@ private:
 
 	std::vector<Cell> cells;
 	Snake snake;
-	float time_passed;
+	float time_passed = 0.0f;
 };
 /*
 SnakeInit

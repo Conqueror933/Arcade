@@ -26,6 +26,9 @@ SnakeGame::SnakeGame(Graphics& gfx, Keyboard& keyboard, void* data)
 			cells.emplace_back(*this, Vec2<int>{ topleft.x + x * cellsize, topleft.y + y * cellsize});
 		}
 	}
+	//make snake longer
+	snake.Init();
+
 	//place Apple
 	PlaceApple();
 
@@ -34,48 +37,8 @@ SnakeGame::SnakeGame(Graphics& gfx, Keyboard& keyboard, void* data)
 		keyboard.DisableAutorepeat();
 }
 
-
 SnakeGame::~SnakeGame()
 {
-}
-
-int SnakeGame::Update()
-{
-	switch (sm)
-	{
-	case running:
-		//code
-		if (snake.length == cellcount.x * cellcount.y)
-			sm = Victory;
-		Run();
-		return 0;
-	default:
-		//code
-		if (keyboard.KeyIsPressed(VK_SPACE))
-			return 1;
-		else
-			return 0;
-	}
-}
-
-void SnakeGame::Draw()
-{
-	switch (sm)
-	{
-	case running:
-		//draw
-		for (auto i = 0u; i < cells.size(); i++)
-			cells[i].Draw();
-		break;
-	case Defeat:
-		//draw
-		gfx.DrawRectangle(0, 0, 100, 100, Colors::Red);
-		break;
-	case Victory:
-		//draw
-		gfx.DrawRectangle(0, 0, 100, 100, Colors::Blue);
-		break;
-	}
 }
 
 Vec2<int> SnakeGame::GetCellCount(void* data)
@@ -123,6 +86,45 @@ Vec2<int> SnakeGame::MakeSnakeHead(SnakeGame& sg)
 	return Vec2<int>(dice(rng), dice(rng));
 }
 
+int SnakeGame::Update()
+{
+	switch (sm)
+	{
+	case running:
+		//code
+		if (snake.length == cellcount.x * cellcount.y)
+			sm = Victory;
+		Run();
+		return 0;
+	default:
+		//code
+		if (keyboard.KeyIsPressed(VK_SPACE))
+			return 1;
+		else
+			return 0;
+	}
+}
+
+void SnakeGame::Draw()
+{
+	switch (sm)
+	{
+	case running:
+		//draw
+		for (auto i = 0u; i < cells.size(); i++)
+			cells[i].Draw();
+		break;
+	case Defeat:
+		//draw
+		gfx.DrawRectangle(0, 0, 100, 100, Colors::Red);
+		break;
+	case Victory:
+		//draw
+		gfx.DrawRectangle(0, 0, 100, 100, Colors::Blue);
+		break;
+	}
+}
+
 inline void SnakeGame::Run()
 {
 	if (keyboard.KeyIsPressed(keys[0]))
@@ -138,10 +140,7 @@ inline void SnakeGame::Run()
 	if (time_passed > gamespeed)
 	{
 		time_passed -= gamespeed;
-		if (cells[snake.head.x + snake.head.y * cellcount.x].cc == Cell::Apple)
-			snake.Update(true);
-		else
-			snake.Update(false);
+		snake.Update();
 	}
 }
 
@@ -149,23 +148,31 @@ void SnakeGame::PlaceApple()
 {
 	std::mt19937 rng(rd());
 	std::uniform_int_distribution<int> dice(0, cellcount.x*cellcount.y - 1);
-	int x = dice(rng); int y = dice(rng);
-	while (!(cells[x + y * cellcount.x].cc == Cell::Empty)) {
-		x = dice(rng); y = dice(rng);
-	}
-	cells[x + y * cellcount.x].cc = Cell::Apple;
+	int apple = dice(rng);
+	while (!(cells[apple].cc == Cell::Empty))
+		apple = dice(rng);
+	cells[apple].cc = Cell::Apple;
 }
 
-void SnakeGame::Snake::Update(bool apple)
+void SnakeGame::Snake::Update()
 {
-	body.push(head);
-	sg.cells[head.x + head.y * sg.cellcount.x].cc = Cell::Snake;
-	if (!apple) {
-		body.pop();
-		sg.cells[body.back().x + body.back().y * sg.cellcount.x].cc = Cell::Empty;
+	if (sg.cells[head.x + head.y * sg.cellcount.x].cc == Cell::Empty) {
+		if (!body.empty()) {
+			sg.cells[body.front().x + body.front().y * sg.cellcount.x].cc = Cell::Empty;
+			body.pop();
+		}
+	}
+	else if (sg.cells[head.x + head.y * sg.cellcount.x].cc == Cell::Apple)
+	{
+		length++;
+		sg.PlaceApple();
 	}
 	else
-		length++;
+		sg.sm = Defeat;
+	sg.cells[head.x + head.y * sg.cellcount.x].cc = Cell::Snakehead;
+	if(!body.empty())
+		sg.cells[body.back().x + body.back().y * sg.cellcount.x].cc = Cell::Snake;
+	body.push(head);
 	switch (dir)
 	{
 	case up:
@@ -197,7 +204,7 @@ void SnakeGame::Snake::Update(bool apple)
 		}
 		break;
 	}
-	sg.cells[head.x + head.y * sg.cellcount.x].cc = Cell::Snakehead;
+	sg.cells[body.back().x + body.back().y * sg.cellcount.x].cc = Cell::Snakehead;
 }
 
 SnakeGame::Cell::Cell(SnakeGame& sg, Vec2<int> screenposition)
@@ -214,19 +221,19 @@ void SnakeGame::Cell::Draw() const
 	{
 	case Empty:
 		sg.gfx.DrawRectangleDim(pos.x + sg.cellborderwidth, pos.y + sg.cellborderwidth, 
-			sg.cellsize - sg.cellborderwidth, sg.cellsize - sg.cellborderwidth, sg.colors[1]);
+			sg.cellsize - sg.cellborderwidth * 2, sg.cellsize - sg.cellborderwidth * 2, sg.colors[1]);
 		break;
 	case Apple:
 		sg.gfx.DrawRectangleDim(pos.x + sg.cellborderwidth, pos.y + sg.cellborderwidth,
-			sg.cellsize - sg.cellborderwidth, sg.cellsize - sg.cellborderwidth, sg.colors[2]);
+			sg.cellsize - sg.cellborderwidth * 2, sg.cellsize - sg.cellborderwidth * 2, sg.colors[2]);
 		break;
 	case Snake:
 		sg.gfx.DrawRectangleDim(pos.x + sg.cellborderwidth, pos.y + sg.cellborderwidth,
-			sg.cellsize - sg.cellborderwidth, sg.cellsize - sg.cellborderwidth, sg.colors[3]);
+			sg.cellsize - sg.cellborderwidth * 2, sg.cellsize - sg.cellborderwidth * 2, sg.colors[3]);
 		break;
 	case Snakehead:
 		sg.gfx.DrawRectangleDim(pos.x + sg.cellborderwidth, pos.y + sg.cellborderwidth,
-			sg.cellsize - sg.cellborderwidth, sg.cellsize - sg.cellborderwidth, sg.colors[4]);
+			sg.cellsize - sg.cellborderwidth * 2, sg.cellsize - sg.cellborderwidth * 2, sg.colors[4]);
 		break;
 	}
 }

@@ -61,7 +61,7 @@ inline void Menu::GameButton::Update()
 
 /****************  MenuButton  *******************/
 Menu::MenuButton::MenuButton(Menu & menu, Graphics * gfx, 
-	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms, 
+	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms,
 	std::string s, Color background, Color textcolor)
 	:
 	Button(menu, gfx, position, size, half_bordersize, backgroundcolor, foregroundcolor, s, background, textcolor),
@@ -75,85 +75,181 @@ inline void Menu::MenuButton::Update()
 	{
 		switch (ms)
 		{
-		case MsMain:
-			menu.game->ClearData();
-		case MsKaese:
-		case MsKaeseOptionen:
-		case MsSnake:
-		case MsSnakeOptionen:
-			menu.ms = ms;
-			return;
 		case MsKaeseInit:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[12] = 10;
-			ptr[13] = 10;
-			ptr[14] = 0;
-			ptr[15] = 0;
-		}
-		{
-			double* ptr = static_cast<double*>(menu.game->data);
-			ptr[4] = 0.25;
-		}
+			menu.game->ClearData();
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[12] = 20;
+				ptr[13] = 20;
+				ptr[14] = 0;
+				ptr[15] = 0;
+			}
+			{
+				double* ptr = static_cast<double*>(menu.game->data);
+				ptr[4] = 0.25;
+			}
 			menu.ms = MsKaese;
 			break;
 		case MsSnakeInit:
+			menu.game->ClearData();
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[0] = 20;
+				ptr[1] = 20;
+				ptr[2] = 0;
+				ptr[3] = 3;
+			}
+			{
+				char* ptr = static_cast<char*>(menu.game->data);
+				ptr[16] = 'W';
+				ptr[17] = 'A';
+				ptr[18] = 'D';
+				ptr[19] = 'S';
+			}
+			{
+				Color* ptr = static_cast<Color*>(menu.game->data);
+				ptr[6] = Colors::Gray;
+				ptr[7] = Colors::LightGray;
+				ptr[8] = Colors::Red;
+				ptr[9] = Colors::Green;
+				ptr[10] = Colors::Cyan;
+			}
+			{
+				static_cast<double*>(menu.game->data)[1] = 0.05;
+				static_cast<float*>(menu.game->data)[5] = 0.4f;
+			}
 			menu.ms = MsSnake;
 			break;
-		case MsSmall:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[12] = 4;
-			ptr[13] = 4;
+		default:
+			menu.ms = ms;
 		}
-			break;
-		case MsMedium:
+	}
+}
+
+Menu::OptionButton::OptionButton(Menu & menu, Graphics * gfx,
+	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms, Option opt,
+	std::string s, Color background, Color textcolor)
+	:
+	MenuButton(menu, gfx, position, size, half_bordersize, backgroundcolor, foregroundcolor, ms, s, background, textcolor),
+	opt(opt)
+{
+}
+void Menu::OptionButton::Update()
+{
+	if (clicked)
+	{
+		switch (ms)
 		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[12] = 8;
-			ptr[13] = 8;
-		}
+		case MsKaese:
+			switch (opt)
+			{
+			case Small:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[12] = 4;
+				ptr[13] = 4;
+			}
 			break;
-		case MsDefault:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[12] = 10;
-			ptr[13] = 10;
-		}
+			case Medium:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[12] = 8;
+				ptr[13] = 8;
+			}
 			break;
-		case MsBig:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[12] = 12;
-			ptr[13] = 12;
-		}
+			case Default:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[12] = 10;
+				ptr[13] = 10;
+			}
 			break;
-		case MsSquare:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[14] = 40;
-			ptr[15] = 40;
-		}
+			case Big:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[12] = 12;
+				ptr[13] = 12;
+			}
 			break;
-		case MsFree:
-		{
-			short* ptr = static_cast<short*>(menu.game->data);
-			ptr[14] = 0;
-			ptr[15] = 0;
-		}
+			case Square:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[14] = 40;
+				ptr[15] = 40;
+			}
 			break;
-		case MsThickBorder:
-		{
-			double* ptr = static_cast<double*>(menu.game->data);
-			ptr[4] = 0.35;
-		}
+			case Free:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[14] = 0;
+				ptr[15] = 0;
+			}
 			break;
-		case MsSlimBorder:
-		{
-			double* ptr = static_cast<double*>(menu.game->data);
-			ptr[4] = 0.25;
-		}
+			case ThickBorder:
+			{
+				double* ptr = static_cast<double*>(menu.game->data);
+				ptr[4] = 0.35;
+			}
 			break;
+			case SlimBorder:
+			{
+				double* ptr = static_cast<double*>(menu.game->data);
+				ptr[4] = 0.25;
+			}
+			break;
+			default:
+				throw std::exception("OptionsButton::Update::Kaese.default reached");
+			}
+			break;
+		case MsSnake:
+			switch (opt)
+			{
+			case Small:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[0] = 6;
+				ptr[1] = 6;
+			}
+				break;
+			case Medium:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[0] = 15;
+				ptr[1] = 15;
+			}
+				break;
+			case Default:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[0] = 20;
+				ptr[1] = 20;
+			}
+				break;
+			case Big:
+			{
+				short* ptr = static_cast<short*>(menu.game->data);
+				ptr[0] = 30;
+				ptr[1] = 30;
+			}
+				break;
+			case ThickBorder:
+				static_cast<double*>(menu.game->data)[1] = 0.3;
+				break;
+			case SlimBorder:
+				static_cast<double*>(menu.game->data)[1] = 0.05;
+				break;
+			case Doublespeed:
+				static_cast<float*>(menu.game->data)[5] = 0.2f;
+				break;
+			case Normalspeed:
+				static_cast<float*>(menu.game->data)[5] = 0.4f;
+				break;
+			default:
+				throw std::exception("OptionsButton::Update::Snake.default reached");
+			}
+			break;
+		//default:
+		//	throw std::exception("OptionsButton::Update::NoOptionfound");
 		}
 	}
 }

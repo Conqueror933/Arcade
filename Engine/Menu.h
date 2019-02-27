@@ -7,7 +7,7 @@
 #include "WorldObject.h"
 #include <memory>
 
-enum Gamestate
+enum Gamestate //power to change the game
 {
 	GsError = -1,
 	GsMenu,
@@ -19,14 +19,25 @@ class Game;
 class Menu
 {
 private:
-	enum Menustate
+	enum Menustate //power to change the Menuwindow
 	{
 		MsMain,
 
-		MsSnakeInit, MsSnake, MsSnakeOptionen,
+		MsSnakeInit, MsSnake, MsSnakeOptionen, 
 
-		MsKaeseInit, MsKaese, MsKaeseOptionen, MsSmall, MsMedium, MsDefault, MsBig, MsSquare, MsFree, MsThickBorder, MsSlimBorder
+		MsKaeseInit, MsKaese, MsKaeseOptionen
 	};
+	enum Option //power to change the void*data for game options
+	{
+		Small, Medium, Default, Big, 
+		Square, Free, 
+		ThickBorder, SlimBorder,
+		Doublespeed, Normalspeed, 
+		up, left, right, down, 
+		Color1, Color2, Color3, Color4, Color5, Color6,
+		Undefined1, Undefined2, Undefined3, Undefined4
+	};
+
 	class Label : public WorldObject
 	{
 	public:
@@ -43,6 +54,7 @@ private:
 		const std::string s;
 		/*bool permanent;*/
 	};
+
 	class Button : public WorldObject
 	{
 	public:
@@ -51,6 +63,7 @@ private:
 			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
 			//Label
 			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
+		virtual ~Button() = default;
 
 	public:
 		virtual void Update() = 0;
@@ -86,11 +99,26 @@ private:
 			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms,
 			//Label
 			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
+		virtual ~MenuButton() = default;
+		virtual void Update() override;
+
+	protected:
+		Menustate ms;
+	};
+	class OptionButton : public MenuButton
+	{
+	public:
+		OptionButton(Menu& menu, Graphics* gfx,
+			//Button
+			Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms, Option opt,
+			//Label
+			std::string s, Color background = Colors::Magenta, Color textcolor = Colors::White);
 		void Update() override;
 
 	private:
-		Menustate ms;
+		Option opt;
 	};
+
 public:
 	Menu(Game* game);
 	Menu(const Menu&) = delete;

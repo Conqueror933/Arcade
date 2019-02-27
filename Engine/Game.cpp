@@ -46,8 +46,8 @@ Game::~Game()
 
 void Game::ClearData()
 {
-	int* ptr = static_cast<int*>(data);
-	for (auto i = 0u; i < databuffermemblocksize / 4; i++)
+	char* ptr = static_cast<char*>(data);
+	for (auto i = 0u; i < databuffermemblocksize; i++)
 	{
 		ptr[i] = 0;
 	}
@@ -71,10 +71,13 @@ void Game::UpdateModel()
 			if (curInterface != nullptr)
 			{
 				delete curInterface;
-				curInterface = new Menu(this); 
+				curInterface = new Menu(this);
+				wnd.mouse.Flush();
 			}
-			else
+			else {
 				curInterface = new Menu(this); //first call
+				wnd.mouse.Flush();
+			}
 		//</init>
 		//<code>
 		while (!wnd.mouse.IsEmpty())
@@ -95,6 +98,7 @@ void Game::UpdateModel()
 			{
 				delete curInterface;
 				curInterface = new Kaesekaestchen(gfx, wnd.mouse, data, gamestate.second);
+				wnd.mouse.Flush();
 			}
 		//</init>
 		//<code>
@@ -111,10 +115,11 @@ void Game::UpdateModel()
 			{
 				delete curInterface;
 				curInterface = new SnakeGame(gfx, wnd.kbd, data);
+				wnd.kbd.Flush();
+				wnd.mouse.Flush();
 			}
 		//</init>
 		//<code>
-		wnd.mouse;
 		if (static_cast<SnakeGame*>(curInterface)->Update()) //if running return 0 else return 1
 			gamestate = std::make_pair(GsMenu, -1);
 		//</code>

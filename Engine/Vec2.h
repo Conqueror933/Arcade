@@ -22,8 +22,8 @@ public:	//Ctor, Dtor, Copy, Move
 
 	//Vec2(const Vec2& rhs) : x(rhs.x), y(rhs.y){}
 	//Vec2& operator= (const Vec2& rhs) { return *this = Vec2(rhs); }
-	//Vec2(Vec2&& rhs);
-	//Vec2& operator= (Vec2&& rhs);
+	//Vec2(Vec2&& rhs) = delete;
+	//Vec2& operator= (Vec2&& rhs) = delete;
 	~Vec2() = default;
 
 public: //Math
