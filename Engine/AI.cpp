@@ -42,7 +42,7 @@ void AI::Init(AI & ai)
 
 int AI::FindCellWith3()
 {
-	int index = 0;
+	unsigned int index = 0;
 	for (; index < cellstate.size(); index++)
 		if (cellstate[index] == 3)
 			break;
@@ -205,7 +205,7 @@ void EasyAI::AIstuff()
 			int calc = dice(rng);
 			int x = 0;
 			int y = 0;
-			for (auto i = 0; i < cellstate.size(); i++) {
+			for (auto i = 0u; i < cellstate.size(); i++) {
 				if (cells[i].top)
 					x++;
 				if (cells[i].left)
@@ -290,7 +290,7 @@ void MediumAI::AIstuff()
 			}
 			else //there are still good cells to pick from
 			{
-				std::uniform_int_distribution<int> dice1(0, allcells1.size()-1);
+				std::uniform_int_distribution<int> dice1(0, (int)allcells1.size()-1);
 				calc = dice1(rng);
 				//at this point it is guaranteed that either top or left are settable
 				if (allcells1[calc].second == 3)
@@ -338,7 +338,7 @@ void HardAI::FindAllCellsWith1()
 
 void HardAI::FindAllCellsWith3()
 {
-	for (int index = 0; index < cellstate.size(); index++)
+	for (unsigned int index = 0u; index < cellstate.size(); index++)
 		if (cellstate[index] == 3) 
 			if (cells[index].top)
 				if (cells[index].left)
