@@ -26,6 +26,11 @@ void Menu::CreateMainMenu()
 	objects.emplace_back(std::make_unique<MenuButton>(
 		*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnakeInit,
 		"Snake", Colors::White, Colors::Black));
+
+	//End
+	objects.emplace_back(std::make_unique<GameButton>(
+		*this, &game->gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, 2, Color(145u, 0u, 0u), Color(200u, 0u, 0u), std::make_pair(GsQuit, 0),
+		"Beenden", Color(255u, 0u, 0u), Colors::White));
 }
 
 void Menu::CreateSnakeMenu()

@@ -22,6 +22,16 @@
 #include "Game.h"
 #include <assert.h>
 
+/* DEBUG WINDOW OUTPUT MACRO
+#include <iostream>
+#include <sstream>
+#define DBOUT( s )            \
+{                             \
+   std::wostringstream os_;    \
+   os_ << s;                   \
+   OutputDebugStringW( os_.str().c_str() );  \
+}*/
+
 Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
@@ -49,7 +59,7 @@ void Game::ClearData()
 	char* ptr = static_cast<char*>(data);
 	for (auto i = 0u; i < databuffermemblocksize; i++)
 	{
-		ptr[i] = 0;
+		ptr[i] = '\0';
 	}
 }
 
@@ -125,6 +135,8 @@ void Game::UpdateModel()
 		//</code>
 		prevgamestate = GsSnake;
 		break;
+	case GsQuit:
+		wnd.Kill();
 	default:
 		gamestate = std::make_pair(GsError, -1);
 	}

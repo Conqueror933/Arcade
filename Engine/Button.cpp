@@ -79,8 +79,8 @@ inline void Menu::MenuButton::Update()
 			menu.game->ClearData();
 			{
 				short* ptr = static_cast<short*>(menu.game->data);
-				ptr[12] = 20;
-				ptr[13] = 20;
+				ptr[12] = 10;
+				ptr[13] = 10;
 				ptr[14] = 0;
 				ptr[15] = 0;
 			}

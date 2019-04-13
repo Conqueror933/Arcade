@@ -13,6 +13,7 @@ enum Gamestate //power to change the game
 	GsMenu,
 	GsKaese,
 	GsSnake,
+	GsQuit
 };
 
 class Game;
