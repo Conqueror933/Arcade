@@ -116,7 +116,7 @@ inline void Menu::MenuButton::Update()
 			}
 			{
 				static_cast<double*>(menu.game->data)[1] = 0.05;
-				static_cast<float*>(menu.game->data)[5] = 0.4f;
+				static_cast<float*>(menu.game->data)[5] = 0.3f;
 			}
 			menu.ms = MsSnake;
 			break;
@@ -239,10 +239,10 @@ void Menu::OptionButton::Update()
 				static_cast<double*>(menu.game->data)[1] = 0.05;
 				break;
 			case Doublespeed:
-				static_cast<float*>(menu.game->data)[5] = 0.2f;
+				static_cast<float*>(menu.game->data)[5] = 0.15f;
 				break;
 			case Normalspeed:
-				static_cast<float*>(menu.game->data)[5] = 0.4f;
+				static_cast<float*>(menu.game->data)[5] = 0.3f;
 				break;
 			default:
 				throw std::exception("OptionsButton::Update::Snake.default reached");
