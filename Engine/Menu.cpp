@@ -211,7 +211,7 @@ std::pair<Gamestate, int> Menu::Update(int mouse_x, int mouse_y, bool buttondown
 	return gs;
 }
 
-void Menu::Draw()
+__declspec(noinline) void Menu::Draw()
 {
 	//Set Background
 	game->gfx.DrawRectangle(0, 0, game->gfx.ScreenWidth, game->gfx.ScreenHeight, Color(0u, 0u, 205u));
