@@ -34,3 +34,11 @@ AI Levels:
 1: just check for closed cell and pick random
 2: previous working imperfect version of 3
 3: make the best move possible
+
+
+newMenu:
+make Button (and Label) its on full class outside of Menu
+	- should make buttons available everywhere, want a "concede" Button in your game, have one!
+change Button behaviour away from gigantic switch
+	- either via inheritance
+	- or via Functors

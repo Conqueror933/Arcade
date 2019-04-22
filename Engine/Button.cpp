@@ -1,8 +1,9 @@
+#include "Button.h"
 #include "Menu.h"
 #include "Game.h"
 
 /****************  BaseButton  *******************/
-inline Menu::Button::Button(
+inline Button::Button(
 	Menu& menu, Graphics* gfx, Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
 	std::string s, Color background, Color textcolor)
 	:
@@ -19,7 +20,7 @@ inline Menu::Button::Button(
 	if (label.size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
 }
 
-inline void Menu::Button::Draw()
+inline void Button::Draw()
 {
 	if (highlighted)
 	{
@@ -42,7 +43,7 @@ inline void Menu::Button::Draw()
 }
 
 /****************  GameButton  *******************/
-Menu::GameButton::GameButton(Menu & menu, Graphics * gfx, 
+GameButton::GameButton(Menu & menu, Graphics * gfx, 
 	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, std::pair<Gamestate, int> gs,
 	std::string s, Color background, Color textcolor)
 	:
@@ -51,7 +52,7 @@ Menu::GameButton::GameButton(Menu & menu, Graphics * gfx,
 {
 }
 
-inline void Menu::GameButton::Update()
+inline void GameButton::Update()
 {
 	if (clicked)
 	{
@@ -60,7 +61,7 @@ inline void Menu::GameButton::Update()
 }
 
 /****************  MenuButton  *******************/
-Menu::MenuButton::MenuButton(Menu & menu, Graphics * gfx, 
+MenuButton::MenuButton(Menu & menu, Graphics * gfx, 
 	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms,
 	std::string s, Color background, Color textcolor)
 	:
@@ -69,7 +70,7 @@ Menu::MenuButton::MenuButton(Menu & menu, Graphics * gfx,
 {
 }
 
-inline void Menu::MenuButton::Update()
+inline void MenuButton::Update()
 {
 	if (clicked)
 	{
@@ -126,7 +127,7 @@ inline void Menu::MenuButton::Update()
 	}
 }
 
-Menu::OptionButton::OptionButton(Menu & menu, Graphics * gfx,
+OptionButton::OptionButton(Menu & menu, Graphics * gfx,
 	Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor, Menustate ms, Option opt,
 	std::string s, Color background, Color textcolor)
 	:
@@ -134,7 +135,7 @@ Menu::OptionButton::OptionButton(Menu & menu, Graphics * gfx,
 	opt(opt)
 {
 }
-void Menu::OptionButton::Update()
+void OptionButton::Update()
 {
 	if (clicked)
 	{
