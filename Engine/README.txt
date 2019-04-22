@@ -24,6 +24,9 @@ it however is the cheap way out:
 Board:
 Square doesnt actually behave like it should, it should still adjust to screensize, just with keeping the cells...well square
 
+AI:
+while making Medium and part Hard AI broke the Easy AI somehow
+
 Snake:
 controls are weirdly delayed, super annoying
 

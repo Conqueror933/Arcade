@@ -106,9 +106,9 @@ void Menu::CreateKaeseMenu()
 		*this, &game->gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 2),
 		"Mittel", Colors::White, Colors::Black));
 	//AI Level 3
-	objects.emplace_back(std::make_unique<GameButton>(
+	/*objects.emplace_back(std::make_unique<GameButton>(
 		*this, &game->gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, std::make_pair(GsKaese, 3),
-		"Schwer", Colors::White, Colors::Black));
+		"Schwer", Colors::White, Colors::Black));*/
 	//Optionen
 	objects.emplace_back(std::make_unique<MenuButton>(
 		*this, &game->gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseOptionen,
