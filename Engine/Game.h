@@ -53,7 +53,7 @@ private:
 	Gamestate prevgamestate = GsError; /*because DEBUG-mode auto initializes every variable, 
 									   it sets this to 0 which is GsMenu which on the very first call of Update makes it so that it doesn't get initialized, since gamestate == prevgamestate (0 == 0)*/
 
-	//Should be totally legimit RAII, right? no memory learking happening
+	//Should be totally legimit RAII, right? no memory leaking happening
 	void* curInterface = nullptr;
 
 	static constexpr unsigned int databuffermemblocksize = 64u;
