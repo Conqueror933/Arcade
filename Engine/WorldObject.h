@@ -18,6 +18,8 @@ public:
 
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
+	virtual void SetHighlight(bool b) {}
+	virtual void SetClicked(bool b) {}
 
 //protected:
 	Vec2<int> position;

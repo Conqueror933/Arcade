@@ -29,6 +29,7 @@ while making Medium and part Hard AI broke the Easy AI somehow
 
 Snake:
 controls are weirdly delayed, super annoying
+	- decouple input from timestep
 
 AI Levels:
 1: just check for closed cell and pick random
@@ -42,3 +43,8 @@ make Button (and Label) its on full class outside of Menu
 change Button behaviour away from gigantic switch
 	- either via inheritance
 	- or via Functors
+
+public Menu : public Owner
+
+i need the menu to be able to create a button and set its behaviour
+	- have a base button, handling the drawing, with a templated Update() function in which the menu can stick its functor

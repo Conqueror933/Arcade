@@ -30,16 +30,16 @@ private:
 
 		MsKaeseInit, MsKaese, MsKaeseOptionen
 	};
-	enum Option //power to change the void*data for game options
-	{
-		Small, Medium, Default, Big, 
-		Square, Free, 
-		ThickBorder, SlimBorder,
-		Doublespeed, Normalspeed, 
-		up, left, right, down, 
-		Color1, Color2, Color3, Color4, Color5, Color6,
-		Undefined1, Undefined2, Undefined3, Undefined4
-	};
+	//enum Option //power to change the void*data for game options
+	//{
+	//	Small, Medium, Default, Big, 
+	//	Square, Free, 
+	//	ThickBorder, SlimBorder,
+	//	Doublespeed, Normalspeed, 
+	//	up, left, right, down, 
+	//	Color1, Color2, Color3, Color4, Color5, Color6,
+	//	Undefined1, Undefined2, Undefined3, Undefined4
+	//};
 
 public:
 	Menu(Game* game);
@@ -70,4 +70,12 @@ private:
 	Menustate prevms;
 	static constexpr int letterspacing = 3;
 	static constexpr int border = 6;
+};
+
+struct Back
+{
+	void operator()()
+	{
+		DBOUT("Back functor.");
+	}
 };
