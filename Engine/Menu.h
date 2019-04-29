@@ -70,12 +70,102 @@ private:
 	Menustate prevms;
 	static constexpr int letterspacing = 3;
 	static constexpr int border = 6;
+
+
+//namespace MB //MenuButton
+//{
+	//template<class T>
+public:
+	class ButtonOwner
+	{
+	public:
+		ButtonOwner(Menu* m) : Owner(m){}
+		virtual void operator()() = 0;
+	protected:
+		int GetMenustate()
+		{
+			return Owner->ms;
+		}
+		void SetMenustate(Menustate m)
+		{
+			Owner->ms = m;
+		}
+		std::pair<Gamestate, int> GetGamestate()
+		{
+			return Owner->gs;
+		}
+		void SetGamestate(std::pair<Gamestate, int> g)
+		{
+			Owner->gs = g;
+		}
+		void* GetDataPointer()
+		{
+			return Owner->game->data;
+		}
+	protected:
+		Menu* Owner;
+	};
 };
 
-struct Back
+struct Back : public Menu::ButtonOwner//<T>
+{
+	Back(Menu* m) : ButtonOwner(m) {}
+	void operator()()
+	{
+		{
+			short* ptr = static_cast<short*>(GetDataPointer());
+			ptr[12] = 10;
+			ptr[13] = 10;
+			ptr[14] = 0;
+			ptr[15] = 0;
+		}
+		{
+			double* ptr = static_cast<double*>(GetDataPointer());
+			ptr[4] = 0.25;
+		}
+		DBOUT("Back functor.");
+		/*GetMenustate(Owner);*/
+		SetGamestate(std::make_pair(GsKaese, 0));
+		//Owner.gs = std::make_pair(GsKaese, 0);
+	}
+};
+struct Option1
 {
 	void operator()()
 	{
-		DBOUT("Back functor.");
+		;
 	}
 };
+//namespace MB //MenuButton
+//{
+//	//template<class T>
+//	class ButtonOwner
+//	{
+//	public:
+//		virtual void operator()() = 0;
+//	protected:
+//		static int GetMenustate(Menu* m)
+//		{
+//			return m->ms;
+//		}
+//		//protected:
+//		//	T * Owner;
+//	};
+//	template<class T>
+//	struct Back : public ButtonOwner<T>
+//	{
+//		void operator()()
+//		{
+//			DBOUT("Back functor.");
+//			GetMenustate(Owner);
+//			ms = MsKaese;
+//		}
+//	};
+//	struct Option1
+//	{
+//		void operator()()
+//		{
+//			;
+//		}
+//	};
+//}

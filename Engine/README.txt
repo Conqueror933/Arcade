@@ -48,3 +48,6 @@ public Menu : public Owner
 
 i need the menu to be able to create a button and set its behaviour
 	- have a base button, handling the drawing, with a templated Update() function in which the menu can stick its functor
+
+	make in worldobject a worldowner interface class to then pass a pointer to that into the button Update
+what if i make a public subclass in menu that implements the static Get...() and then inherit from that outside the class

@@ -8,7 +8,7 @@ template<typename B>
 class Button : public WorldObject
 {
 public:
-	Button(/*Menu& menu, */Text* text, Graphics* gfx,
+	Button(/*Menu& menu, */Text* text, Graphics* gfx, B behaviour,
 		//Button
 		Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
 		//Label
@@ -16,6 +16,7 @@ public:
 		:
 		WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
 		half_bordersize(half_bordersize),
+		behaviour(behaviour),
 		/*menu(menu),*/
 		label(gfx, /*&menu.*/text, s,
 			Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
