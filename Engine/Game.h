@@ -43,35 +43,23 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void ClearData();
-	void SetData(DataPass data);
+	//void SetData(DataPass data);
 	/********************************/
 private:
 	MainWindow & wnd;
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	std::pair<Gamestate, int> gamestate = std::make_pair(GsMenu, -1);
-	Gamestate prevgamestate = GsError; /*because DEBUG-mode auto initializes every variable, 
-									   it sets this to 0 which is GsMenu which on the very first call of Update makes it so that it doesn't get initialized, since gamestate == prevgamestate (0 == 0)*/
-
-	//Should be totally legimit RAII, right? no memory leaking happening
-	void* curInterface = nullptr;
-
-	std::stack<std::unique_ptr<Interface>> sInterface;
-
-	static constexpr unsigned int databuffermemblocksize = 64u;
-	void* data = ::operator new (databuffermemblocksize); //basically malloc, but not quite
-	/********************************/
-
+	std::stack<std::unique_ptr<Interface>> spInterface;
 	class IQuit : public Interface
 	{
 	public:
 		IQuit(Game* game) : pgame(game) {}
-		int Update() { pgame->wnd.Kill(); }
+		int Update() { pgame->wnd.Kill(); return 0; }
 		void Draw(){}
 
 	private:
 		Game * pgame;
 	};
+	/********************************/
 };

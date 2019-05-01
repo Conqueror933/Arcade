@@ -27,32 +27,12 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd)
 {
-	sInterface.push(std::make_unique<IQuit>(this));
-	sInterface.push(std::make_unique<Menu>(this));
-	ClearData();
+	spInterface.push(std::make_unique<IQuit>(this));
+	spInterface.push(std::make_unique<Menu>(this));
 }
 
 Game::~Game()
 {
-	if (curInterface != nullptr)
-	{
-		delete curInterface;
-		curInterface = nullptr;
-	}
-	if (data != nullptr)
-	{
-		delete data;
-		data = nullptr;
-	}
-}
-
-void Game::ClearData()
-{
-	char* ptr = static_cast<char*>(data);
-	for (auto i = 0u; i < databuffermemblocksize; i++)
-	{
-		ptr[i] = '\0';
-	}
 }
 
 void Game::Go()
@@ -65,99 +45,24 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	/*****************************************/
-	int returnvalue = sInterface.top->Update();
-	if (returnvalue == 1)
-		sInterface.pop();
-	/***********    same shit    *************/
-	if(sInterface.top->Update())
-		sInterface.pop();
-	/*****************************************/
-
-
-	switch (gamestate.first)
+	switch (spInterface.top->Update()) //could use a sanity check if its not the menu returning, since a Game shouldn't create another game
 	{
-	case GsMenu:
-		//<init>
-		if (prevgamestate != GsMenu)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				curInterface = new Menu(this);
-				wnd.mouse.Flush();
-			}
-			else {
-				curInterface = new Menu(this); //first call
-				wnd.mouse.Flush();
-			}
-		//</init>
-		//<code>
-		while (!wnd.mouse.IsEmpty())
-		{
-			const auto e = wnd.mouse.Read();
-			if (e.GetType() == Mouse::Event::Type::LPress)
-				gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), true);
-			else
-				gamestate = static_cast<Menu*>(curInterface)->Update(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), false);
-		}
-		//</code>
-		prevgamestate = GsMenu;
+	case 0:
 		break;
-	case GsKaese:
-		//<init>
-		if (prevgamestate != GsKaese)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				curInterface = new Kaesekaestchen(gfx, wnd.mouse, data, gamestate.second);
-				wnd.mouse.Flush();
-			}
-		//</init>
-		//<code>
-		wnd.mouse;
-		if (static_cast<Kaesekaestchen*>(curInterface)->Update()) //if running return 0 else return 1
-			gamestate = std::make_pair(GsMenu, -1);
-		//</code>
-		prevgamestate = GsKaese;
-		break;
-	case GsSnake:
-		//<init>
-		if (prevgamestate != GsSnake)
-			if (curInterface != nullptr)
-			{
-				delete curInterface;
-				curInterface = new SnakeGame(gfx, wnd.kbd, data);
-				wnd.kbd.Flush();
-				wnd.mouse.Flush();
-			}
-		//</init>
-		//<code>
-		if (static_cast<SnakeGame*>(curInterface)->Update()) //if running return 0 else return 1
-			gamestate = std::make_pair(GsMenu, -1);
-		//</code>
-		prevgamestate = GsSnake;
-		break;
-	case GsQuit:
-		wnd.Kill();
+	case 1:
+		spInterface.pop(); break;
+	case 2:
+	{ void* data; int flag;
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, data, flag)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
+	case 3:
+	{ void* data; int flag;
+		spInterface.push(std::make_unique<SnakeGame>(gfx, wnd.mouse, data, flag)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
 	default:
-		gamestate = std::make_pair(GsError, -1);
+		throw std::exception("Bad Update return");
 	}
 }
 
 void Game::ComposeFrame()
 {
-	switch (prevgamestate)
-	{
-	case GsMenu:
-		static_cast<Menu*>(curInterface)->Draw();
-		break;
-	case GsKaese:
-		static_cast<Kaesekaestchen*>(curInterface)->Draw();
-		break;
-	case GsSnake:
-		static_cast<SnakeGame*>(curInterface)->Draw();
-		break;
-	default:
-		throw std::exception("Bad Gamestate.");
-	}
+	spInterface.top->Draw();
 }
