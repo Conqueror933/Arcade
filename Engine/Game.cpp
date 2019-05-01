@@ -27,6 +27,8 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd)
 {
+	sInterface.push(std::make_unique<IQuit>(this));
+	sInterface.push(std::make_unique<Menu>(this));
 	ClearData();
 }
 
@@ -63,6 +65,16 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	/*****************************************/
+	int returnvalue = sInterface.top->Update();
+	if (returnvalue == 1)
+		sInterface.pop();
+	/***********    same shit    *************/
+	if(sInterface.top->Update())
+		sInterface.pop();
+	/*****************************************/
+
+
 	switch (gamestate.first)
 	{
 	case GsMenu:

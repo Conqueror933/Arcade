@@ -8,6 +8,7 @@
 #include "Bitmap.h"
 #include "WorldObject.h"
 #include <memory>
+#include "Interface.h"
 
 enum Gamestate //power to change the game
 {
@@ -19,7 +20,7 @@ enum Gamestate //power to change the game
 };
 
 class Game;
-class Menu
+class Menu : public Interface
 {
 private:
 	enum Menustate //power to change the Menuwindow
@@ -49,6 +50,7 @@ public:
 	//Menu& operator=(const Menu&&) = delete;
 	~Menu();
 
+	int Update() {}
 	std::pair<Gamestate, int> Update(int mouse_x, int mouse_y, bool buttondown);
 	void Draw();
 

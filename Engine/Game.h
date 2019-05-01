@@ -26,6 +26,7 @@
 #include "Menu.h"
 #include "Kaesekaestchen.h"
 #include "Snake.h"
+#include <stack>
 
 class Game
 {
@@ -43,6 +44,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	void ClearData();
+	void SetData(DataPass data);
 	/********************************/
 private:
 	MainWindow & wnd;
@@ -56,7 +58,20 @@ private:
 	//Should be totally legimit RAII, right? no memory leaking happening
 	void* curInterface = nullptr;
 
+	std::stack<std::unique_ptr<Interface>> sInterface;
+
 	static constexpr unsigned int databuffermemblocksize = 64u;
 	void* data = ::operator new (databuffermemblocksize); //basically malloc, but not quite
 	/********************************/
+
+	class IQuit : public Interface
+	{
+	public:
+		IQuit(Game* game) : pgame(game) {}
+		int Update() { pgame->wnd.Kill(); }
+		void Draw(){}
+
+	private:
+		Game * pgame;
+	};
 };

@@ -4,12 +4,13 @@
 #include "Keyboard.h"
 #include "Vec2.h"
 #include "Frametimer.h"
+#include "Interface.h"
 #include <vector>
 #include <queue>
 #include <array>
 #include <random>
 
-class SnakeGame
+class SnakeGame : public Interface
 {
 private:
 	enum Snakemode

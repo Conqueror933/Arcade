@@ -2,8 +2,9 @@
 #include "TwoPlayer.h"
 #include "AI.h"
 #include "Mouse.h"
+#include "Interface.h"
 
-class Kaesekaestchen
+class Kaesekaestchen : public Interface
 {
 private:
 	enum Kaesekaestchenmode
