@@ -12,6 +12,7 @@ Menu:
 make a checkbox-type button
 make a slider-type button
 Snake Button doesn't work after first time playing snake
+make hit detection more efficient
 
 General:
 maybe even just predefine some options in the optionsmenu

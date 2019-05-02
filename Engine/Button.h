@@ -1,58 +1,79 @@
 #pragma once
 
 //#include "Bitmap.h"
-//#include "WorldObject.h"
 #include "Label.h"
 
-template<typename B>
-class Button : public WorldObject
+//struct ButtonConstructorParams
+//{
+//	//Button
+//	Vec2<int> position;
+//	Vec2<int> size;
+//	int half_bordersize;
+//	Color buttoncolor;
+//	//Label
+//	std::string text;
+//	int letterspacing;
+//	int border;
+//	Color textcolor = Colors::White;
+//};
+
+class Button
 {
 public:
-	Button(/*Menu& menu, */Text* text, Graphics* gfx, B behaviour,
-		//Button
-		Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
-		//Label
-		std::string s, const int letterspacing, const int border, Color background = Colors::Magenta, Color textcolor = Colors::White)
+	Button(
+		Text& text, Graphics& gfx, Vec2<int> position, Vec2<int> size, std::string s, int returnvalue, 
+		const int letterspacing, const int border, int half_bordersize, Color backgroundcolor, Color textcolor = Colors::White)
 		:
-		WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
-		half_bordersize(half_bordersize),
-		behaviour(behaviour),
-		/*menu(menu),*/
-		label(gfx, /*&menu.*/text, s,
+		//Button
+		gfx(gfx), position(position), size(size), returnvalue(returnvalue),
+		backgroundcolor(backgroundcolor), foregroundcolor(backgroundcolor.Tint(0.25f)/*bugs here*/), half_bordersize(half_bordersize),
+		//Label
+		label(gfx, text, s,
 			Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
-			letterspacing,
-			border,
 			Vec2<int>(size.x - half_bordersize * 4, size.y - half_bordersize * 4),
-			background, textcolor)
+			letterspacing, border, Colors::Magenta, textcolor)
 	{
 #ifdef _DEBUG
 		if (size == Vec2<int>{0, 0}) throw std::exception("Button can't have 0 size.");
-		if (label.size.x < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
-		if (label.size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+		if (size.x < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+		if (size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
 #endif
 	}
 	~Button() = default;
 
 public:
-	void Update() { if(clicked) behaviour(); }
-	//virtual void Update() = 0;
+	void DoHitDetection(int x, int y, bool clicked)
+	{
+		if (x > position.x && x < position.x + size.x &&
+			y > position.y && y < position.y + size.y)
+			if (clicked)
+				SetClicked(true);
+			else
+			{
+				SetHighlight(true);
+				SetClicked(false);
+			}
+		else
+			SetHighlight(false);
+	}
+	int Update() { return (clicked ? returnvalue : 0); }
 	void Draw()
 	{
 		if (highlighted)
 		{
 			Color b = backgroundcolor; b.Shade(0.5f);
 			Color f = foregroundcolor; f.Shade(0.5f);
-			if (clicked) label.backgroundcolor.Shade(0.75f);
-			gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, b);
-			gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+			//if (clicked) label.background.Shade(0.75f);
+			gfx.DrawRectangleDim(position.x, position.y, size.x, size.y, b);
+			gfx.DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
 				size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
 			label.Draw();
-			if (clicked) label.backgroundcolor.Tint(0.75f);
+			//if (clicked) label.background.Tint(0.75f);
 		}
 		else
 		{
-			gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
-			gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+			gfx.DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
+			gfx.DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
 				size.x - half_bordersize * 2, size.y - half_bordersize * 2, foregroundcolor);
 			label.Draw();
 		}
@@ -60,14 +81,84 @@ public:
 	void SetHighlight(bool b) { highlighted = b; }
 	void SetClicked(bool b) { clicked = b; }
 
-protected:
-	/*Menu & menu;*/
+private:
+	Graphics& gfx;
+	Vec2<int> position;
+	Vec2<int> size;
+	Color backgroundcolor;
+	Color foregroundcolor;
+
 	Label label;
-	B behaviour;
+	const int returnvalue;
 	const int half_bordersize;
 	bool highlighted = false;
 	bool clicked = false;
 };
+
+//template<typename B>
+//class Button : public WorldObject
+//{
+//public:
+//	Button(/*Menu& menu, */Text* text, Graphics* gfx, B behaviour,
+//		//Button
+//		Vec2<int> position, Vec2<int> size, int half_bordersize, Color backgroundcolor, Color foregroundcolor,
+//		//Label
+//		std::string s, const int letterspacing, const int border, Color background = Colors::Magenta, Color textcolor = Colors::White)
+//		:
+//		WorldObject(gfx, position, size, backgroundcolor, foregroundcolor),
+//		half_bordersize(half_bordersize),
+//		behaviour(behaviour),
+//		/*menu(menu),*/
+//		label(gfx, /*&menu.*/text, s,
+//			Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
+//			letterspacing,
+//			border,
+//			Vec2<int>(size.x - half_bordersize * 4, size.y - half_bordersize * 4),
+//			background, textcolor)
+//	{
+//#ifdef _DEBUG
+//		if (size == Vec2<int>{0, 0}) throw std::exception("Button can't have 0 size.");
+//		if (label.size.x < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+//		if (label.size.y < 0) throw std::exception("Labelsize of Button can't be less than 0. bordersize might be to big.");
+//#endif
+//	}
+//	~Button() = default;
+//
+//public:
+//	int Update() { if(clicked) behaviour(); }
+//	//virtual void Update() = 0;
+//	void Draw()
+//	{
+//		if (highlighted)
+//		{
+//			Color b = backgroundcolor; b.Shade(0.5f);
+//			Color f = foregroundcolor; f.Shade(0.5f);
+//			if (clicked) label.backgroundcolor.Shade(0.75f);
+//			gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, b);
+//			gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+//				size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
+//			label.Draw();
+//			if (clicked) label.backgroundcolor.Tint(0.75f);
+//		}
+//		else
+//		{
+//			gfx->DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
+//			gfx->DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+//				size.x - half_bordersize * 2, size.y - half_bordersize * 2, foregroundcolor);
+//			label.Draw();
+//		}
+//	}
+//	void SetHighlight(bool b) { highlighted = b; }
+//	void SetClicked(bool b) { clicked = b; }
+//
+//protected:
+//	/*Menu & menu;*/
+//	Label label;
+//	B behaviour;
+//	const int half_bordersize;
+//	bool highlighted = false;
+//	bool clicked = false;
+//};
 //class GameButton : public Button
 //{
 //public:

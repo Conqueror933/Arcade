@@ -1,21 +1,26 @@
 #pragma once
 
 #include "Bitmap.h"
-#include "WorldObject.h"
 
-class Label : public WorldObject
+class Label
 {
 public:
 	//helper thing to display text on screen
-	Label(Graphics* gfx, Text* text, std::string s, Vec2<int> position, const int letterspacing, const int border,
-		Vec2<int> size = { 0,0 }, Color background = Colors::Magenta, Color textcolor = Colors::White);
+	Label(Graphics& gfx, Text& text, std::string s, Vec2<int> position, Vec2<int> size = { 0,0 }, 
+		const int letterspacing = 3, const int border = 6, Color backgroundcolor = Colors::Magenta, Color textcolor = Colors::White);
 	//add a "Style" Object for rounded corners and all that fancy stuff
 	Label(const Label& other);
 	Label& operator=(const Label& other) { return *this = Label(other); }
-	void Update() override { /*if (!permanent) timercountdown;*/ }
-	void Draw() override;
+	//int Update() { /*if (!permanent) timercountdown;*/ }
+	void Draw();
 private:
-	Text * text;
+	Graphics& gfx;
+	Text& text;
+	Vec2<int> position;
+	Vec2<int> size;
+	Color background;
+	Color textcolor;
+
 	const std::string s;
 	const int letterspacing;
 	const int border;

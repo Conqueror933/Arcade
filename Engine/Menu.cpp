@@ -1,37 +1,29 @@
 #include "Menu.h"
 #include "Game.h"
 
-/****************  Menu  *******************/
-
-Menu::Menu(Game* game)
-	: 
-	game(game),
-	text(game->gfx, "Letters2.bmp")
+MenuHandler::MenuHandler(Graphics & gfx, Mouse & mouse) : gfx(gfx), mouse(mouse), text(gfx, "Letters2.bmp")
 {
-	CreateMainMenu();
+	spSubMenus.push(std::make_unique<IQuit>());
+	spSubMenus.push(std::make_unique<MainMenu>(gfx, mouse, text));
 }
 
-Menu::~Menu()
-{
-}
-
-void Menu::CreateMainMenu()
-{
-	//Welcome Label
-	objects.emplace_back(std::make_unique<Label>(
-		&game->gfx, &text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, letterspacing, border, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
-	//objects.emplace_back(std::make_unique<MenuButton>(
-	//	*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseInit,
-	//	"Kaesekaestchen", Colors::White, Colors::Black));
-	//objects.emplace_back(std::make_unique<MenuButton>(
-	//	*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnakeInit,
-	//	"Snake", Colors::White, Colors::Black));
-
-	//End
-	objects.emplace_back(std::make_unique<Button<Back>>( &text,
-		/**this, */&game->gfx, *this, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, 2, Color(145u, 0u, 0u), Color(200u, 0u, 0u), /*std::make_pair(GsQuit, 0),*/
-		"Beenden", letterspacing, border, Color(255u, 0u, 0u), Colors::White));
-}
+//void Menu::CreateMainMenu()
+//{
+//	//Welcome Label
+//	objects.emplace_back(std::make_unique<Label>(
+//		&game->gfx, &text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, letterspacing, border, Vec2<int>{ 400, 100 }, Color(0u, 0u, 185u), Colors::White));
+//	//objects.emplace_back(std::make_unique<MenuButton>(
+//	//	*this, &game->gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsKaeseInit,
+//	//	"Kaesekaestchen", Colors::White, Colors::Black));
+//	//objects.emplace_back(std::make_unique<MenuButton>(
+//	//	*this, &game->gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, 2, Colors::Gray, Colors::LightGray, MsSnakeInit,
+//	//	"Snake", Colors::White, Colors::Black));
+//
+//	//End
+//	objects.emplace_back(std::make_unique<Button<Back>>( &text,
+//		/**this, */&game->gfx, *this, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, 2, Color(145u, 0u, 0u), Color(200u, 0u, 0u), /*std::make_pair(GsQuit, 0),*/
+//		"Beenden", letterspacing, border, Color(255u, 0u, 0u), Colors::White));
+//}
 //
 //void Menu::CreateSnakeMenu()
 //{
@@ -162,62 +154,99 @@ void Menu::CreateMainMenu()
 //		"Back", Colors::White, Colors::Black));
 //}
 
-std::pair<Gamestate, int> Menu::Update(int mouse_x, int mouse_y, bool buttondown)
+int MenuHandler::Update() //int mouse_x, int mouse_y, bool buttondown
 {
-	for (auto i = 0u; i < objects.size(); i++)
+	switch (spSubMenus.top()->Update())
 	{
-		//if (auto temp = dynamic_cast<Button*>(objects[i].get()))
-		//{
-		auto temp = objects[i].get();
-			if (temp->position.x <= mouse_x && (temp->position.x + temp->size.x) >= mouse_x &&
-				temp->position.y <= mouse_y && (temp->position.y + temp->size.y) >= mouse_y)
-			{
-				temp->SetHighlight(true);
-				if (buttondown)
-					temp->SetClicked(true);
-				else
-					temp->SetClicked(false);
-				prevms = ms;
-			}
-			else
-				temp->SetHighlight(false);
-		//}
-		objects[i]->Update();
+	case 0:
+		break;
+	case 1:
+		break;
+	default:
+		break;
 	}
-	if (ms == prevms)	//turned the ms != prevms around for ease of reading
-		return gs;
-	switch (ms)
-	{
-	//case MsKaese:
-	//	objects.clear();
-	//	CreateKaeseMenu();
-	//	break;
-	//case MsKaeseOptionen:
-	//	objects.clear();
-	//	CreateKaeseOptionsMenu();
-	//	break;
-	//case MsSnake:
-	//	objects.clear();
-	//	CreateSnakeMenu();
-	//	break;
-	//case MsSnakeOptionen:
-	//	objects.clear();
-	//	CreateSnakeOptionsMenu();
-	//	break;
-	//case MsMain:
-	//	objects.clear();
-	//	CreateMainMenu();
-	//	break;
-	}
-	return gs;
+	return 0; //just to compile
 }
 
-void Menu::Draw()
+void MenuHandler::Draw()
 {
 	//Set Background
-	game->gfx.DrawRectangle(0, 0, game->gfx.ScreenWidth, game->gfx.ScreenHeight, Color(0u, 0u, 205u));
-	for (auto i = 0u; i < objects.size(); i++)
+	gfx.DrawRectangle(0, 0, gfx.ScreenWidth, gfx.ScreenHeight, Color(0u, 0u, 205u));
+	for (auto i = 0u; i < _TopMenu->vpLabels.size(); i++)
 	{
-		objects[i]->Draw();
+		_TopMenu->vpLabels[i]->Draw();
 	}
+	for (auto i = 0u; i < _TopMenu->vpButtons.size(); i++)
+	{
+		_TopMenu->vpButtons[i]->Draw();
+	}
+}
+
+/****************  Menu  *******************/
+
+MenuHandler::Menu::Menu(Graphics& gfx, Mouse& mouse, Text& text) : mouse(mouse), gfx(gfx), text(text) {}
+
+MenuHandler::MainMenu::MainMenu(Graphics & gfx, Mouse & mouse, Text & text) : Menu(gfx, mouse, text) 
+{
+	//Welcome Label
+	vpLabels.emplace_back(std::make_unique<Label>(
+		gfx, text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
+
+	vpButtons.emplace_back(std::make_unique<Button>(
+		text, gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", (int)Option2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+	vpButtons.emplace_back(std::make_unique<Button>(
+		text, gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", (int)Option3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+	//End
+	vpButtons.emplace_back(std::make_unique<Button>( 
+		text, gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, "Beenden", (int)Quit, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
+}
+
+int MenuHandler::MainMenu::Update()
+{
+	for (auto i = 0u; i < vpButtons.size(); i++) //for(auto& i : objects)
+	{
+		vpButtons[i]->DoHitDetection(mouse.GetPosX(), mouse.GetPosY(), mouse.LeftIsPressed()); //brute force
+		switch (vpButtons[i]->Update())
+		{
+		case 0:
+			break; //don't return 0 directly, or it will cancel on the first Button
+		case 1:
+			return 1;
+		case 2:
+			return 2;
+		case 3:
+			return 3;
+		default:
+			throw std::exception("Bad Button return value.");
+		}
+	}
+	return 0;
+}
+
+
+MenuHandler::SnakeMenu::SnakeMenu(Graphics & gfx, Mouse & mouse, Text & text) : Menu(gfx, mouse, text) {
+}
+int MenuHandler::SnakeMenu::Update()
+{
+	return 0; //just to compile
+}
+MenuHandler::SnakeOptionsMenu::SnakeOptionsMenu(Graphics & gfx, Mouse & mouse, Text & text) : Menu(gfx, mouse, text) {
+}
+int MenuHandler::SnakeOptionsMenu::Update()
+{
+	return 0; //just to compile
+}
+
+
+MenuHandler::KaeseMenu::KaeseMenu(Graphics & gfx, Mouse & mouse, Text & text) : Menu(gfx, mouse, text) {
+}
+int MenuHandler::KaeseMenu::Update()
+{
+	return 0; //just to compile
+}
+MenuHandler::KaeseOptionsMenu::KaeseOptionsMenu(Graphics & gfx, Mouse & mouse, Text & text) : Menu(gfx, mouse, text) {
+}
+int MenuHandler::KaeseOptionsMenu::Update()
+{
+	return 0; //just to compile
 }

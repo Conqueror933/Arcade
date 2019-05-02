@@ -1,11 +1,14 @@
 #pragma once
 
+#include <stack>
+#include <memory>
+
 class Interface
 {
 public:
-	virtual ~Interface() = 0;
+	virtual ~Interface() = 0 {};
 	virtual int Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Draw(){}
 };
 
 #include <vector>

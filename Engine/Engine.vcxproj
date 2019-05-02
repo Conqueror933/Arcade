@@ -163,7 +163,6 @@
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="TwoPlayer.h" />
     <ClInclude Include="Vec2.h" />
-    <ClInclude Include="WorldObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />

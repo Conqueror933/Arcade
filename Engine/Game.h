@@ -26,7 +26,6 @@
 #include "Menu.h"
 #include "Kaesekaestchen.h"
 #include "Snake.h"
-#include <stack>
 
 class Game
 {
@@ -51,15 +50,14 @@ private:
 	/********************************/
 	/*  User Variables              */
 	std::stack<std::unique_ptr<Interface>> spInterface;
-	class IQuit : public Interface
-	{
-	public:
-		IQuit(Game* game) : pgame(game) {}
-		int Update() { pgame->wnd.Kill(); return 0; }
-		void Draw(){}
+	//class IQuit : public Interface
+	//{
+	//public:
+	//	IQuit(Game* game) : pgame(game) {}
+	//	int Update() { pgame->wnd.Kill(); return 0; }
 
-	private:
-		Game * pgame;
-	};
+	//private:
+	//	Game * pgame;
+	//};
 	/********************************/
 };
