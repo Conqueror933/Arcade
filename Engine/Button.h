@@ -26,7 +26,7 @@ public:
 		:
 		//Button
 		gfx(gfx), position(position), size(size), returnvalue(returnvalue),
-		backgroundcolor(backgroundcolor), foregroundcolor(backgroundcolor.Tint(0.25f)/*bugs here*/), half_bordersize(half_bordersize),
+		backgroundcolor(backgroundcolor), half_bordersize(half_bordersize),
 		//Label
 		label(gfx, text, s,
 			Vec2<int>(position.x + half_bordersize * 2, position.y + half_bordersize * 2),
@@ -61,24 +61,23 @@ public:
 	int Update() { return (clicked ? returnvalue : 0); }
 	void Draw()
 	{
+		Color Edge1 = backgroundcolor; Edge1.Shade(0.25f);
+		Color Edge2 = backgroundcolor; Edge2.Shade(0.5f);
+		Color Background = backgroundcolor;
+
 		if (highlighted)
 		{
-			Color b = backgroundcolor; b.Shade(0.5f);
-			Color f = foregroundcolor; f.Shade(0.5f);
-			//if (clicked) label.background.Shade(0.75f);
-			gfx.DrawRectangleDim(position.x, position.y, size.x, size.y, b);
-			gfx.DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
-				size.x - half_bordersize * 2, size.y - half_bordersize * 2, f);
-			label.Draw();
-			//if (clicked) label.background.Tint(0.75f);
+			//Edge1.Shade(0.5f);
+			Edge2.Shade(0.25f);
+			Background.Shade(0.75f);
 		}
-		else
-		{
-			gfx.DrawRectangleDim(position.x, position.y, size.x, size.y, backgroundcolor);
-			gfx.DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
-				size.x - half_bordersize * 2, size.y - half_bordersize * 2, foregroundcolor);
-			label.Draw();
-		}
+
+		gfx.DrawRectangleDim(position.x, position.y, size.x, size.y, Edge1);
+		gfx.DrawRectangleDim(position.x + half_bordersize, position.y + half_bordersize,
+			size.x - half_bordersize * 2, size.y - half_bordersize * 2, Edge2);
+		gfx.DrawRectangleDim(position.x + half_bordersize * 2, position.y + half_bordersize * 2,
+			size.x - half_bordersize * 4, size.y - half_bordersize * 4, Background);
+		label.Draw();
 	}
 	void SetHighlight(bool b) { highlighted = b; }
 	void SetClicked(bool b) { clicked = b; }
@@ -88,7 +87,6 @@ private:
 	Vec2<int> position;
 	Vec2<int> size;
 	Color backgroundcolor;
-	Color foregroundcolor;
 
 	Label label;
 	const int returnvalue;

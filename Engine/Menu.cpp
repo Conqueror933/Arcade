@@ -57,9 +57,9 @@ MenuHandler::MainMenu::MainMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 		mH.gfx, mH.text, "Willkommen zur Arcade", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
 
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", 2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//End
 	vpButtons.emplace_back(std::make_unique<Button>( 
 		mH.text, mH.gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, "Beenden", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -102,19 +102,19 @@ MenuHandler::KaeseMenu::KaeseMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 		mH.gfx, mH.text, "Willkommen zum Kaesekaestchen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
 	//2 Player
 	vpButtons.emplace_back(std::make_unique<Button>(
-			mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Zwei Spieler", 2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+			mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Zwei Spieler", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//AI Level 1
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Einfach", 3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Einfach", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//AI Level 2
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, "Mittel", 4, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, "Mittel", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//AI Level 3
 	/*vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, "Schwer", 5, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));*/
+		mH.text, mH.gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, "Schwer", 5, letterspacing, border, half_bordersize, Colors::White, Colors::Black));*/
 	//Optionen
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, "Optionen", 6, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, "Optionen", 6, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -159,28 +159,28 @@ MenuHandler::KaeseOptionsMenu::KaeseOptionsMenu(MenuHandler& menuHandler) : Menu
 		mH.gfx, mH.text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
 	//Small size is 4x4  -  would be nice if this was a slider
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, "Small", 2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, "Small", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Medium size is 8x8
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, "Medium", 3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, "Medium", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Default size is 10x10
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, "Default", 4, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, "Default", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Big size is 12x12
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, "Big", 5, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, "Big", 5, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Square ensures Square Cells (and Board)  -  would be nice if this was a checkbox
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, "Square", 6, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, "Square", 6, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//makes Board fill the entire screen
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, "Full Screen", 7, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, "Full Screen", 7, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Extra thick borders
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, "Thick Borders", 8, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, "Thick Borders", 8, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Reset Thick borders
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, "Slim Borders", 9, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, "Slim Borders", 9, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -219,10 +219,10 @@ MenuHandler::SnakeMenu::SnakeMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 		mH.gfx, mH.text, "Welcome to Snake", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
 	//Start
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Start", 2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Start", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Optionen
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, "Optionen", 3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, "Optionen", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -261,28 +261,28 @@ MenuHandler::SnakeOptionsMenu::SnakeOptionsMenu(MenuHandler& menuHandler) : Menu
 		mH.gfx, mH.text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
 	//Small size is 4x4  -  would be nice if this was a slider
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, "Small", 2, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, "Small", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Medium size is 8x8
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, "Medium", 3, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, "Medium", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Default size is 10x10
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, "Default", 4, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, "Default", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Big size is 12x12
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, "Big", 5, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, "Big", 5, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Doublespeed
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, "Doublespeed", 6, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, "Doublespeed", 6, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Normalspeed
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, "Normalspeed", 7, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, "Normalspeed", 7, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Extra thick borders
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, "Thick Borders", 8, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, "Thick Borders", 8, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Reset Thick borders
 	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, "Slim Borders", 9, letterspacing, border, half_bordersize, Colors::Gray, Colors::Black));
+		mH.text, mH.gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, "Slim Borders", 9, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
