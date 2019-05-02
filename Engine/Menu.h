@@ -28,7 +28,7 @@ private:
 	class IQuit : public Interface
 	{
 	public:
-		int Update() { return 0; }
+		int Update() { return 1; }
 	};
 	class Menu : public Interface
 	{
@@ -57,31 +57,24 @@ private:
 	};
 	enum Options
 	{
-		Nothing = 0,
-		Quit = 1,
-		Option2 = 2,
-		Option3 = 3,
-		Option4 = 4
+		_StartHard = -5,
+		_StartMedium = -4,
+		_StartEasy = -3,
+		_StartTP = -2,
+		_StartSnake = -1,
+		_Nothing = 0,
+		_Quit = 1,
+		_MainMenu,
+		_Kaese,
+		_KaeseMenu,
+		_Snake,
+		_SnakeMenu
 	};
 
 	class MainMenu : public Menu
 	{
 	public:
 		MainMenu(Graphics& gfx, Mouse& mouse, Text& text);
-		int Update();
-	};
-
-	class SnakeMenu: public Menu
-	{
-	public:
-		SnakeMenu(Graphics& gfx, Mouse& mouse, Text& text);
-		int Update();
-	};
-
-	class SnakeOptionsMenu : public Menu
-	{
-	public:
-		SnakeOptionsMenu(Graphics& gfx, Mouse& mouse, Text& text);
 		int Update();
 	};
 
@@ -96,6 +89,20 @@ private:
 	{
 	public:
 		KaeseOptionsMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		int Update();
+	};
+
+	class SnakeMenu: public Menu
+	{
+	public:
+		SnakeMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		int Update();
+	};
+
+	class SnakeOptionsMenu : public Menu
+	{
+	public:
+		SnakeOptionsMenu(Graphics& gfx, Mouse& mouse, Text& text);
 		int Update();
 	};
 };

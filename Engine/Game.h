@@ -50,6 +50,11 @@ private:
 	/********************************/
 	/*  User Variables              */
 	std::stack<std::unique_ptr<Interface>> spInterface;
+	class IQuit : public Interface
+	{
+	public:
+		int Update() { return 1; }
+	};
 	//class IQuit : public Interface
 	//{
 	//public:

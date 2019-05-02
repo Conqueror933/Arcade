@@ -27,7 +27,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd)
 {
-	//spInterface.push(std::make_unique<IQuit>(this));
+	spInterface.push(std::make_unique<IQuit>(/*this*/));
 	spInterface.push(std::make_unique<MenuHandler>(gfx, wnd.mouse)); //wrong params
 }
 
@@ -45,6 +45,9 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	if (spInterface.empty()) {
+		wnd.Kill(); return;
+	}
 	int r = spInterface.top()->Update();
 	switch (r) //could use a sanity check if its not the menu returning, since a Game shouldn't create another game
 	{
@@ -52,12 +55,12 @@ void Game::UpdateModel()
 		break;
 	case 1:
 		spInterface.pop(); break;
-	case 2:
-	{ void* data; int flag;
-		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, data, flag)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
-	case 3:
+	case -1:
 	{ void* data;
 		spInterface.push(std::make_unique<SnakeGame>(gfx, wnd.kbd, data)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
+	case -2:
+	{ void* data; int flag;
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, data, flag)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
 	default:
 		throw std::exception("Bad Update return");
 	}
@@ -65,5 +68,6 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	spInterface.top()->Draw();
+	if (spInterface.size() > 1)
+		spInterface.top()->Draw();
 }

@@ -46,13 +46,13 @@ public:
 	{
 		if (x > position.x && x < position.x + size.x &&
 			y > position.y && y < position.y + size.y)
+		{
+			SetHighlight(true);
 			if (clicked)
 				SetClicked(true);
 			else
-			{
-				SetHighlight(true);
 				SetClicked(false);
-			}
+		}
 		else
 			SetHighlight(false);
 	}

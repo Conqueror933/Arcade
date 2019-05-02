@@ -11,7 +11,7 @@ Menu:
 	add a "Style" Object for rounded corners and all that fancy stuff
 make a checkbox-type button
 make a slider-type button
-Snake Button doesn't work after first time playing snake
+Snake Button doesn't work after first time playing snake || mouse.Flush() could solve this
 make hit detection more efficient
 
 General:
