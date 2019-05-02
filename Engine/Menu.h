@@ -18,10 +18,15 @@ public:
 	int Update();
 	void Draw();
 
+	DataPass& GetData() { return data; }
+
+private:
+	void FlushData() { data.c.clear(); data.i.clear(); data.d.clear(); }
 private:
 	Graphics& gfx;
 	Mouse& mouse;
 	Text text;
+	DataPass data;
 	std::stack<std::unique_ptr<Interface>> spSubMenus;
 
 private:
@@ -33,7 +38,7 @@ private:
 	class Menu : public Interface
 	{
 	public:
-		Menu(Graphics& gfx, Mouse& mouse, Text& text);
+		Menu(MenuHandler& menuHandler);
 		Menu(const Menu&) = delete;
 		Menu& operator=(const Menu&) = delete;
 		//Menu(const Menu&&) = delete;
@@ -45,9 +50,7 @@ private:
 
 	protected:
 	public:
-		Graphics& gfx;
-		Mouse& mouse;
-		Text& text;
+		MenuHandler& mH;
 		std::vector<std::unique_ptr<Label>> vpLabels;
 		std::vector<std::unique_ptr<Button>> vpButtons;
 
@@ -74,35 +77,35 @@ private:
 	class MainMenu : public Menu
 	{
 	public:
-		MainMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		MainMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 
 	class KaeseMenu : public Menu
 	{
 	public:
-		KaeseMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		KaeseMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 
 	class KaeseOptionsMenu : public Menu
 	{
 	public:
-		KaeseOptionsMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		KaeseOptionsMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 
 	class SnakeMenu: public Menu
 	{
 	public:
-		SnakeMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		SnakeMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 
 	class SnakeOptionsMenu : public Menu
 	{
 	public:
-		SnakeOptionsMenu(Graphics& gfx, Mouse& mouse, Text& text);
+		SnakeOptionsMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 };

@@ -53,8 +53,10 @@ public:
 			else
 				SetClicked(false);
 		}
-		else
+		else {
 			SetHighlight(false);
+			SetClicked(false);
+		}
 	}
 	int Update() { return (clicked ? returnvalue : 0); }
 	void Draw()

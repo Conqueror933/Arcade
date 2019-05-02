@@ -15,7 +15,6 @@ public:
 
 struct DataPass
 {
-	DataPass() = default;
 	std::vector<char> c;
 	std::vector<int> i;
 	std::vector<double> d;
