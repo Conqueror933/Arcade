@@ -42,13 +42,15 @@ void Game::Go()
 	ComposeFrame();
 	gfx.EndFrame();
 }
-
+#define _GetData dynamic_cast<MenuHandler*>(spInterface.top().get())->GetData()
 void Game::UpdateModel()
 {
 	if (spInterface.empty()) {
 		wnd.Kill(); return;
 	}
-	int r = spInterface.top()->Update();
+	int r = spInterface.top()->Update(); //sanity check for games not to create other games on top
+	if (spInterface.size() > 2u && (r > 1 || r < 0))
+		return;
 	switch (r) //could use a sanity check if its not the menu returning, since a Game shouldn't create another game
 	{
 	case 0:
@@ -57,10 +59,15 @@ void Game::UpdateModel()
 		spInterface.pop(); break;
 	case -1:
 	{ void* data;
-		spInterface.push(std::make_unique<SnakeGame>(gfx, wnd.kbd, data)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
+	spInterface.push(std::make_unique<SnakeGame>(gfx, wnd.kbd, data)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ } break;
 	case -2:
-	{ void* data; int flag;
-		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, data, flag)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ }
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 0)); break;
+	case -3:
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 1)); break;
+	case -4:
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 2)); break;
+	case -5:
+		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 3)); break;
 	default:
 		throw std::exception("Bad Update return");
 	}

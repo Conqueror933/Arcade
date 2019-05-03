@@ -10,6 +10,7 @@
 #include "Interface.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "StringSwitch.h"
 
 class MenuHandler : public Interface
 {
@@ -18,15 +19,15 @@ public:
 	int Update();
 	void Draw();
 
-	DataPass& GetData() { return data; }
+	StringSwitch<DataPass>& GetData() { return data; }
 
 private:
-	void FlushData() { data.c.clear(); data.i.clear(); data.d.clear(); }
+	void FlushData() { data.Flush(); }
 private:
 	Graphics& gfx;
 	Mouse& mouse;
 	Text text;
-	DataPass data;
+	StringSwitch<DataPass> data;
 	std::stack<std::unique_ptr<Interface>> spSubMenus;
 
 private:

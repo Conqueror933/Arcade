@@ -1,16 +1,19 @@
 #include "Kaesekaestchen.h"
 #include "Game.h"
 
-Kaesekaestchen::Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag)
+Kaesekaestchen::Kaesekaestchen(Graphics& gfx, Mouse& mouse, StringSwitch<DataPass>& data, int flag)
 	:
 	gfx(gfx),
 	mouse(mouse)
 {
-	Board::BoardInit brdinit; 
-	short* ptr = static_cast<short*>(data);
-	brdinit.boardcellcounts = Vec2<int>(int(ptr[12]), int(ptr[13]));
-	brdinit.boardcellsize = Vec2<int>(int(ptr[14]), int(ptr[15])); 
-	brdinit.boardborderthickness = static_cast<double*>(data)[4];
+	Board::BoardInit brdinit;
+	brdinit.boardcellcounts = Vec2<int>(data.GetValue("Size").i, data.GetValue("Size").i);
+	brdinit.boardcellsize = Vec2<int>(data.GetValue("Square").i, data.GetValue("Square").i);
+	brdinit.boardborderthickness = data.GetValue("Border").d;
+	//short* ptr = static_cast<short*>(data);
+	//brdinit.boardcellcounts = Vec2<int>(int(ptr[12]), int(ptr[13]));
+	//brdinit.boardcellsize = Vec2<int>(int(ptr[14]), int(ptr[15])); 
+	//brdinit.boardborderthickness = static_cast<double*>(data)[4];
 	switch (flag)
 	{
 	case 0://twoPlayer;
@@ -40,7 +43,6 @@ Kaesekaestchen::Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag
 	}
 	kkm = running;
 }
-
 
 Kaesekaestchen::~Kaesekaestchen()
 {

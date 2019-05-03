@@ -3,6 +3,7 @@
 #include "AI.h"
 #include "Mouse.h"
 #include "Interface.h"
+#include "StringSwitch.h"
 
 class Kaesekaestchen : public Interface
 {
@@ -15,7 +16,7 @@ private:
 		Undecided
 	};
 public:
-	Kaesekaestchen(Graphics& gfx, Mouse& mouse, void* data, int flag);
+	Kaesekaestchen(Graphics& gfx, Mouse& mouse, StringSwitch<DataPass>& data, int flag);
 	~Kaesekaestchen();
 	int Update();
 	void Draw();

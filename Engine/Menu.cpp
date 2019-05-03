@@ -58,8 +58,8 @@ MenuHandler::MainMenu::MainMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
-	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//vpButtons.emplace_back(std::make_unique<Button>(
+	//	mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//End
 	vpButtons.emplace_back(std::make_unique<Button>( 
 		mH.text, mH.gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, "Beenden", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -118,6 +118,11 @@ MenuHandler::KaeseMenu::KaeseMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
+
+	//Set Default Values
+	mH.data.AddEntry("Size", 10);
+	mH.data.AddEntry("Square", 40);
+	mH.data.AddEntry("Border", 0.25);
 }
 int MenuHandler::KaeseMenu::Update()
 {
@@ -200,8 +205,22 @@ int MenuHandler::KaeseOptionsMenu::Update()
 			{
 			case 0:
 				break; //don't return 0 directly, or it will cancel on the first Button
-			case 1:
-				//mH.data.c.emplace_back('r');
+			case 2:
+				mH.data.ChangeEntry("Size", 4); break; //Small
+			case 3:
+				mH.data.ChangeEntry("Size", 8); break; //Medium
+			case 4:
+				mH.data.ChangeEntry("Size", 10); break; //Default
+			case 5:
+				mH.data.ChangeEntry("Size", 12); break; //Big
+			case 6:
+				mH.data.ChangeEntry("Square", 40); break; //Square
+			case 7:
+				mH.data.ChangeEntry("Square", 0); break; //Free
+			case 8:
+				mH.data.ChangeEntry("Border", 0.35); break; //ThickBorder
+			case 9:
+				mH.data.ChangeEntry("Border", 0.25); break; //SlimBorder
 			default:
 				return temp;
 			}
@@ -226,6 +245,11 @@ MenuHandler::SnakeMenu::SnakeMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 	//Back
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
+
+	//Set Default Values
+	mH.data.AddEntry("Size", 20);
+	mH.data.AddEntry("Speed", 0.3f);
+	mH.data.AddEntry("Border", 0.05);
 }
 int MenuHandler::SnakeMenu::Update()
 {
@@ -302,6 +326,22 @@ int MenuHandler::SnakeOptionsMenu::Update()
 			{
 			case 0:
 				break; //don't return 0 directly, or it will cancel on the first Button
+			case 2:
+				mH.data.ChangeEntry("Size", 06); break; //Small
+			case 3:
+				mH.data.ChangeEntry("Size", 15); break; //Medium
+			case 4:
+				mH.data.ChangeEntry("Size", 20); break; //Default
+			case 5:
+				mH.data.ChangeEntry("Size", 30); break; //Big
+			case 6:
+				mH.data.ChangeEntry("Speed", 0.15f); break; //Doublespeed
+			case 7:
+				mH.data.ChangeEntry("Speed", 0.30f); break; //Normalspeed
+			case 8:
+				mH.data.ChangeEntry("Border", 0.35); break; //ThickBorder
+			case 9:
+				mH.data.ChangeEntry("Border", 0.25); break; //SlimBorder
 			default:
 				return temp;
 			}
