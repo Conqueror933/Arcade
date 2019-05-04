@@ -52,7 +52,7 @@ void Bitmap::readBMP(const std::string &file)
 	bmp.read(temp.data(), temp_SIZE);
 	//convert from char to Color (int)
 	std::vector<Color> ColorPalette; ColorPalette.reserve(temp_SIZE / 4);
-	for (int i = 0; i < temp_SIZE; i += 4)
+	for (auto i = 0u; i < temp_SIZE; i += 4)
 	{
 		ColorPalette.emplace_back(Color(
 			static_cast<unsigned char>(temp[i + 3]),

@@ -184,7 +184,6 @@
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="TwoPlayer.cpp" />
-    <ClCompile Include="WorldObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
