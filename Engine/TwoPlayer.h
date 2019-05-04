@@ -14,7 +14,9 @@ public:
 
 public:
 	int Update(int mouse_x, int mouse_y) override;
+	void Draw() override;
 
 private:
 	int turncounter = 0;
+	Label label;
 };

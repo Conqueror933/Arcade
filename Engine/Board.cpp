@@ -8,7 +8,8 @@ Board::Board(Graphics& gfx, const BoardColors brdclr, const Vec2<int> cellcount,
 	cellcount(cellcount),
 	cellborderwidth(CalculateCellBorderWidth1(cellcount, borderthicknessratio)),
 	cellsize(CalculateCellSize(cellcount, cellborderwidth)),
-	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth))
+	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth)),
+	text(gfx, "Letters2.bmp")
 {
 	Init(*this);
 }
@@ -20,7 +21,8 @@ Board::Board(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount
 	cellcount(cellcount),
 	cellborderwidth(CalculateCellBorderWidth2(cellsize, borderthicknessratio)),
 	cellsize(CheckCellSize(cellcount, cellsize, cellborderwidth)),
-	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth))
+	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth)),
+	text(gfx, "Letters2.bmp")
 {
 	Init(*this);
 }
@@ -89,7 +91,7 @@ void Board::Init(Board& brd)
 	}
 }
 
-void Board::Draw() const
+void Board::Draw()
 {
 	//Draw Cell Background
 	gfx.DrawRectangle(topleft.x, topleft.y, 

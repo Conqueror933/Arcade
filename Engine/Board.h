@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include <vector>
 #include "Vec2.h"
+#include "Label.h"
 
 class Board
 {
@@ -72,11 +73,12 @@ private: //statics
 
 public:
 	virtual int Update(int mouse_x, int mouse_y) = 0;
-	void Draw() const;
+	virtual void Draw();
 
 protected:
 	Graphics& gfx;
 	const BoardColors brdclr;
+	Text text;
 
 	const Vec2<int> cellcount;
 	const int cellborderwidth;	//in Board cause it is basically static for the Cell but not actually static

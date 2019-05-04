@@ -13,6 +13,10 @@ public:
 	Label& operator=(const Label& other) { return *this = Label(other); }
 	//int Update() { /*if (!permanent) timercountdown;*/ }
 	void Draw();
+
+	void SetText(std::string text) { s = text; }
+	void SetBackground(Color c) { background = c; }
+	void SetTextColor(Color c) { textcolor = c; }
 private:
 	Graphics& gfx;
 	Text& text;
@@ -21,7 +25,7 @@ private:
 	Color background;
 	Color textcolor;
 
-	const std::string s;
+	std::string s;
 	const int letterspacing;
 	const int border;
 	/*bool permanent;*/
