@@ -2,21 +2,18 @@
 #include <assert.h>
 
 
-SnakeGame::SnakeGame(Graphics& gfx, Keyboard& keyboard, void* data)
+SnakeGame::SnakeGame(Graphics& gfx, Keyboard& keyboard, StringSwitch<DataPass>& data)
 	:
 	gfx(gfx),
 	keyboard(keyboard),
 	cellcount(GetCellCount(data)),
 	cellsize(CalculateCellSize(cellcount, data)),
-	cellborderwidth(CalculateCellBorderWidth(cellsize, static_cast<double*>(data)[1])),
+	cellborderwidth(CalculateCellBorderWidth(cellsize, data.GetValue("Border").d)),
 	topleft(CalculateTopLeft(cellcount, cellsize)),
-	keys{ static_cast<char*>(data)[16], static_cast<char*>(data)[17], static_cast<char*>(data)[18], static_cast<char*>(data)[19] },
-	snake(*this, static_cast<short*>(data)[3]),
-	gamespeed(static_cast<float*>(data)[5]),
-	colors{ static_cast<Color*>(data)[6], static_cast<Color*>(data)[7], static_cast<Color*>(data)[8],
-	static_cast<Color*>(data)[9], static_cast<Color*>(data)[10], } //damn this feels shaky as fuck
+	snake(*this, 3),
+	gamespeed((float)data.GetValue("Speed").d)
 {
-	//reserve Cell space to avoid reallocating
+	//reserve Cell space to avoid reallocating/
 	cells.reserve(cellcount.x*cellcount.y);
 	//make Cells
 	for (int y = 0; y < cellcount.y; y++)
@@ -41,9 +38,9 @@ SnakeGame::~SnakeGame()
 {
 }
 
-Vec2<int> SnakeGame::GetCellCount(void* data)
+Vec2<int> SnakeGame::GetCellCount(StringSwitch<DataPass>& data)
 {
-	return Vec2<int>(int(static_cast<short*>(data)[0]), int(static_cast<short*>(data)[1]));
+	return Vec2<int>(data.GetValue("Size").i, data.GetValue("Size").i);
 }
 
 int SnakeGame::CalculateCellBorderWidth(const int cellsize, const double borderthicknessratio)
@@ -53,24 +50,24 @@ int SnakeGame::CalculateCellBorderWidth(const int cellsize, const double bordert
 	return static_cast<int>((double)cellsize * borderthicknessratio);
 }
 
-int SnakeGame::CalculateCellSize(const Vec2<int> cellcount, void* data)
+int SnakeGame::CalculateCellSize(const Vec2<int> cellcount, StringSwitch<DataPass>& data)
 {
 	int x = Graphics::ScreenWidth / cellcount.x;
 	int y = Graphics::ScreenHeight / cellcount.y;
-	if (static_cast<short*>(data)[2] == 0)
-	{
+	//if (static_cast<short*>(data)[2] == 0)
+	//{
 		if (x < y)
 			return x;
 		else
 			return y;
-	}
-	else
-	{
-		int w = static_cast<short*>(data)[2];
-		assert(w * x < Graphics::ScreenWidth);
-		assert(w * y < Graphics::ScreenHeight);
-		return w;
-	}
+	//}
+	//else
+	//{
+	//	int w = static_cast<short*>(data)[2];
+	//	assert(w * x < Graphics::ScreenWidth);
+	//	assert(w * y < Graphics::ScreenHeight);
+	//	return w;
+	//}
 }
 
 Vec2<int> SnakeGame::CalculateTopLeft(const Vec2<int> cellcount, const int cellsize)

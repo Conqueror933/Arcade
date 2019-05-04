@@ -58,8 +58,8 @@ MenuHandler::MainMenu::MainMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
-	//vpButtons.emplace_back(std::make_unique<Button>(
-	//	mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//End
 	vpButtons.emplace_back(std::make_unique<Button>( 
 		mH.text, mH.gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, "Beenden", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -339,9 +339,9 @@ int MenuHandler::SnakeOptionsMenu::Update()
 			case 7:
 				mH.data.ChangeEntry("Speed", 0.30f); break; //Normalspeed
 			case 8:
-				mH.data.ChangeEntry("Border", 0.35); break; //ThickBorder
+				mH.data.ChangeEntry("Border", 0.30); break; //ThickBorder
 			case 9:
-				mH.data.ChangeEntry("Border", 0.25); break; //SlimBorder
+				mH.data.ChangeEntry("Border", 0.05); break; //SlimBorder
 			default:
 				return temp;
 			}

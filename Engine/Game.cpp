@@ -58,8 +58,7 @@ void Game::UpdateModel()
 	case 1:
 		spInterface.pop(); break;
 	case -1:
-	{ void* data;
-	spInterface.push(std::make_unique<SnakeGame>(gfx, wnd.kbd, data)); /*Constructor is still fucked, but this way it will compile, won't work, but compile*/ } break;
+		spInterface.push(std::make_unique<SnakeGame>	 (gfx, wnd.kbd, _GetData));		 break;
 	case -2:
 		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 0)); break;
 	case -3:

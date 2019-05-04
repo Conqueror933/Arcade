@@ -5,6 +5,7 @@
 #include "Vec2.h"
 #include "Frametimer.h"
 #include "Interface.h"
+#include "StringSwitch.h"
 #include <vector>
 #include <queue>
 #include <array>
@@ -73,15 +74,15 @@ private:
 	call update on cells
 	*/
 public:
-	SnakeGame(Graphics& gfx, Keyboard& keyboard, void* data);
+	SnakeGame(Graphics& gfx, Keyboard& keyboard, StringSwitch<DataPass>& data);
 	~SnakeGame();
 	int Update();
 	void Draw();
 
 private:
-	static Vec2<int> GetCellCount(void* data);
+	static Vec2<int> GetCellCount(StringSwitch<DataPass>& data);
 	static int CalculateCellBorderWidth(const int cellsize, const double borderthicknessratio);
-	static int CalculateCellSize(const Vec2<int> cellcount, void* data);
+	static int CalculateCellSize(const Vec2<int> cellcount, StringSwitch<DataPass>& data);
 	static Vec2<int> CalculateTopLeft(const Vec2<int> cellcount, const int cellsize);
 	static Vec2<int> MakeSnakeHead(SnakeGame& sg);
 
@@ -100,9 +101,9 @@ private:
 	const int cellsize;
 	const int cellborderwidth; //for drawing purposes
 	const Vec2<int> topleft;
-	const std::array<char, 4> keys;
+	const std::array<char, 4> keys = {'W', 'A', 'D', 'S'};
 	const float gamespeed;
-	const std::array<Color, 5> colors; //Border, Cell, Apple, Snake, Snakehead
+	const std::array<Color, 5> colors = {Colors::Gray, Colors::LightGray, Colors::Red, Colors::Green, Colors::Cyan}; //Border, Cell, Apple, Snake, Snakehead
 
 	std::vector<Cell> cells;
 	Snake snake;
