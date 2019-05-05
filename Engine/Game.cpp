@@ -27,8 +27,8 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd)
 {
-	spInterface.push(std::make_unique<IQuit>(/*this*/));
-	spInterface.push(std::make_unique<MenuHandler>(gfx, wnd.mouse)); //wrong params
+	spInterface.push(std::make_unique<IQuit>());
+	spInterface.push(std::make_unique<MenuHandler>(gfx, wnd.mouse));
 }
 
 Game::~Game()
@@ -42,16 +42,17 @@ void Game::Go()
 	ComposeFrame();
 	gfx.EndFrame();
 }
+
 #define _GetData dynamic_cast<MenuHandler*>(spInterface.top().get())->GetData()
 void Game::UpdateModel()
 {
 	if (spInterface.empty()) {
 		wnd.Kill(); return;
 	}
-	int r = spInterface.top()->Update(); //sanity check for games not to create other games on top
-	if (spInterface.size() > 2u && (r > 1 || r < 0))
-		return;
-	switch (r) //could use a sanity check if its not the menu returning, since a Game shouldn't create another game
+	int r = spInterface.top()->Update(); //sanity check for games not to create other games on top //debatable
+	assert(!(spInterface.size() > 2u && (r > 1 || r < 0)));
+		//return;
+	switch (r)
 	{
 	case 0:
 		break;

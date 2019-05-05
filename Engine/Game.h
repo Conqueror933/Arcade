@@ -42,7 +42,6 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	//void SetData(DataPass data);
 	/********************************/
 private:
 	MainWindow & wnd;
@@ -55,14 +54,5 @@ private:
 	public:
 		int Update() { return 1; }
 	};
-	//class IQuit : public Interface
-	//{
-	//public:
-	//	IQuit(Game* game) : pgame(game) {}
-	//	int Update() { pgame->wnd.Kill(); return 0; }
-
-	//private:
-	//	Game * pgame;
-	//};
 	/********************************/
 };

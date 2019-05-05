@@ -79,6 +79,7 @@ public:
 			size.x - half_bordersize * 4, size.y - half_bordersize * 4, Background);
 		label.Draw();
 	}
+private: //currently replaced by "DoHitDetection"
 	void SetHighlight(bool b) { highlighted = b; }
 	void SetClicked(bool b) { clicked = b; }
 

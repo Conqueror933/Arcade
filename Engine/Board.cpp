@@ -9,7 +9,9 @@ Board::Board(Graphics& gfx, const BoardColors brdclr, const Vec2<int> cellcount,
 	cellborderwidth(CalculateCellBorderWidth1(cellcount, borderthicknessratio)),
 	cellsize(CalculateCellSize(cellcount, cellborderwidth)),
 	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth)),
-	text(gfx, "Letters2.bmp")
+	text(gfx, "Letters2.bmp"),
+	label(gfx, text, ".", Vec2<int>(700, 10), Vec2<int>(0, 0), 3, 6, Colors::Magenta)//,
+	//button(text, gfx, Vec2<int>(700, 60), Vec2<int>(150, 50), "surrender", 1, 3, 6, 2, Colors::White, Colors::Black)
 {
 	Init(*this);
 }
@@ -22,7 +24,9 @@ Board::Board(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount
 	cellborderwidth(CalculateCellBorderWidth2(cellsize, borderthicknessratio)),
 	cellsize(CheckCellSize(cellcount, cellsize, cellborderwidth)),
 	topleft(CalculateTopLeft(cellcount, cellsize, cellborderwidth)),
-	text(gfx, "Letters2.bmp")
+	text(gfx, "Letters2.bmp"),
+	label(gfx, text, ".", Vec2<int>(700, 10), Vec2<int>(0, 0), 3, 6, Colors::Magenta)//,
+	//button(text, gfx, Vec2<int>(700, 60), Vec2<int>(150, 50), "surrender", 1, 3, 6, 2, Colors::White, Colors::Black)
 {
 	Init(*this);
 }
@@ -110,6 +114,8 @@ void Board::Draw()
 	//Draw lastClicked on Top
 	if (lastclickedCell.first > -1)
 		cells[lastclickedCell.first].Draw(lastclickedCell.second);
+	//Draw Label
+	label.Draw();
 }
 
 /*****************   Cell   ********************/

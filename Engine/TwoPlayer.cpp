@@ -3,16 +3,18 @@
 
 TwoPlayer::TwoPlayer(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const double borderthicknessratio)
 	:
-	Board(gfx, brdclr, cellcount, borderthicknessratio),
-	label(gfx, text, "Player One", Vec2<int>(700, 10), Vec2<int>(0, 0), 3, 6, Colors::Magenta, Colors::Blue)
+	Board(gfx, brdclr, cellcount, borderthicknessratio)
 {
+	label.SetText("Player One");
+	label.SetTextColor(Colors::Blue);
 }
 
 TwoPlayer::TwoPlayer(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
 	:
-	Board(gfx, brdclr, cellcount, cellsize, borderthicknessratio),
-	label(gfx, text, "Player One", Vec2<int>(700, 10), Vec2<int>(0, 0), 3, 6, Colors::Magenta, Colors::Blue)
+	Board(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
 {
+	label.SetText("Player One");
+	label.SetTextColor(Colors::Blue);
 }
 
 int TwoPlayer::Update(int mouse_x, int mouse_y)
@@ -71,11 +73,4 @@ int TwoPlayer::Update(int mouse_x, int mouse_y)
 				}
 		}
 	return 0;
-}
-
-void TwoPlayer::Draw()
-{
-	//Draw Label
-	label.Draw();
-	Board::Draw();
 }

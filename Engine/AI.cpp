@@ -4,7 +4,7 @@ AI::AI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, cons
 	:
 	Board(gfx, brdclr, cellcount, borderthicknessratio)
 {
-	Init(*this);	
+	Init(*this);
 }
 
 AI::AI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
@@ -177,12 +177,14 @@ EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcou
 	:
 	AI(gfx,brdclr, cellcount, borderthicknessratio)
 {
+	label.SetText("Easy AI");
 }
 
 EasyAI::EasyAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
 	:
 	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
 {
+	label.SetText("Easy AI");
 }
 
 void EasyAI::AIstuff()
@@ -236,12 +238,14 @@ MediumAI::MediumAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cel
 	:
 	AI(gfx, brdclr, cellcount, borderthicknessratio)
 {
+	label.SetText("Medium AI");
 }
 
 MediumAI::MediumAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
 	:
 	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
 {
+	label.SetText("Medium AI");
 }
 
 void MediumAI::AIstuff()
@@ -318,12 +322,14 @@ HardAI::HardAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcou
 	:
 	AI(gfx, brdclr, cellcount, borderthicknessratio)
 {
+	label.SetText("Hard AI");
 }
 
 HardAI::HardAI(Graphics & gfx, const BoardColors brdclr, const Vec2<int> cellcount, const Vec2<int> cellsize, const double borderthicknessratio)
 	:
 	AI(gfx, brdclr, cellcount, cellsize, borderthicknessratio)
 {
+	label.SetText("Hard AI");
 }
 
 void HardAI::FindAllCellsWith1()

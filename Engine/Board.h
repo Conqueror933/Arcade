@@ -73,12 +73,14 @@ private: //statics
 
 public:
 	virtual int Update(int mouse_x, int mouse_y) = 0;
-	virtual void Draw();
+	void Draw();
 
 protected:
 	Graphics& gfx;
 	const BoardColors brdclr;
 	Text text;
+	Label label;
+	//Button button;
 
 	const Vec2<int> cellcount;
 	const int cellborderwidth;	//in Board cause it is basically static for the Cell but not actually static
