@@ -46,6 +46,7 @@ private:
 private:
 	MainWindow & wnd;
 	Graphics gfx;
+	FrameTimer ft;
 	/********************************/
 	/*  User Variables              */
 	std::stack<std::unique_ptr<Interface>> spInterface;

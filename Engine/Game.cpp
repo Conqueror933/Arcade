@@ -46,6 +46,7 @@ void Game::Go()
 #define _GetData dynamic_cast<MenuHandler*>(spInterface.top().get())->GetData()
 void Game::UpdateModel()
 {
+	DBOUT(60.0f/ft.Mark() << '\n'); //fps
 	if (spInterface.empty()) {
 		wnd.Kill(); return;
 	}
