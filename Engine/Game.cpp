@@ -69,6 +69,8 @@ void Game::UpdateModel()
 		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 2)); break;
 	case -5:
 		spInterface.push(std::make_unique<Kaesekaestchen>(gfx, wnd.mouse, _GetData, 3)); break;
+	case -6:
+		spInterface.push(std::make_unique<Pong>(gfx, wnd.kbd, _GetData)); break;
 	default:
 		throw std::exception("Bad Update return");
 	}
