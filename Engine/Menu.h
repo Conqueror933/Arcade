@@ -61,6 +61,7 @@ private:
 	};
 	enum Options
 	{
+		_StartPong = -6,
 		_StartHard = -5,
 		_StartMedium = -4,
 		_StartEasy = -3,
@@ -72,7 +73,9 @@ private:
 		_Kaese,
 		_KaeseMenu,
 		_Snake,
-		_SnakeMenu
+		_SnakeMenu,
+		_Pong,
+		_PongMenu
 	};
 
 	class MainMenu : public Menu
@@ -107,6 +110,20 @@ private:
 	{
 	public:
 		SnakeOptionsMenu(MenuHandler& menuHandler);
+		int Update();
+	};
+
+	class PongMenu : public Menu
+	{
+	public:
+		PongMenu(MenuHandler& menuHandler);
+		int Update();
+	};
+
+	class PongOptionsMenu : public Menu
+	{
+	public:
+		PongOptionsMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 };

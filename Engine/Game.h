@@ -26,6 +26,7 @@
 #include "Menu.h"
 #include "Kaesekaestchen.h"
 #include "Snake.h"
+#include "Pong.h"
 
 class Game
 {

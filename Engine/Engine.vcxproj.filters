@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{50d5fcb2-f390-450e-bf2a-cfbbb74e2c54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Pong">
+      <UniqueIdentifier>{ce177bd3-d50a-44be-b1a9-339b6fddd9db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="StringSwitch.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pong.h">
+      <Filter>Header Files\Pong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

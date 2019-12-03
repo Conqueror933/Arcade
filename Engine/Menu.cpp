@@ -24,6 +24,10 @@ int MenuHandler::Update() // 1 is reserved for going back/ending, 0 is do nothin
 		spSubMenus.push(std::make_unique<SnakeMenu>(*this)); break;
 	case _SnakeMenu:
 		spSubMenus.push(std::make_unique<SnakeOptionsMenu>(*this)); break;
+	case _Pong:
+		spSubMenus.push(std::make_unique<PongMenu>(*this)); break;
+	case _PongMenu:
+		spSubMenus.push(std::make_unique<PongOptionsMenu>(*this)); break;
 	default:
 		return temp;
 	}
@@ -60,6 +64,8 @@ MenuHandler::MainMenu::MainMenu(MenuHandler& menuHandler) : Menu(menuHandler)
 		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Kaesekaestchen", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	vpButtons.emplace_back(std::make_unique<Button>(
 		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Snake", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, "Pong", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
 	//End
 	vpButtons.emplace_back(std::make_unique<Button>( 
 		mH.text, mH.gfx, Vec2<int>{ 350, 500 }, Vec2<int>{ 100, 50 }, "Beenden", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
@@ -85,6 +91,9 @@ int MenuHandler::MainMenu::Update()
 			case 3:
 				mH.FlushData();
 				return _Snake;
+			case 4:
+				mH.FlushData();
+				return _Pong;
 			default:
 				return temp;
 			}
@@ -342,6 +351,144 @@ int MenuHandler::SnakeOptionsMenu::Update()
 				mH.data.ChangeEntry("Border", 0.30); break; //ThickBorder
 			case 9:
 				mH.data.ChangeEntry("Border", 0.05); break; //SlimBorder
+			default:
+				return temp;
+			}
+		}
+	}
+	return 0;
+}
+
+/*******************************************************************************************************************************************/
+
+MenuHandler::PongMenu::PongMenu(MenuHandler& menuHandler) : Menu(menuHandler)
+{
+	//Welcome Label
+	vpLabels.emplace_back(std::make_unique<Label>(
+		mH.gfx, mH.text, "Welcome to Pong", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
+	//2 Player
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Zwei Spieler", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//AI Level 1
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 260 }, Vec2<int>{ 150, 50 }, "Einfache KI", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//AI Level 2
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 320 }, Vec2<int>{ 150, 50 }, "Mittlere KI", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//AI Level 3
+	vpButtons.emplace_back(std::make_unique<Button>(
+	mH.text, mH.gfx, Vec2<int>{ 325, 380 }, Vec2<int>{ 150, 50 }, "Schwere KI", 5, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Optionen
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 325, 460 }, Vec2<int>{ 150, 50 }, "Optionen", 6, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Back
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
+
+	//Set Default Values
+	mH.data.AddEntry("Gamemode", '2');
+}
+int MenuHandler::PongMenu::Update()
+{
+	while (!mH.mouse.IsEmpty()) //brute force
+	{
+		const auto e = mH.mouse.Read();
+		for (auto i = 0u; i < vpButtons.size(); i++) //for(auto& i : objects)
+		{
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), true);
+			else
+				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), false);
+			switch (int temp = vpButtons[i]->Update())
+			{
+			case 0:
+				break; //don't return 0 directly, or it will cancel on the first Button
+			case 2:
+				mH.data.ChangeEntry("Gamemode", '2');
+				return _StartPong;
+			case 3:
+				mH.data.ChangeEntry("Gamemode", 'E');
+				return _StartPong;
+			case 4:
+				mH.data.ChangeEntry("Gamemode", 'M');
+				return _StartPong;
+			case 5:
+				mH.data.ChangeEntry("Gamemode", 'H');
+				return _StartPong;
+			case 6:
+				return _PongMenu;
+			default:
+				return temp;
+			}
+		}
+	}
+	return 0;
+}
+
+MenuHandler::PongOptionsMenu::PongOptionsMenu(MenuHandler& menuHandler) : Menu(menuHandler)
+{
+	//Optionen
+	vpLabels.emplace_back(std::make_unique<Label>(
+		mH.gfx, mH.text, "Optionen", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
+	//Small size is 4x4  -  would be nice if this was a slider
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 200, 200 }, Vec2<int>{ 150, 50 }, "Option1", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Medium size is 8x8
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 200, 260 }, Vec2<int>{ 150, 50 }, "Option", 3, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Default size is 10x10
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 200, 320 }, Vec2<int>{ 150, 50 }, "Option", 4, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Big size is 12x12
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 200, 380 }, Vec2<int>{ 150, 50 }, "Option", 5, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Doublespeed
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 450, 200 }, Vec2<int>{ 150, 50 }, "Option", 6, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Normalspeed
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 450, 260 }, Vec2<int>{ 150, 50 }, "Option", 7, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Extra thick borders
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 450, 320 }, Vec2<int>{ 150, 50 }, "Option", 8, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Reset Thick borders
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 450, 380 }, Vec2<int>{ 150, 50 }, "Option1", 9, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
+	//Back
+	vpButtons.emplace_back(std::make_unique<Button>(
+		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
+}
+int MenuHandler::PongOptionsMenu::Update()
+{
+	while (!mH.mouse.IsEmpty()) //brute force
+	{
+		const auto e = mH.mouse.Read();
+		for (auto i = 0u; i < vpButtons.size(); i++) //for(auto& i : objects)
+		{
+			if (e.GetType() == Mouse::Event::Type::LPress)
+				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), true);
+			else
+				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), false);
+			switch (int temp = vpButtons[i]->Update())
+			{
+			case 0:
+				break; //don't return 0 directly, or it will cancel on the first Button
+			case 2:
+				break; //Option-Button 1
+			case 3:
+				break; //Option-Button 2
+			case 4:
+				break; //Option-Button 3
+			case 5:
+				break; //Option-Button 4
+			case 6:
+				break; //Option-Button 5
+			case 7:
+				break; //Option-Button 6
+			case 8:
+				break; //Option-Button 7
+			case 9:
+				break; //Option-Button 8
 			default:
 				return temp;
 			}
