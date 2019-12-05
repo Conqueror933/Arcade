@@ -158,6 +158,9 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Pong.h" />
+    <ClInclude Include="PongAI.h" />
+    <ClInclude Include="PongGame.h" />
+    <ClInclude Include="PongTwoPlayer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="Sound.h" />

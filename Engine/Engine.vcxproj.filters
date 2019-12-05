@@ -123,6 +123,15 @@
     <ClInclude Include="Pong.h">
       <Filter>Header Files\Pong</Filter>
     </ClInclude>
+    <ClInclude Include="PongTwoPlayer.h">
+      <Filter>Header Files\Pong</Filter>
+    </ClInclude>
+    <ClInclude Include="PongAI.h">
+      <Filter>Header Files\Pong</Filter>
+    </ClInclude>
+    <ClInclude Include="PongGame.h">
+      <Filter>Header Files\Pong</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
