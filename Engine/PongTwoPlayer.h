@@ -26,7 +26,11 @@ private:
 	class Player
 	{
 	public:
-		Player(PongTwoPlayer& PTP, int y, int x, const char up, const char down) : PTP(PTP), y(y), x(x), up(up), down(down){}
+		Player(PongTwoPlayer& PTP, int x, int y,const char up, const char down)
+			: 
+			PTP(PTP), y(y), x(x), up(up), down(down)
+		{
+		}
 		void Update()
 		{
 			if (PTP.kbd.KeyIsPressed(up))
@@ -45,9 +49,9 @@ private:
 		int y, x;
 		const char up;
 		const char down;
-	} player1{*this, 200, 25, 'W', 'S' }, player2{ *this, 200, Graphics::ScreenWidth - 25, 'O', 'L' };
+	};
+	Player player1{ *this, 25, 200, 'W', 'S' };
+	Player player2{ *this, Graphics::ScreenWidth - 25, 200, 'O', 'L' };
 
 private:
-	int y1 = 200;
-	int y2 = 200;
 };
