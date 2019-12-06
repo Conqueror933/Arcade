@@ -11,37 +11,41 @@ public:
 	PongTwoPlayer(Graphics& gfx, Keyboard& keyboard, StringSwitch<DataPass>& data) : PongGame(gfx, keyboard, data) {}
 	int Update() override 
 	{ 
-		p1();
-		p2();
+		player1.Update();
+		player2.Update();
 		return 0;
 	}
 
 	void Draw() override 
 	{ 
-		gfx.DrawRectangleDim(25, y1, 5, 100, Colors::White);
-		gfx.DrawRectangleDim(Graphics::ScreenWidth-25, y2, 5, 100, Colors::White);
+		player1.Draw();
+		player2.Draw();
 	}
 
 private:
-	void p1()
+	class Player
 	{
-		if (kbd.KeyIsPressed('W'))
-			if (y1 >= 1)
-				y1 = y1 - 2;
-		if (kbd.KeyIsPressed('S'))
-			if (y1 < Graphics::ScreenHeight - 100)
-				y1 = y1 + 2;
-	}
-
-	void p2()
-	{
-		if (kbd.KeyIsPressed('O'))
-			if (y2 >= 1)
-				y2 = y2 - 2;
-		if (kbd.KeyIsPressed('L'))
-			if (y2 < Graphics::ScreenHeight - 100)
-				y2 = y2 + 2;
-	}
+	public:
+		Player(PongTwoPlayer& PTP, int y, int x, const char up, const char down) : PTP(PTP), y(y), x(x), up(up), down(down){}
+		void Update()
+		{
+			if (PTP.kbd.KeyIsPressed(up))
+				if (y > 0)
+					y = y - 2;
+			if (PTP.kbd.KeyIsPressed(down))
+				if (y < Graphics::ScreenHeight - 100)
+					y = y + 2;
+		}
+		void Draw()
+		{
+			PTP.gfx.DrawRectangleDim(x, y, 5, 100, Colors::White);
+		}
+	private:
+		PongTwoPlayer& PTP;
+		int y, x;
+		const char up;
+		const char down;
+	} player1{*this, 200, 25, 'W', 'S' }, player2{ *this, 200, Graphics::ScreenWidth - 25, 'O', 'L' };
 
 private:
 	int y1 = 200;
