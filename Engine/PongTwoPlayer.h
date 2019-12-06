@@ -5,21 +5,21 @@
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
 
-class PongTwoPlayer : public PongGame
-{
+class PongTwoPlayer : public PongGame 
+{ 
 public:
 	PongTwoPlayer(Graphics& gfx, Keyboard& keyboard, StringSwitch<DataPass>& data) : PongGame(gfx, keyboard, data) {}
-	int Update() override
-	{
+	int Update() override 
+	{ 
 		p1();
 		p2();
 		return 0;
 	}
 
-	void Draw() override
-	{
+	void Draw() override 
+	{ 
 		gfx.DrawRectangleDim(25, y1, 5, 100, Colors::White);
-		gfx.DrawRectangleDim(Graphics::ScreenWidth - 25, y2, 5, 100, Colors::White);
+		gfx.DrawRectangleDim(Graphics::ScreenWidth-25, y2, 5, 100, Colors::White);
 	}
 
 private:
@@ -37,14 +37,13 @@ private:
 		}
 	}
 
-	void p2() 
+	void p2()
 	{
 		if (kbd.KeyIsPressed('O')) {
 			if (y2 >= 1) {
 				y2 = y2 - 2;
 			}
 		}
-
 		if (kbd.KeyIsPressed('L')) {
 			if (y2 < Graphics::ScreenHeight - 100) {
 				y2 = y2 + 2;
