@@ -25,30 +25,22 @@ public:
 private:
 	void p1()
 	{
-		if (kbd.KeyIsPressed('W')) {
-			if (y1 >= 1) {
+		if (kbd.KeyIsPressed('W'))
+			if (y1 >= 1)
 				y1 = y1 - 2;
-			}
-		}
-		if (kbd.KeyIsPressed('S')) {
-			if (y1 < Graphics::ScreenHeight - 100) {
+		if (kbd.KeyIsPressed('S'))
+			if (y1 < Graphics::ScreenHeight - 100)
 				y1 = y1 + 2;
-			}
-		}
 	}
 
 	void p2()
 	{
-		if (kbd.KeyIsPressed('O')) {
-			if (y2 >= 1) {
+		if (kbd.KeyIsPressed('O'))
+			if (y2 >= 1)
 				y2 = y2 - 2;
-			}
-		}
-		if (kbd.KeyIsPressed('L')) {
-			if (y2 < Graphics::ScreenHeight - 100) {
+		if (kbd.KeyIsPressed('L'))
+			if (y2 < Graphics::ScreenHeight - 100)
 				y2 = y2 + 2;
-			}
-		}
 	}
 
 private:
