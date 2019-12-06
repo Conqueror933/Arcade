@@ -11,10 +11,10 @@ public:
 	{
 		switch (data.GetValue("Gamemode").c)
 		{
-		case '2': pong = new PongTwoPlayer(); break;
-		case 'E': pong = new PongAIEasy(); break;
-		case 'M': pong = new PongAIMedium(); break;
-		case 'H': pong = new PongAIHard(); break;
+		case '2': pong = new PongTwoPlayer(gfx, keyboard, data); break;
+		case 'E': pong = new PongAIEasy(gfx, keyboard, data); break;
+		case 'M': pong = new PongAIMedium(gfx, keyboard, data); break;
+		case 'H': pong = new PongAIHard(gfx, keyboard, data); break;
 		}
 	}
 	~Pong() { delete pong; }
