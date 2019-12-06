@@ -13,6 +13,7 @@ public:
 	{ 
 		player1.Update();
 		player2.Update();
+		ball.Update();
 		return 0;
 	}
 
@@ -20,6 +21,7 @@ public:
 	{ 
 		player1.Draw();
 		player2.Draw();
+		ball.Draw();
 	}
 
 private:
@@ -52,6 +54,36 @@ private:
 	};
 	Player player1{ *this, 25, 200, 'W', 'S' };
 	Player player2{ *this, Graphics::ScreenWidth - 25, 200, 'O', 'L' };
+
+	class Ball
+	{	
+	public:
+		Ball(PongTwoPlayer& PTP)
+			:
+			PTP(PTP)
+		{
+		}
+		void Update()
+		{
+			if (r) {
+				x = x - 2;
+			}
+			if (l) {
+				x = x - 2;
+			}
+		}
+		void Draw()
+		{
+			PTP.gfx.DrawRectangleDim(x, y, 20, 20, Colors::Red);
+		}	
+	private:
+		PongTwoPlayer & PTP;
+		int y = Graphics::ScreenHeight / 2;
+		int	x = Graphics::ScreenWidth / 2;
+		bool l = false;
+		bool r = true;
+	};	
+	Ball ball{*this};
 
 private:
 };
