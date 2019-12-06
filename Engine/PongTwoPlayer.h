@@ -5,5 +5,5 @@ class PongTwoPlayer : public PongGame
 { 
 public: 
 	int Update() override { return 0; }
-	void Draw() override {} 
+	void Draw() override { gfx.PutPixel(100, 100, 255, 255, 255); }
 };
