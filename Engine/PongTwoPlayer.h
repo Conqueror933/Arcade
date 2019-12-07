@@ -44,16 +44,19 @@ private:
 		}
 		void Draw()
 		{
-			PTP.gfx.DrawRectangleDim(x, y, 5, 100, Colors::White);
+			PTP.gfx.DrawRectangleDim(x-3, y-50, 6, 100, Colors::White);
 		}
+		const int GetX() const { return x; }
+		const int GetY() const { return y; }
+
 	private:
 		PongTwoPlayer& PTP;
 		int y, x;
 		const char up;
 		const char down;
 	};
-	Player player1{ *this, 25, 200, 'W', 'S' };
-	Player player2{ *this, Graphics::ScreenWidth - 25, 200, 'O', 'L' };
+	Player player1{ *this, 25, Graphics::ScreenHeight / 2, 'W', 'S' };
+	Player player2{ *this, Graphics::ScreenWidth - 25, Graphics::ScreenHeight / 2, 'O', 'L' };
 
 	class Ball
 	{	
@@ -65,23 +68,41 @@ private:
 		}
 		void Update()
 		{
-			if (r) {
+			if (rl) 
+			{
 				x = x - 2;
 			}
-			if (l) {
-				x = x - 2;
+			else 
+			{
+				x = x + 2;
+			}
+
+			if (x - 10 <= PTP.player1.GetX() + 3) 
+			{
+				if (y + 10 > PTP.player1.GetY() - 50 && y - 10 < PTP.player1.GetY() + 50) 
+				{
+					rl = false;
+				}
+			}
+			if (x + 10 >= PTP.player2.GetX() - 3)
+			{
+				if (y + 10 > PTP.player2.GetY() - 50 && y - 10 < PTP.player2.GetY() + 50)
+				{
+					rl = true;
+				}
 			}
 		}
 		void Draw()
 		{
-			PTP.gfx.DrawRectangleDim(x, y, 20, 20, Colors::Red);
-		}	
+			PTP.gfx.DrawRectangleDim(x-10, y-10, 20, 20, Colors::Red);
+		}
+		const int GetX() const { return x; }
+		const int GetY() const { return y; }
 	private:
 		PongTwoPlayer & PTP;
 		int y = Graphics::ScreenHeight / 2;
 		int	x = Graphics::ScreenWidth / 2;
-		bool l = false;
-		bool r = true;
+		bool rl = true;
 	};	
 	Ball ball{*this};
 
