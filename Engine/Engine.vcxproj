@@ -145,6 +145,7 @@
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
+    <ClInclude Include="DevMode.h" />
     <ClInclude Include="DXErr.h" />
     <ClInclude Include="Frametimer.h" />
     <ClInclude Include="Game.h" />

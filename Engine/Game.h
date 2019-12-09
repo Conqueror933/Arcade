@@ -27,6 +27,7 @@
 #include "Kaesekaestchen.h"
 #include "Snake.h"
 #include "Pong.h"
+#include "DevMode.h"
 
 class Game
 {
