@@ -28,8 +28,6 @@ int MenuHandler::Update() // 1 is reserved for going back/ending, 0 is do nothin
 		spSubMenus.push(std::make_unique<PongMenu>(*this)); break;
 	case _PongMenu:
 		spSubMenus.push(std::make_unique<PongOptionsMenu>(*this)); break;
-	case _DevMode:
-		spSubMenus.push(std::make_unique<DevModeMenu>(*this)); break;
 	default:
 		return temp;
 	}
@@ -495,46 +493,6 @@ int MenuHandler::PongOptionsMenu::Update()
 				break; //Option-Button 7
 			case 9:
 				break; //Option-Button 8
-			default:
-				return temp;
-			}
-		}
-	}
-	return 0;
-}
-
-/*******************************************************************************************************************************************/
-
-MenuHandler::DevModeMenu::DevModeMenu(MenuHandler& menuHandler) : Menu(menuHandler)
-{
-	//Welcome Label
-	vpLabels.emplace_back(std::make_unique<Label>(
-		mH.gfx, mH.text, "DevMode", Vec2<int>{ 200, 50 }, Vec2<int>{ 400, 100 }, letterspacing, border, Color(0u, 0u, 185u), Colors::White));
-	//Start
-	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 325, 200 }, Vec2<int>{ 150, 50 }, "Start", 2, letterspacing, border, half_bordersize, Colors::White, Colors::Black));
-	//Back
-	vpButtons.emplace_back(std::make_unique<Button>(
-		mH.text, mH.gfx, Vec2<int>{ 25, Graphics::ScreenHeight - 65 }, Vec2<int>{ 75, 40 }, "Back", 1, letterspacing, border, half_bordersize, Colors::Red, Colors::White));
-}
-
-int MenuHandler::DevModeMenu::Update()
-{
-	while (!mH.mouse.IsEmpty()) //brute force
-	{
-		const auto e = mH.mouse.Read();
-		for (auto i = 0u; i < vpButtons.size(); i++) //for(auto& i : objects)
-		{
-			if (e.GetType() == Mouse::Event::Type::LPress)
-				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), true);
-			else
-				vpButtons[i]->DoHitDetection(mH.mouse.GetPosX(), mH.mouse.GetPosY(), false);
-			switch (int temp = vpButtons[i]->Update())
-			{
-			case 0:
-				break; //don't return 0 directly, or it will cancel on the first Button
-			case 2:
-				return _StartDevMode;
 			default:
 				return temp;
 			}

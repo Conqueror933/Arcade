@@ -61,7 +61,6 @@ private:
 	};
 	enum Options
 	{
-		_StartDevMode = -1000000,
 		_StartPong = -6,
 		_StartHard = -5,
 		_StartMedium = -4,
@@ -126,13 +125,6 @@ private:
 	{
 	public:
 		PongOptionsMenu(MenuHandler& menuHandler);
-		int Update();
-	};
-
-	class DevModeMenu : public Menu
-	{
-	public:
-		DevModeMenu(MenuHandler& menuHandler);
 		int Update();
 	};
 };
