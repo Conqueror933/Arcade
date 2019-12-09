@@ -106,11 +106,11 @@ public: //Math
 		norm.Normalize();
 		return norm;
 	}
-	T GetDistanceSquared(const Vec2<T>& rhs)
+	T GetDistanceSquared(const Vec2<T>& rhs) const
 	{
 		return (x - rhs.x) * (x - rhs.x) + (y - rhs.y) * (y - rhs.y);
 	}
-	T GetDistance(const Vec2<T>& rhs)
+	T GetDistance(const Vec2<T>& rhs) const
 	{
 		return std::sqrt(getDistanceSquared());
 	}
@@ -221,7 +221,7 @@ namespace Vec2Math
 	}
 	template<typename T> const T getYOffset(const Vec2<T>& point, const T slope)
 	{
-		return point.p1.y - slope * point.p1.x;
+		return point.y - slope * point.x;
 	}
 
 	template<typename T> Vec2<T> getCollisionPoint(const T& slope1, const T& slope2, const T& YOffset1, const T& YOffset2)
@@ -276,7 +276,11 @@ namespace Vec2Math
 	//}
 	template<typename T> bool isColliding(const Vec2<T>& point, const Circle<T>& circle)
 	{
-		return point.GetDistanceSquared(circle) < circle.size * circle.size;
+		return point.GetDistanceSquared(circle.pos) < circle.size * circle.size;
+	}
+	template<typename T> bool isColliding(const Vec2<T>& point, const Triangle<T>& tri)
+	{
+		return isColliding(tri, point);
 	}
 
 	//Line colliding with X
@@ -287,7 +291,7 @@ namespace Vec2Math
 	template<typename T> bool isColliding(const Line<T>& line1, const Line<T>& line2)
 	{
 		const auto col = getCollisionPoint(line1, line2);
-		const bool b = true;
+		bool b = true;
 		b = b && AxisAligned::isColliding(line1, col);
 		b = b && AxisAligned::isColliding(line2, col);
 		return b;
@@ -302,7 +306,7 @@ namespace Vec2Math
 		const T m1 = getSlope(line);
 		const T m2 = (T)-1.0 / getSlope(line); //orthogonalSlope
 		const T b1 = getYOffset(line);
-		const T b2 = getYOffset(circle.pos, m);
+		const T b2 = getYOffset(circle.pos, m2);
 		const auto col = getCollisionPoint(m1, m2, b1, b2);
 		//return std::abs(col - circle.pos) < circle.size;
 		return circle.pos.GetDistanceSquared(col) < circle.size * circle.size;

@@ -56,6 +56,7 @@ public:
 	{
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
+	void PutPixel(float x, float y, Color c) { PutPixel((int)x, (int)y, c); }
 	void PutPixel( int x,int y,Color c );
 	void DrawRectangle(int x0, int y0, int x1, int y1, Color c);
 	void DrawRectangleDim(int x0, int y0, int width, int height, Color c)
