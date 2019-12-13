@@ -32,7 +32,7 @@ private:
 	public:
 		Player(PongTwoPlayer& PTP, int x, int y,const char up, const char down)
 			: 
-			PTP(PTP), y(y), x(x), up(up), down(down)
+			PTP(PTP), pos(x,y), up(up), down(down)
 		{
 		}
 		void Update()
@@ -41,30 +41,30 @@ private:
 
 			if (PTP.kbd.KeyIsPressed(up) && deltatime > steptime) 
 			{
-				if (y > 0) 
+				if (pos.y > 0) 
 				{
-					y -= speed; deltatime = 0.f;
+					pos.y -= speed; deltatime = 0.f;
 				}
 			}
 
 			if (PTP.kbd.KeyIsPressed(down) && deltatime > steptime)
 			{
-				if (y < Graphics::ScreenHeight - 100)
+				if (pos.y < Graphics::ScreenHeight - 100)
 				{
-					y += speed; deltatime = 0.f;
+					pos.y += speed; deltatime = 0.f;
 				}
 			}
 		}
 		void Draw()
 		{
-			PTP.gfx.DrawRectangleDim(x-3, y-50, 6, 100, Colors::White);
+			PTP.gfx.DrawRectangleDim(pos.x-3, pos.y-50, 6, 100, Colors::White);
 		}
-		const int GetX() const { return x; }
-		const int GetY() const { return y; }
+		const int GetX() const { return pos.x; }
+		const int GetY() const { return pos.y; }
 
 	private:
 		PongTwoPlayer& PTP;
-		int y, x;
+		Vec2<float> pos;
 		const char up;
 		const char down;
 		FrameTimer ft;
