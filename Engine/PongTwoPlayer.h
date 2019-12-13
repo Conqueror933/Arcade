@@ -1,5 +1,7 @@
 #pragma once
 #include "PongGame.h"
+#include "Frametimer.h"
+#include "Vec2.h"
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_LEFT 75
@@ -35,12 +37,23 @@ private:
 		}
 		void Update()
 		{
-			if (PTP.kbd.KeyIsPressed(up))
-				if (y > 0)
-					y = y - 2;
-			if (PTP.kbd.KeyIsPressed(down))
+			deltatime += ft.Mark();
+
+			if (PTP.kbd.KeyIsPressed(up) && deltatime > steptime) 
+			{
+				if (y > 0) 
+				{
+					y -= speed; deltatime = 0.f;
+				}
+			}
+
+			if (PTP.kbd.KeyIsPressed(down) && deltatime > steptime)
+			{
 				if (y < Graphics::ScreenHeight - 100)
-					y = y + 2;
+				{
+					y += speed; deltatime = 0.f;
+				}
+			}
 		}
 		void Draw()
 		{
@@ -54,6 +67,10 @@ private:
 		int y, x;
 		const char up;
 		const char down;
+		FrameTimer ft;
+		float deltatime = 0.0f;
+		const float steptime = 0.01f;
+		const float speed = 5.f;
 	};
 	Player player1{ *this, 25, Graphics::ScreenHeight / 2, 'W', 'S' };
 	Player player2{ *this, Graphics::ScreenWidth - 25, Graphics::ScreenHeight / 2, 'O', 'L' };
@@ -68,13 +85,14 @@ private:
 		}
 		void Update()
 		{
-			if (rl) 
+			deltatime += ft.Mark();			
+			if (rl && deltatime > steptime) // Bool für Richtungsänderung
 			{
-				x = x - 2;
+				x -= speed; deltatime = 0.f;
 			}
-			else 
+			if (!rl && deltatime > steptime)
 			{
-				x = x + 2;
+				x += speed; deltatime = 0.f;
 			}
 
 			if (x - 10 <= PTP.player1.GetX() + 3) 
@@ -103,6 +121,10 @@ private:
 		int y = Graphics::ScreenHeight / 2;
 		int	x = Graphics::ScreenWidth / 2;
 		bool rl = true;
+		FrameTimer ft;
+		float deltatime = 0.0f;
+		const float steptime = 0.01f;
+		const float speed = 3.f;
 	};	
 	Ball ball{*this};
 
